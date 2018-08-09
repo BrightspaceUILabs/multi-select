@@ -8,7 +8,7 @@
 		<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
 		<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
 		<link rel="import" href="../../d2l-typography/d2l-typography.html">
-		<link rel="import" href="../d2l-multi-select.html">
+		<link rel="import" href="../all-imports.html">
 		<custom-style>
 			<style is="custom-style" include="demo-pages-shared-styles"></style>
 		</custom-style>
@@ -23,10 +23,11 @@
 	</head>
 	<body unresolved class="d2l-typography">
 		<div class="vertical-section-container centered">
-			<h3>d2l-multi-select</h3>
+			<h3>d2l-multi-select-item</h3>
 			<demo-snippet>
 				<template>
-					<d2l-multi-select></d2l-multi-select>
+					<d2l-multi-select-item text="Default select-item"></d2l-multi-select-item>
+					<d2l-multi-select-item deletable text="Default select-item with delete"></d2l-multi-select-item>
 				</template>
 			</demo-snippet>
 		</div>

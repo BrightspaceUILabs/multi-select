@@ -1,0 +1,198 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../d2l-colors/d2l-colors.html">
+<link rel="import" href="../d2l-typography/d2l-typography-shared-styles.html">
+<link rel="import" href="../d2l-icons/d2l-icon.html">
+<link rel="import" href="../d2l-icons/tier1-icons.html">
+<link rel="import" href="localize-behavior.html">
+
+<dom-module id="d2l-multi-select-item">
+	<template strip-whitespace>
+		<style>
+			:host {
+				display: inline-block;
+				position: relative;
+				outline: none;
+				cursor: pointer;
+			}
+
+			.d2l-multi-select-item-wrapper {
+				display: flex;
+				font-size: 16px;
+				font-family: Lato;
+				color: var(--d2l-color-ferrite);
+				align-items: center;
+				min-height: 30px;
+				height: 100%;
+				padding: 0px 15px;
+				background-color: var(--d2l-color-sylvite);
+				border: 1px solid var(--d2l-color-gypsum);
+				border-radius: 5px;
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				-ms-box-sizing: border-box;
+				box-sizing: border-box;
+				outline: none;
+				cursor: pointer;
+			}
+
+			:host([icon]) .d2l-multi-select-item-wrapper {
+				padding-left: 40px;
+			}
+
+			:host([dir='rtl'][icon]) .d2l-multi-select-item-wrapper {
+				padding-left: 15px;
+				padding-right: 40px;
+			}
+
+			:host([deletable]) .d2l-multi-select-item-wrapper {
+				padding-right: 8px;
+			}
+
+			:host([dir='rtl'][deletable]) .d2l-multi-select-item-wrapper {
+				padding-left: 8px;
+				padding-right: 15px;
+			}
+
+			:host([dir='rtl'][deletable][icon]) .d2l-multi-select-item-wrapper {
+				padding-right: 40px;
+			}
+
+			:host(:hover) .d2l-multi-select-item-wrapper {
+				background-color: var(--d2l-color-gypsum);
+				border-color: var(--d2l-color-mica);
+			}
+
+			:host(:hover) .d2l-multi-select-item-wrapper d2l-icon:hover {
+				opacity: 1;
+			}
+
+			:host(:focus) .d2l-multi-select-item-wrapper,
+			:host(:focus) .d2l-multi-select-item-wrapper d2l-icon {
+				background-color: var(--d2l-color-celestine);
+				border-color: var(--d2l-color-celestine-minus-1);
+				color: #ffffff;
+			}
+
+			img {
+				height: 30px;
+				width: 30px;
+				border-radius: 4px;
+				position: absolute;
+				left: 0;
+				top: 0;
+				object-fit: cover;
+			}
+
+			:host(:dir(rtl)) img {
+				right: 0;
+				left: initial;
+			}
+
+			d2l-icon {
+				--d2l-icon-height: 10px;
+				--d2l-icon-width: 10px;
+				color: var(--d2l-color-ferrite);
+				padding: 4px;
+				margin-left: 3px;
+				opacity: 0.75;
+				cursor: pointer;
+			}
+
+			d2l-icon[hidden] {
+				display: none;
+			}
+
+			:host(:dir(rtl)) d2l-icon {
+				margin-right: 3px;
+			}
+
+		</style>
+
+		<div class="d2l-multi-select-item-wrapper" aria-label$=[[text]]>
+			<img hidden=[[!icon]] src="[[icon]]"/>
+			<div class="d2l-multi-select-item-text">[[text]]</div>
+			<d2l-icon
+				icon="d2l-tier1:close-large-thick"
+				hidden=[[!deletable]]
+				aria-label$="[[localize('delete')]]"
+				on-click="_onDeleteClick"
+			/>
+		</div>
+	</template>
+	<script>
+		/**
+		 * `<d2l-multi-select-item>`
+		 * Polymer-based web component for D2L multi-select-item
+		 * @demo demo/index.hmtl
+		 */
+		class D2LMultiSelectItem extends Polymer.mixinBehaviors(
+			[D2L.PolymerBehaviors.D2LMultiSelect.LocalizeBehavior], Polymer.Element
+		) {
+			static get is() { return 'd2l-multi-select-item'; }
+			static get properties() {
+				return {
+					/**
+					 * Fired when the multi-select-item is deleted.
+					 * @event d2l-multi-select-item-deleted
+					*/
+
+					/**
+					* Text displayed in the multi-select-item.
+					*/
+					text: {
+						type: String,
+						value: ''
+					},
+					/**
+					* Whether the multi-select-item can be deleted. False unless 'deletable' property is set.
+					*/
+					deletable: {
+						type: Boolean,
+						value: false
+					},
+					/**
+					* Optional icon to be shown beside the multi-select-item.
+					*/
+					icon: {
+						type: String,
+						value: ''
+					},
+				};
+			}
+
+			constructor() {
+				super();
+				this._keyCodes = { BACKSPACE: 8, DELETE: 46 };
+			}
+
+			ready() {
+				super.ready();
+				this.tabIndex = -1; // Set tabindex to allow focusable behaviour
+				this.addEventListener('keydown', this._onKeyDown);
+			}
+
+			disconnectedCallback() {
+				super.disconnectedCallback();
+				this.removeEventListener('keydown', this._onKeyDown);
+			}
+
+			_onKeyDown(event) {
+				if ((event.keyCode === this._keyCodes.BACKSPACE || event.keyCode === this._keyCodes.DELETE)
+					&& this.deletable) {
+					event.preventDefault();
+					event.stopPropagation();
+					this._onDeleteClick();
+				}
+			}
+
+			_onDeleteClick() {
+				this.dispatchEvent(new CustomEvent(
+					'd2l-multi-select-item-deleted',
+					{ bubbles: true, composed: true, detail: { value: this.text } }
+				));
+				this.parentNode.removeChild(this);
+			}
+		}
+		customElements.define(D2LMultiSelectItem.is, D2LMultiSelectItem);
+	</script>
+</dom-module>
