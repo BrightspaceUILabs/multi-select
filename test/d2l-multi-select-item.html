@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+		<title>d2l-multi-select-item test</title>
+		<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+		<script src="../../web-component-tester/browser.js"></script>
+		<script src="../../iron-test-helpers/mock-interactions.js"></script>
+		<link rel="import" href="../d2l-multi-select-item.html">
+	</head>
+	<body>
+		<test-fixture id="basic">
+			<template>
+				<d2l-multi-select-item text="select-item"></d2l-multi-select-item>
+			</template>
+		</test-fixture>
+		<test-fixture id="deletable">
+			<template>
+				<d2l-multi-select-item deletable text="deletable-select-item"></d2l-multi-select-item>
+			</template>
+		</test-fixture>
+		<script>
+			describe('<d2l-multi-select-item>', () => {
+				let item;
+				let itemShadowRoot;
+				let text;
+				let deleteIcon;
+
+				describe('basic', () => {
+					beforeEach(() => {
+						item = fixture('basic');
+						itemShadowRoot = item.shadowRoot;
+						text = itemShadowRoot.querySelector('.d2l-multi-select-item-text').innerHTML;
+						deleteIcon = itemShadowRoot.querySelector('.d2l-multi-select-item-wrapper d2l-icon');
+					});
+
+					it('should pass text parameter correctly', () => {
+						expect(text).to.equal('select-item');
+					});
+
+					it('should not show the delete button', () => {
+						expect(deleteIcon.hidden).to.be.true;
+					});
+				});
+
+				describe('deletable', () => {
+					beforeEach(() => {
+						item = fixture('deletable');
+						itemShadowRoot = item.shadowRoot;
+						text = itemShadowRoot.querySelector('.d2l-multi-select-item-text').innerHTML;
+						deleteIcon = itemShadowRoot.querySelector('.d2l-multi-select-item-wrapper d2l-icon');
+					});
+
+					it('should pass text parameter correctly', () => {
+						expect(text).to.equal('deletable-select-item');
+					});
+
+					it('should show the delete icon', () => {
+						expect(deleteIcon.hidden).to.be.false;
+					});
+
+					it('should be deleted when button is clicked', () => {
+						let itemToDelete = document.getElementById('deletable').querySelector('d2l-multi-select-item');
+						expect(itemToDelete).to.not.be.null;
+
+						MockInteractions.tap(deleteIcon);
+						itemToDelete = document.getElementById('deletable').querySelector('d2l-multi-select-item');
+						expect(itemToDelete).to.be.null;
+					});
+				});
+			});
+		</script>
+	</body>
+</html>
