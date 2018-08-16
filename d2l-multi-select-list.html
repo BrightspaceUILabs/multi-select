@@ -1,0 +1,165 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../d2l-colors/d2l-colors.html">
+<link rel="import" href="../d2l-typography/d2l-typography-shared-styles.html">
+<link rel="import" href="localize-behavior.html">
+
+<dom-module id="d2l-multi-select-list">
+	<template strip-whitespace>
+		<style>
+			:host {
+				display: inline-block;
+			}
+
+			::slotted(d2l-multi-select-list-item) {
+				padding: 0.15rem;
+			}
+
+		</style>
+
+		<slot></slot>
+	</template>
+	<script>
+		/**
+		 * `<d2l-multi-select-list>`
+		 * Polymer-based web component for D2L multi-select-list
+		 * @demo demo/index.hmtl
+		 */
+		class D2LMultiSelectList extends Polymer.mixinBehaviors(
+			[D2L.PolymerBehaviors.D2LMultiSelect.LocalizeBehavior], Polymer.Element
+		) {
+			static get is() { return 'd2l-multi-select-list'; }
+			static get properties() {
+				return {
+					/**
+					* The list of multi-select-list-items.
+					*/
+					_items: {
+						type: Array,
+						value: []
+					},
+				};
+			}
+
+			constructor() {
+				super();
+				this._keyCodes = { LEFT: 37, RIGHT: 39, BACKSPACE: 8, DELETE: 46 };
+			}
+
+			connectedCallback() {
+				super.connectedCallback();
+				this.tabIndex = 0; // Set tabindex to allow component to be focusable
+
+				this._items = this.getEffectiveChildren();
+				this.addEventListener('keydown', this._onKeyDown);
+				this.addEventListener('d2l-multi-select-list-item-deleted', this._onItemRemoved);
+			}
+
+			disconnectedCallback() {
+				super.disconnectedCallback();
+				this.removeEventListener('keydown', this._onKeyDown);
+				this.removeEventListener('d2l-multi-select-list-item-deleted', this._onItemRemoved);
+			}
+
+			_onItemRemoved(event) {
+				// Handle when an item is deleted via click
+				const { target } = event;
+				const itemIndex = this._items.indexOf(target);
+				target.deleteItem();
+				this._items.splice(itemIndex, 1);
+			}
+
+			_onItemAdded(element) {
+				this._items.push(element);
+			}
+
+			_onKeyDown(event) {
+				const rootTarget = event.composedPath()[0];
+				const { keyCode } = event;
+
+				if (Object.values(this._keyCodes).indexOf(keyCode) !== -1) {
+					// Prevent scrolling and page navigation via keyboard
+					event.preventDefault();
+					event.stopPropagation();
+				}
+
+				if (keyCode === this._keyCodes.LEFT || keyCode === this._keyCodes.RIGHT) {
+					// Move focus from list to items
+					if (rootTarget === this) {
+						keyCode === this._keyCodes.RIGHT
+							? this._focusFirst()
+							: this._focusLast();
+						return;
+					}
+
+					keyCode === this._keyCodes.RIGHT
+						? this._focusNext(rootTarget)
+						: this._focusPrevious(rootTarget);
+
+				} else if (keyCode === this._keyCodes.BACKSPACE || keyCode === this._keyCodes.DELETE) {
+					const itemIndex = this._items.indexOf(rootTarget);
+					if (itemIndex  !== -1) {
+						rootTarget.deleteItem();
+						keyCode === this._keyCodes.BACKSPACE
+							? this._focusPrevious(rootTarget)
+							: this._focusNext(rootTarget);
+
+						this._items.splice(itemIndex, 1);
+					}
+				}
+			}
+
+			_focusFirst() {
+				const item = this._tryGetNextFocusable();
+				if (item) {
+					item.focus();
+				}
+			}
+
+			_focusLast() {
+				const item = this._tryGetPreviousFocusable();
+				if (item) {
+					item.focus();
+				}
+			}
+
+			_focusNext(item) {
+				item = this._tryGetNextFocusable(item);
+				item ? item.focus() : this._focusFirst();
+			}
+
+			_focusPrevious(item) {
+				item = this._tryGetPreviousFocusable(item);
+				item ? item.focus() : this._focusLast();
+			}
+
+			_tryGetNextFocusable(item) {
+				if (!this._items || this._items.length === 0) {
+					return;
+				}
+				if (!item) {
+					return this._items[0];
+				}
+				const itemIndex = this._items.indexOf(item);
+				if (itemIndex === this._items.length - 1) {
+					return;
+				}
+				return this._items[itemIndex + 1];
+			}
+
+			_tryGetPreviousFocusable(item) {
+				if (!this._items || this._items.length === 0) {
+					return;
+				}
+				if (!item) {
+					return this._items[this._items.length - 1];
+				}
+				const itemIndex = this._items.indexOf(item);
+				if (itemIndex === 0) {
+					return;
+				}
+				return this._items[itemIndex - 1];
+			}
+		}
+		customElements.define(D2LMultiSelectList.is, D2LMultiSelectList);
+	</script>
+</dom-module>
