@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+		<title>d2l-multi-select-list test</title>
+		<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+		<script src="../../web-component-tester/browser.js"></script>
+		<script src="../../iron-test-helpers/mock-interactions.js"></script>
+		<link rel="import" href="../d2l-multi-select-list-item.html">
+		<link rel="import" href="../d2l-multi-select-list.html">
+	</head>
+	<body>
+		<test-fixture id="basic">
+			<template>
+				<d2l-multi-select-list>
+					<d2l-multi-select-list-item id="item-0" deletable text="item-0"></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item id="item-1" deletable text="item-1"></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item id="item-2" deletable text="item-2"></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item id="item-3" deletable text="item-3"></d2l-multi-select-list-item>
+				</d2l-multi-select-list>
+			</template>
+		</test-fixture>
+		<script>
+			describe('<d2l-multi-select-List>', () => {
+				let listFixture;
+				const _keyCodes = { LEFT: 37, RIGHT: 39, BACKSPACE: 8, DELETE: 46 };
+
+				describe('basic', () => {
+					beforeEach(() => {
+						listFixture = fixture('basic');
+						listFixture = document.querySelector('d2l-multi-select-list');
+					});
+
+					it('should render all list items', () => {
+						expect(listFixture.children.length).to.equal(4);
+					});
+
+					it('should switch focus between list elements with left/right arrow keys', () => {
+						listFixture.focus();
+						MockInteractions.pressAndReleaseKeyOn(listFixture, _keyCodes.RIGHT);
+						let expectedFocusItem = document.querySelector('#item-0');
+						expect(document.activeElement).to.equal(expectedFocusItem);
+
+						// Focus is now on item-0, trigger the next key press on it
+						MockInteractions.pressAndReleaseKeyOn(expectedFocusItem, _keyCodes.RIGHT);
+						expectedFocusItem = document.querySelector('#item-1');
+						expect(document.activeElement).to.equal(expectedFocusItem);
+
+						MockInteractions.pressAndReleaseKeyOn(expectedFocusItem, _keyCodes.LEFT);
+						expectedFocusItem = document.querySelector('#item-0');
+						expect(document.activeElement).to.equal(expectedFocusItem);
+					});
+
+					it('should delete the item and switch focus when backspace/delete are pressed', () => {
+						const item1 = document.querySelector('#item-1');
+						const item2 = document.querySelector('#item-2');
+						const item3 = document.querySelector('#item-3');
+
+						item2.focus();
+						MockInteractions.pressAndReleaseKeyOn(item2, _keyCodes.BACKSPACE);
+
+						// Focus should be on the previous element after pressing backspace
+						expect(document.activeElement).to.equal(item1);
+						MockInteractions.pressAndReleaseKeyOn(item1, _keyCodes.DELETE);
+
+						// Focus should be on the next item after pressing delete
+						expect(document.activeElement).to.equal(item3);
+					});
+
+					it('should delete the item when the icon is clicked', () => {
+						let item = document.querySelector('#item-0');
+						expect(item).to.not.be.null;
+
+						const itemShadowRoot = item.shadowRoot;
+						const deleteIcon = itemShadowRoot.querySelector('d2l-icon');
+						MockInteractions.tap(deleteIcon);
+
+						item = document.querySelector('#item-0');
+						expect(item).to.be.null;
+					});
+				});
+
+			});
+		</script>
+	</body>
+</html>
