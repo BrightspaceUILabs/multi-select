@@ -27,14 +27,16 @@
 				let text;
 				let deleteIcon;
 
-				describe('basic', () => {
-					beforeEach(() => {
-						item = fixture('basic');
-						itemShadowRoot = item.shadowRoot;
-						text = itemShadowRoot.querySelector('.d2l-multi-select-item-text').innerHTML;
-						deleteIcon = itemShadowRoot.querySelector('.d2l-multi-select-item-wrapper d2l-icon');
-					});
+				beforeEach(function() {
+					itemShadowRoot = item.shadowRoot;
+					text = itemShadowRoot.querySelector('.d2l-multi-select-item-text').innerHTML;
+					deleteIcon = itemShadowRoot.querySelector('.d2l-multi-select-item-wrapper d2l-icon');
+				})
 
+				describe('basic', () => {
+					before(() => {
+						item = fixture('basic');
+					})
 					it('should pass text parameter correctly', () => {
 						expect(text).to.equal('select-item');
 					});
@@ -45,28 +47,15 @@
 				});
 
 				describe('deletable', () => {
-					beforeEach(() => {
+					before(() => {
 						item = fixture('deletable');
-						itemShadowRoot = item.shadowRoot;
-						text = itemShadowRoot.querySelector('.d2l-multi-select-item-text').innerHTML;
-						deleteIcon = itemShadowRoot.querySelector('.d2l-multi-select-item-wrapper d2l-icon');
-					});
-
+					})
 					it('should pass text parameter correctly', () => {
 						expect(text).to.equal('deletable-select-item');
 					});
 
 					it('should show the delete icon', () => {
 						expect(deleteIcon.hidden).to.be.false;
-					});
-
-					it('should be deleted when button is clicked', () => {
-						let itemToDelete = document.getElementById('deletable').querySelector('d2l-multi-select-item');
-						expect(itemToDelete).to.not.be.null;
-
-						MockInteractions.tap(deleteIcon);
-						itemToDelete = document.getElementById('deletable').querySelector('d2l-multi-select-item');
-						expect(itemToDelete).to.be.null;
 					});
 				});
 			});

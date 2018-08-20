@@ -80,7 +80,7 @@
 
 		<div class="d2l-multi-select-item-wrapper">
 			<div class="d2l-multi-select-item-text">[[text]]</div>
-			<d2l-icon icon="d2l-tier1:close-large-thick" hidden=[[!deletable]] on-click="_onDeleteClick" />
+			<d2l-icon icon="d2l-tier1:close-large-thick" hidden=[[!deletable]] />
 		</div>
 	</template>
 	<script>
@@ -95,10 +95,6 @@
 			static get is() { return 'd2l-multi-select-item'; }
 			static get properties() {
 				return {
-					/**
-					 * Fired when the multi-select-item is deleted.
-					 * @event d2l-multi-select-item-deleted
-					*/
 
 					/**
 					* Text displayed in the multi-select-item.
@@ -108,7 +104,7 @@
 						value: ''
 					},
 					/**
-					* Whether the multi-select-item can be deleted. False unless 'deletable' property is set.
+					* Whether the multi-select-item can be deleted.
 					*/
 					deletable: {
 						type: Boolean,
@@ -119,7 +115,6 @@
 
 			constructor() {
 				super();
-				this._keyCodes = { BACKSPACE: 8, DELETE: 46 };
 			}
 
 			ready() {
@@ -128,30 +123,8 @@
 
 			connectedCallback() {
 				super.connectedCallback();
-				this.tabIndex = -1; // Set tabindex to allow focusable behaviour
-				this.addEventListener('keydown', this._onKeyDown);
-			}
-
-			disconnectedCallback() {
-				super.disconnectedCallback();
-				this.removeEventListener('keydown', this._onKeyDown);
-			}
-
-			_onKeyDown(event) {
-				if ((event.keyCode === this._keyCodes.BACKSPACE || event.keyCode === this._keyCodes.DELETE)
-					&& this.deletable) {
-					event.preventDefault();
-					event.stopPropagation();
-					this._onDeleteClick();
-				}
-			}
-
-			_onDeleteClick() {
-				this.dispatchEvent(new CustomEvent(
-					'd2l-multi-select-item-deleted',
-					{ bubbles: true, composed: true, detail: { value: this.text } }
-				));
-				this.parentNode.removeChild(this);
+				 // Set tabindex to allow focusable behaviour from the list
+				this.tabIndex = -1;
 			}
 		}
 		customElements.define(D2LMultiSelectItem.is, D2LMultiSelectItem);
