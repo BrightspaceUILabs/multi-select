@@ -3,42 +3,44 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-		<title>d2l-multi-select-item test</title>
+		<title>d2l-multi-select-list-item test</title>
 		<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
 		<script src="../../web-component-tester/browser.js"></script>
 		<script src="../../iron-test-helpers/mock-interactions.js"></script>
-		<link rel="import" href="../d2l-multi-select-item.html">
+		<link rel="import" href="../d2l-multi-select-list-item.html">
 	</head>
 	<body>
 		<test-fixture id="basic">
 			<template>
-				<d2l-multi-select-item text="select-item"></d2l-multi-select-item>
+				<d2l-multi-select-list-item text="basic-item"></d2l-multi-select-list-item>
 			</template>
 		</test-fixture>
 		<test-fixture id="deletable">
 			<template>
-				<d2l-multi-select-item deletable text="deletable-select-item"></d2l-multi-select-item>
+				<d2l-multi-select-list-item deletable text="deletable-item"></d2l-multi-select-list-item>
 			</template>
 		</test-fixture>
 		<script>
-			describe('<d2l-multi-select-item>', () => {
+			describe('<d2l-multi-select-list-item>', () => {
 				let item;
 				let itemShadowRoot;
 				let text;
 				let deleteIcon;
 
-				beforeEach(function() {
+				function setItemVariables() {
 					itemShadowRoot = item.shadowRoot;
-					text = itemShadowRoot.querySelector('.d2l-multi-select-item-text').innerHTML;
-					deleteIcon = itemShadowRoot.querySelector('.d2l-multi-select-item-wrapper d2l-icon');
-				})
+					text = itemShadowRoot.querySelector('.d2l-multi-select-list-item-text').innerHTML;
+					deleteIcon = itemShadowRoot.querySelector('.d2l-multi-select-list-item-wrapper d2l-icon');
+				}
 
 				describe('basic', () => {
-					before(() => {
+					beforeEach(() => {
 						item = fixture('basic');
-					})
+						setItemVariables();
+					});
+
 					it('should pass text parameter correctly', () => {
-						expect(text).to.equal('select-item');
+						expect(text).to.equal('basic-item');
 					});
 
 					it('should not show the delete button', () => {
@@ -49,13 +51,24 @@
 				describe('deletable', () => {
 					before(() => {
 						item = fixture('deletable');
-					})
+						setItemVariables();
+					});
+
 					it('should pass text parameter correctly', () => {
-						expect(text).to.equal('deletable-select-item');
+						expect(text).to.equal('deletable-item');
 					});
 
 					it('should show the delete icon', () => {
 						expect(deleteIcon.hidden).to.be.false;
+					});
+
+					it('should send the deleted event when delete icon is clicked', () => {
+						const deleteItemSpy = sinon.spy();
+						item.addEventListener('d2l-multi-select-list-item-deleted', deleteItemSpy);
+						MockInteractions.tap(deleteIcon);
+
+						expect(deleteItemSpy.callCount).to.equal(1);
+						expect(deleteItemSpy.args[0][0].detail.value).to.equal('deletable-item');
 					});
 				});
 			});
