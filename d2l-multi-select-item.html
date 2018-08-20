@@ -9,52 +9,36 @@
 	<template strip-whitespace>
 		<style>
 			:host {
-				display: inline-block;
-				position: relative;
-				outline: none;
 				cursor: pointer;
+				display: inline-block;
+				outline: none;
+				position: relative;
 			}
 
 			.d2l-multi-select-item-wrapper {
-				display: flex;
-				font-size: 16px;
-				font-family: Lato;
-				color: var(--d2l-color-ferrite);
+				@apply --d2l-body-compact-text;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				-webkit-user-select: none;
+
 				align-items: center;
-				min-height: 30px;
-				height: 100%;
-				padding: 0px 15px;
 				background-color: var(--d2l-color-sylvite);
 				border: 1px solid var(--d2l-color-gypsum);
-				border-radius: 5px;
-				-webkit-box-sizing: border-box;
-				-moz-box-sizing: border-box;
-				-ms-box-sizing: border-box;
-				box-sizing: border-box;
-				outline: none;
+				border-radius: 0.25rem;
 				cursor: pointer;
-			}
-
-			:host([icon]) .d2l-multi-select-item-wrapper {
-				padding-left: 40px;
-			}
-
-			:host([dir='rtl'][icon]) .d2l-multi-select-item-wrapper {
-				padding-left: 15px;
-				padding-right: 40px;
+				display: flex;
+				line-height: normal;
+				outline: none;
+				padding: 0.25rem 0.75rem 0.2rem;
 			}
 
 			:host([deletable]) .d2l-multi-select-item-wrapper {
-				padding-right: 8px;
+				padding-right: 0.4rem;
 			}
 
 			:host([dir='rtl'][deletable]) .d2l-multi-select-item-wrapper {
-				padding-left: 8px;
-				padding-right: 15px;
-			}
-
-			:host([dir='rtl'][deletable][icon]) .d2l-multi-select-item-wrapper {
-				padding-right: 40px;
+				padding-left: 0.4rem;
+				padding-right: 0.75rem;
 			}
 
 			:host(:hover) .d2l-multi-select-item-wrapper {
@@ -63,7 +47,7 @@
 			}
 
 			:host(:hover) .d2l-multi-select-item-wrapper d2l-icon:hover {
-				opacity: 1;
+				color: var(--d2l-color-ferrite);
 			}
 
 			:host(:focus) .d2l-multi-select-item-wrapper,
@@ -73,29 +57,14 @@
 				color: #ffffff;
 			}
 
-			img {
-				height: 30px;
-				width: 30px;
-				border-radius: 4px;
-				position: absolute;
-				left: 0;
-				top: 0;
-				object-fit: cover;
-			}
-
-			:host(:dir(rtl)) img {
-				right: 0;
-				left: initial;
-			}
-
 			d2l-icon {
-				--d2l-icon-height: 10px;
-				--d2l-icon-width: 10px;
-				color: var(--d2l-color-ferrite);
-				padding: 4px;
-				margin-left: 3px;
-				opacity: 0.75;
+				--d2l-icon-height: 0.5rem;
+				--d2l-icon-width: 0.5rem;
+				color: var(--d2l-color-galena);
 				cursor: pointer;
+				padding: 0.2rem;
+				margin-left: 0.15rem;
+				vertical-align: middle;
 			}
 
 			d2l-icon[hidden] {
@@ -103,20 +72,15 @@
 			}
 
 			:host(:dir(rtl)) d2l-icon {
-				margin-right: 3px;
+				margin-left: 0;
+				margin-right: 0.15rem;
 			}
 
 		</style>
 
-		<div class="d2l-multi-select-item-wrapper" aria-label$=[[text]]>
-			<img hidden=[[!icon]] src="[[icon]]"/>
+		<div class="d2l-multi-select-item-wrapper">
 			<div class="d2l-multi-select-item-text">[[text]]</div>
-			<d2l-icon
-				icon="d2l-tier1:close-large-thick"
-				hidden=[[!deletable]]
-				aria-label$="[[localize('delete')]]"
-				on-click="_onDeleteClick"
-			/>
+			<d2l-icon icon="d2l-tier1:close-large-thick" hidden=[[!deletable]] on-click="_onDeleteClick" />
 		</div>
 	</template>
 	<script>
@@ -150,13 +114,6 @@
 						type: Boolean,
 						value: false
 					},
-					/**
-					* Optional icon to be shown beside the multi-select-item.
-					*/
-					icon: {
-						type: String,
-						value: ''
-					},
 				};
 			}
 
@@ -167,6 +124,10 @@
 
 			ready() {
 				super.ready();
+			}
+
+			connectedCallback() {
+				super.connectedCallback();
 				this.tabIndex = -1; // Set tabindex to allow focusable behaviour
 				this.addEventListener('keydown', this._onKeyDown);
 			}
