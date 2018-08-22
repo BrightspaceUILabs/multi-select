@@ -75,8 +75,10 @@
 			_onKeyDown(event) {
 				const rootTarget = event.composedPath()[0];
 				const { keyCode } = event;
+				// IE11 doesn't support Object.values
+				const keyCodesArray = Object.keys(this._keyCodes).map(e => this._keyCodes[e]);
 
-				if (Object.values(this._keyCodes).indexOf(keyCode) !== -1) {
+				if (keyCodesArray.indexOf(keyCode) !== -1) {
 					// Prevent scrolling and page navigation via keyboard
 					event.preventDefault();
 					event.stopPropagation();
