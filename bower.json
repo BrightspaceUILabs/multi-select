@@ -20,7 +20,8 @@
     "d2l-colors": "^3.1.2",
     "d2l-icons": "^5.0.2",
     "d2l-typography": "^6.0.0",
-    "d2l-localize-behavior": "^1.1.2"
+    "d2l-localize-behavior": "^1.1.2",
+    "d2l-polymer-behaviors": "^1.7.3"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
