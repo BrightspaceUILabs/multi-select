@@ -15,9 +15,9 @@
 		<test-fixture id="basic">
 			<template>
 				<d2l-multi-select-list>
-					<d2l-multi-select-list-item id="item-0" deletable text="item-0"></d2l-multi-select-list-item>
-					<d2l-multi-select-list-item id="item-1" deletable text="item-1"></d2l-multi-select-list-item>
-					<d2l-multi-select-list-item id="item-2" deletable text="item-2"></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item id="item0" deletable text="item0"></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item id="item1" deletable text="item1"></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item id="item2" deletable text="item2"></d2l-multi-select-list-item>
 				</d2l-multi-select-list>
 			</template>
 		</test-fixture>
@@ -36,43 +36,51 @@
 						expect(listFixture.children.length).to.equal(3);
 					});
 
-					it('should delete the item and switch focus to the previous item when backspace is pressed', (done) => {
-						const item0 = document.querySelector('#item-0');
-						const item1 = document.querySelector('#item-1');
-
-						item1.focus();
-						MockInteractions.pressAndReleaseKeyOn(item1, _keyCodes.BACKSPACE);
-
-						Polymer.RenderStatus.afterNextRender(listFixture, function() {
-							expect(D2L.Dom.Focus.getComposedActiveElement()).to.equal(item0);
-							done();
-						});
-					});
-
-					it('should delete the item and switch focus to the next item when delete is pressed', (done) => {
-						const item1 = document.querySelector('#item-1');
-						const item2 = document.querySelector('#item-2');
-
-						item1.focus();
-						MockInteractions.pressAndReleaseKeyOn(item1, _keyCodes.DELETE);
-
-						Polymer.RenderStatus.afterNextRender(listFixture, function() {
-							expect(D2L.Dom.Focus.getComposedActiveElement()).to.equal(item2);
-							done();
-						});
-					});
-
 					it('should delete the item when the icon is clicked', () => {
-						let item = document.querySelector('#item-0');
+						let item = document.getElementById('item0');
 						expect(item).to.not.be.null;
 
 						const itemShadowRoot = item.shadowRoot;
 						const deleteIcon = itemShadowRoot.querySelector('d2l-icon');
 						MockInteractions.tap(deleteIcon);
 
-						item = document.querySelector('#item-0');
+						item = document.getElementById('item0');
 						expect(listFixture.children.length).to.equal(2);
 						expect(item).to.be.null;
+					});
+
+					describe('keyboard-behavior', () => {
+						let item0, item1, item2;
+						beforeEach((done) => {
+							Polymer.RenderStatus.afterNextRender(listFixture, () => {
+								item0 = document.getElementById('item0');
+								item1 = document.getElementById('item1');
+								item2 = document.getElementById('item2');
+								done();
+							});
+						});
+
+						function testDeleteAndFocus(itemToDelete, expectedFocusItem, keyCode, done) {
+							MockInteractions.pressAndReleaseKeyOn(itemToDelete, keyCode);
+
+							Polymer.RenderStatus.afterNextRender(listFixture, () => {
+								expect(document.getElementById(itemToDelete.id)).to.be.null;
+								expect(D2L.Dom.Focus.getComposedActiveElement()).to.equal(expectedFocusItem);
+								done();
+							});
+						}
+
+						it('should delete the item when Backspace is pressed and switch focus to the previous item', (done) =>
+							testDeleteAndFocus(item1, item0, _keyCodes.BACKSPACE, done));
+
+						it('should delete the item when Backspace is pressed and switch focus to the next item when it is the first of the list', (done) =>
+							testDeleteAndFocus(item0, item1, _keyCodes.BACKSPACE, done));
+
+						it('should delete the item when Delete is pressed and switch focus to the next item', (done) =>
+							testDeleteAndFocus(item1, item2, _keyCodes.DELETE, done));
+
+						it('should delete the item when Delete is pressed and switch focus to the previous item when it is the last item', (done) =>
+							testDeleteAndFocus(item2, item1, _keyCodes.DELETE, done));
 					});
 				});
 

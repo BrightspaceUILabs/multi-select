@@ -88,17 +88,24 @@
 			_onKeyDown(event) {
 				const rootTarget = event.composedPath()[0];
 				const { keyCode } = event;
+				const itemIndex = this.getEffectiveChildren().indexOf(rootTarget);
 
-				if (keyCode === this._keyCodes.BACKSPACE || keyCode === this._keyCodes.DELETE) {
+				if ((keyCode === this._keyCodes.BACKSPACE || keyCode === this._keyCodes.DELETE)
+					&& itemIndex !== -1) {
+
 					event.preventDefault();
 					event.stopPropagation();
 
-					if (this.getEffectiveChildren().indexOf(rootTarget)  !== -1) {
-						keyCode === this._keyCodes.BACKSPACE
+					if (keyCode === this._keyCodes.BACKSPACE) {
+						itemIndex === 0
+							? this.__focusNext(rootTarget)
+							: this.__focusPrevious(rootTarget);
+					} else {
+						itemIndex === this.getEffectiveChildren().length - 1
 							? this.__focusPrevious(rootTarget)
 							: this.__focusNext(rootTarget);
-						rootTarget.deleteItem();
 					}
+					rootTarget.deleteItem();
 				}
 			}
 		}
