@@ -33,17 +33,19 @@
 			static get properties() {
 				return {
 					/**
-					* The list of multi-select-list-items.
+					* Keycodes for keyboard behavior
 					*/
-					_items: {
-						type: Array,
-						value: []
-					},
-
 					_keyCodes: {
 						type: Object,
 						value: { BACKSPACE: 8, DELETE: 46 }
 					},
+					/**
+					* Tracks the currently focused item for managing tabindex
+					*/
+					_currentlyFocusedItem: {
+						type: Node,
+						value: null
+					}
 				};
 			}
 
@@ -55,30 +57,49 @@
 				super.connectedCallback();
 
 				Polymer.RenderStatus.afterNextRender(this, () => {
+					const listItems = this.getEffectiveChildren();
 					// Set up for d2l-focusable-arrowkeys-behavior
 					this.arrowKeyFocusablesContainer = this;
 					this.arrowKeyFocusablesProvider = () => Promise.resolve(this.getEffectiveChildren());
 
-					this.tabIndex = 0; // Set tabindex to allow component to be focusable
-					this.addEventListener('keydown', this._onKeyDown);
-					this.addEventListener('focus', this._onFocus);
-					this.addEventListener('d2l-multi-select-list-item-deleted', this._onListItemDeleted);
+					// Set tabindex to allow component to be focusable
+					if (listItems.length) {
+						listItems[0].tabIndex = 0;
+						this._currentlyFocusedItem = listItems[0];
+					}
 
+					this.addEventListener('blur', this._onListItemBlur, true);
+					this.addEventListener('d2l-multi-select-list-item-deleted', this._onListItemDeleted);
+					this.addEventListener('focus', this._onListItemFocus, true);
+					this.addEventListener('keydown', this._onKeyDown);
 				});
 			}
 
 			disconnectedCallback() {
 				super.disconnectedCallback();
-				this.removeEventListener('keydown', this._onKeyDown);
-				this.removeEventListener('focus', this._onFocus);
+				this.removeEventListener('blur', this._onListItemBlur, true);
 				this.removeEventListener('d2l-multi-select-list-item-deleted', this._onListItemDeleted);
+				this.removeEventListener('focus', this._onListItemFocus, true);
+				this.removeEventListener('keydown', this._onKeyDown);
 			}
 
-			_onFocus(event) {
-				// Only focus if triggered from an element that isn't part of the list
-				if (this.getEffectiveChildren().indexOf(event.relatedTarget) === -1) {
-					this.__focusFirst();
+			_onListItemBlur(event) {
+				const listItems = this.getEffectiveChildren();
+				const { relatedTarget } = event;
+
+				this._currentlyFocusedItem.tabIndex = -1;
+
+				// Reset tabindex to the first element when the next focused element is not a list item
+				if (listItems.indexOf(relatedTarget) === -1) {
+					listItems[0].tabIndex = 0;
+					this._currentlyFocusedItem = listItems[0];
 				}
+			}
+
+			_onListItemFocus(event) {
+				this._currentlyFocusedItem.tabIndex = -1;
+				this._currentlyFocusedItem = event.target;
+				this._currentlyFocusedItem.tabIndex = 0;
 			}
 
 			_onListItemDeleted(event) {
@@ -86,17 +107,16 @@
 			}
 
 			_onKeyDown(event) {
-				const rootTarget = event.composedPath()[0];
+				const { BACKSPACE, DELETE } = this._keyCodes;
 				const { keyCode } = event;
+				const rootTarget = event.composedPath()[0];
 				const itemIndex = this.getEffectiveChildren().indexOf(rootTarget);
 
-				if ((keyCode === this._keyCodes.BACKSPACE || keyCode === this._keyCodes.DELETE)
-					&& itemIndex !== -1) {
-
+				if ((keyCode === BACKSPACE || keyCode === DELETE) && itemIndex !== -1) {
 					event.preventDefault();
 					event.stopPropagation();
 
-					if (keyCode === this._keyCodes.BACKSPACE) {
+					if (keyCode === BACKSPACE) {
 						itemIndex === 0
 							? this.__focusNext(rootTarget)
 							: this.__focusPrevious(rootTarget);

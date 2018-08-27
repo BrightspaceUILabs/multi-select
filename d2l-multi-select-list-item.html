@@ -125,15 +125,12 @@
 				super();
 			}
 
-			ready() {
-				super.ready();
-			}
-
 			connectedCallback() {
 				super.connectedCallback();
 				// Set tabindex to allow focusable behaviour from the list
 				this.tabIndex = -1;
 			}
+
 			_onClick() {
 				// Fix focus not triggering on IE11 when text is clicked
 				this.focus();
