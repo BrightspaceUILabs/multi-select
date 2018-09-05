@@ -40,12 +40,35 @@
 						<d2l-multi-select-list-item deletable text="List item 3"></d2l-multi-select-list-item>
 						<d2l-multi-select-list-item deletable text="List item 4"></d2l-multi-select-list-item>
 						<d2l-multi-select-list-item deletable text="List item 5"></d2l-multi-select-list-item>
-					</d2l-multi-select-list-list>
+					</d2l-multi-select-list>
+				</template>
+			</demo-snippet>
+			<h3>d2l-multi-select-input (slotted)</h3>
+			<demo-snippet>
+				<template>
+					<d2l-multi-select-input id="slotted-input-demo">
+						<d2l-multi-select-list-item deletable text="Existing list item 0"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable text="Existing list item 1"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable text="Existing list item 2"></d2l-multi-select-list-item>
+						<div slot="input">
+							<input id="slotted-input-demo-input">
+							<button id="slotted-input-demo-button">Add</button>
+						</div>
+					</d2l-multi-select-input>
+				</template>
+			</demo-snippet>
 				</template>
 			</demo-snippet>
 		</div>
 		<script>
 			document.body.classList.add('d2l-typography');
+			const slottedDemo = document.getElementById('slotted-input-demo');
+			const button = document.getElementById('slotted-input-demo-button');
+			const input = document.getElementById('slotted-input-demo-input');
+			button.addEventListener('click', () => {
+				slottedDemo.addItem(input.value);
+				input.value = '';
+			});
 		</script>
 	</body>
 </html>

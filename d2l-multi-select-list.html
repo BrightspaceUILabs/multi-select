@@ -42,7 +42,7 @@
 					/**
 					* Tracks the currently focused item for managing tabindex
 					*/
-					_currentlyFocusedItem: {
+					_currentlyFocusedElement: {
 						type: Node,
 						value: null
 					}
@@ -65,7 +65,7 @@
 					// Set tabindex to allow component to be focusable
 					if (listItems.length) {
 						listItems[0].tabIndex = 0;
-						this._currentlyFocusedItem = listItems[0];
+						this._currentlyFocusedElement = listItems[0];
 					}
 
 					this.addEventListener('blur', this._onListItemBlur, true);
@@ -87,19 +87,19 @@
 				const listItems = this.getEffectiveChildren();
 				const { relatedTarget } = event;
 
-				this._currentlyFocusedItem.tabIndex = -1;
+				this._currentlyFocusedElement.tabIndex = -1;
 
 				// Reset tabindex to the first element when the next focused element is not a list item
 				if (listItems.indexOf(relatedTarget) === -1) {
 					listItems[0].tabIndex = 0;
-					this._currentlyFocusedItem = listItems[0];
+					this._currentlyFocusedElement = listItems[0];
 				}
 			}
 
 			_onListItemFocus(event) {
-				this._currentlyFocusedItem.tabIndex = -1;
-				this._currentlyFocusedItem = event.target;
-				this._currentlyFocusedItem.tabIndex = 0;
+				this._currentlyFocusedElement.tabIndex = -1;
+				this._currentlyFocusedElement = event.target;
+				this._currentlyFocusedElement.tabIndex = 0;
 			}
 
 			_onListItemDeleted(event) {
@@ -127,6 +127,17 @@
 					}
 					rootTarget.deleteItem();
 				}
+			}
+
+			addItem(item) {
+				if (this._currentlyFocusedElement === null) {
+					this._currentlyFocusedElement = item;
+				}
+				this.getEffectiveChildren()[0].tabIndex = 0;
+				this.dispatchEvent(new CustomEvent(
+					'd2l-multi-select-list-item-added',
+					{ bubbles: true, composed: true, detail: { value: item.text } }
+				));
 			}
 		}
 		customElements.define(D2LMultiSelectList.is, D2LMultiSelectList);
