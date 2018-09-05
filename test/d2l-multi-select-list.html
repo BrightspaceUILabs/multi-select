@@ -8,8 +8,7 @@
 		<script src="../../web-component-tester/browser.js"></script>
 		<script src="../../iron-test-helpers/mock-interactions.js"></script>
 		<link rel="import" href="../../d2l-polymer-behaviors/d2l-dom-focus.html">
-		<link rel="import" href="../d2l-multi-select-list-item.html">
-		<link rel="import" href="../d2l-multi-select-list.html">
+		<link rel="import" href="../all-imports.html">
 	</head>
 	<body>
 		<test-fixture id="basic">
@@ -82,15 +81,18 @@
 						it('should delete the item when Delete is pressed and switch focus to the previous item when it is the last item', done =>
 							testDeleteAndFocus(item2, item1, _keyCodes.DELETE, done));
 
-						it('should switch tabindex when moving focusing different items', () => {
-							expect(document.getElementById(item0.id).tabIndex).to.equal(0);
-							expect(document.getElementById(item1.id).tabIndex).to.equal(-1);
-							expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
+						it('should switch tabindex when moving focusing different items', done => {
+							Polymer.RenderStatus.afterNextRender(listFixture, () => {
+								expect(document.getElementById(item0.id).tabIndex).to.equal(0);
+								expect(document.getElementById(item1.id).tabIndex).to.equal(-1);
+								expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
 
-							item1.focus();
-							expect(document.getElementById(item0.id).tabIndex).to.equal(-1);
-							expect(document.getElementById(item1.id).tabIndex).to.equal(0);
-							expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
+								item1.focus();
+								expect(document.getElementById(item0.id).tabIndex).to.equal(-1);
+								expect(document.getElementById(item1.id).tabIndex).to.equal(0);
+								expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
+								done();
+							});
 						});
 					});
 				});

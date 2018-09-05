@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+		<title>d2l-multi-select-input test</title>
+		<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+		<script src="../../web-component-tester/browser.js"></script>
+		<script src="../../iron-test-helpers/mock-interactions.js"></script>
+		<link rel="import" href="../all-imports.html">
+	</head>
+	<body>
+		<test-fixture id="basic">
+			<template>
+				<d2l-multi-select-input>
+					<d2l-multi-select-list-item deletable text="item0"></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item deletable text="item1"></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item deletable text="item2"></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item deletable text="item3"></d2l-multi-select-list-item>
+					<input slot="input">
+				</d2l-multi-select-input>
+			</template>
+		</test-fixture>
+		<script>
+			describe('<d2l-multi-select-input>', () => {
+				describe('basic', () => {
+					let inputFixture;
+
+					function getListItems() {
+						return inputFixture.querySelectorAll('d2l-multi-select-list-item');
+					}
+
+					beforeEach(done => {
+						inputFixture = fixture('basic');
+						Polymer.RenderStatus.afterNextRender(inputFixture, done);
+					});
+
+					it('should be able to add a list item', (done) => {
+						expect(getListItems().length).to.equal(4);
+						inputFixture.addItem('item4');
+
+						Polymer.RenderStatus.afterNextRender(inputFixture, () => {
+							expect(getListItems().length).to.equal(5);
+							const newItem = document.querySelector('[text="item4"]');
+							expect(newItem).to.not.be.null;
+							done();
+						});
+					});
+
+					it('should fire an event when the item is added', done => {
+						document.addEventListener('d2l-multi-select-list-item-added', event => {
+							expect(event.detail.value).to.equal('item4');
+							done();
+						});
+						inputFixture.addItem('item4');
+					});
+				});
+
+			});
+		</script>
+	</body>
+</html>
