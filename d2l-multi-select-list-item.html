@@ -86,7 +86,7 @@
 
 		</style>
 
-		<div class="d2l-multi-select-list-item-wrapper">
+		<div class="d2l-multi-select-list-item-wrapper" on-click="_onClick">
 			<div class="d2l-multi-select-list-item-text">[[text]]</div>
 			<d2l-icon icon="d2l-tier1:close-large-thick" hidden=[[!deletable]] on-click="_onDeleteItem" />
 		</div>
@@ -125,14 +125,15 @@
 				super();
 			}
 
-			ready() {
-				super.ready();
-			}
-
 			connectedCallback() {
 				super.connectedCallback();
 				// Set tabindex to allow focusable behaviour from the list
 				this.tabIndex = -1;
+			}
+
+			_onClick() {
+				// Fix focus not triggering on IE11 when text is clicked
+				this.focus();
 			}
 
 			_onDeleteItem() {
