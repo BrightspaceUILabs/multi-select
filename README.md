@@ -5,6 +5,8 @@
 
 Polymer-based web component for D2L multi select and related components
 
+(See [design.d2l][design.d2l-url])
+
 ## Installation
 
 `d2l-multi-select` can be installed from [Bower][bower-url]:
@@ -14,14 +16,19 @@ bower install d2l-multi-select
 
 ## Usage
 
-Include the [webcomponents.js](http://webcomponents.org/polyfills/) polyfill loader (for browsers who don't natively support web components), then import `d2l-multi-select.html`:
+Include the [webcomponents.js](http://webcomponents.org/polyfills/) polyfill loader (for browsers who don't natively support web components), then import the appropriate `d2l-multi-select` components as needed:
 
 ```html
 <head>
 	<script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-	<link rel="import" href="bower_components/d2l-multi-select/d2l-multi-select.html">
 </head>
 ```
+
+### Inputs
+
+#### `d2l-multi-select-text-input`
+
+`d2l-multi-select-text-input` includes a `d2l-text-input` that is hooked up to add items when 'Enter' is pressed.
 
 <!---
 ```
@@ -29,7 +36,8 @@ Include the [webcomponents.js](http://webcomponents.org/polyfills/) polyfill loa
   <template>
     <script src="../webcomponentsjs/webcomponents-loader.js"></script>
     <link rel="import" href="../d2l-typography/d2l-typography.html">
-    <link rel="import" href="d2l-multi-select.html">
+    <link rel="import" href="d2l-multi-select-text-input.html">
+    <link rel="import" href="d2l-multi-select-list-item.html">
     <custom-style include="d2l-typography">
       <style is="custom-style" include="d2l-typography"></style>
     </custom-style>
@@ -45,8 +53,55 @@ Include the [webcomponents.js](http://webcomponents.org/polyfills/) polyfill loa
 ```
 -->
 ```html
-<d2l-multi-select>My element</d2l-multi-select>
+<d2l-multi-select-text-input>
+	<d2l-multi-select-list-item deletable text="Item 1"></d2l-multi-select-list-item>
+</d2l-multi-select-text-input>
 ```
+
+#### `d2l-multi-select-input`
+
+You can use your own input component instead by putting it as a child of `d2l-multi-select-input` and setting `slot="input"` on your input element. To add items to the list, call `addItem` with the item text.
+
+```html
+<d2l-multi-select-input id="multi-select-input">
+	<div slot="input">
+		<input>
+		<button>Add</button>
+	</div>
+</d2l-multi-select-input>
+```
+
+```js
+button.addEventListener('click', () => {
+	multiSelectInput.addItem(input.value)
+})
+```
+
+### Components
+
+#### `d2l-multi-select-list-item`
+
+`d2l-multi-select-list-item` is a compact representation of information. A `deletable` property can be set to enable the option of deleting the item, although there is no wire-up.
+```html
+<d2l-multi-select-list-item deletable text="List item"></d2l-multi-select-list-item>
+```
+
+#### `d2l-multi-select-list`
+
+`d2l-multi-select-list` wraps a list of items, and provides spacing between the items, as well as keyboard navigation (arrow keys) and handling of item deletion (backspace/delete).
+```html
+<d2l-multi-select-list>
+	<d2l-multi-select-list-item text="List item 1"></d2l-multi-select-list-item>
+	<d2l-multi-select-list-item text="List item 2"></d2l-multi-select-list-item>
+	...
+</d2l-multi-select-list>
+```
+
+### Events
+
+- `d2l-multi-select-list-item-deleted`: fired on item deletion
+
+- `d2l-multi-select-list-item-added`: fired on item added to the `d2l-multi-select-list`
 
 ## Developing, Testing and Contributing
 
@@ -86,3 +141,4 @@ npm test
 [bower-image]: https://badge.fury.io/bo/d2l-multi-select.svg
 [ci-url]: https://travis-ci.org/BrightspaceUI/multi-select
 [ci-image]: https://travis-ci.org/BrightspaceUI/multi-select.svg?branch=master
+[design.d2l-url]: http://design.d2l/components/tags/

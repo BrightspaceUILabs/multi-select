@@ -22,8 +22,6 @@
 		</test-fixture>
 		<script>
 			describe('<d2l-multi-select-text-input>', () => {
-				let inputFixture;
-
 				describe('basic', () => {
 					let inputFixture;
 					let inputShadowRoot;
@@ -37,7 +35,7 @@
 						Polymer.RenderStatus.afterNextRender(inputFixture, done);
 					});
 
-					it('should be able to add a list item', (done) => {
+					it('should be able to add a list item', done => {
 						expect(inputFixture.children.length).to.equal(4);
 						textInput.value = 'item4';
 						MockInteractions.pressAndReleaseKeyOn(textInput, keyCodes.ENTER);

@@ -17,7 +17,7 @@
 
 		<d2l-multi-select-input id="d2l-multi-select-input">
 			<slot></slot>
-			<d2l-text-input slot="input" value={{_inputValue}} on-keydown="_onKeyDown"></d2l-text-input>
+			<d2l-text-input slot="input" value={{value}} on-keydown="_onKeyDown"></d2l-text-input>
 		</d2l-multi-select-input>
 
 	</template>
@@ -34,7 +34,7 @@
 					/**
 					* Value of the d2l-text-input
 					*/
-					_inputValue: {
+					value: {
 						type: String,
 						value: ''
 					}
@@ -45,9 +45,9 @@
 			}
 
 			_onKeyDown(event) {
-				if (event.keyCode === 13 && this._inputValue) {
-					this.$['d2l-multi-select-input'].addItem(this._inputValue, this);
-					this._inputValue = '';
+				if (event.keyCode === 13 && this.value) {
+					this.$['d2l-multi-select-input'].addItem(this.value, this);
+					this.value = '';
 				}
 			}
 		}

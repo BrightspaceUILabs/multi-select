@@ -82,12 +82,13 @@
 							testDeleteAndFocus(item2, item1, _keyCodes.DELETE, done));
 
 						it('should switch tabindex when moving focusing different items', done => {
+
 							Polymer.RenderStatus.afterNextRender(listFixture, () => {
 								expect(document.getElementById(item0.id).tabIndex).to.equal(0);
 								expect(document.getElementById(item1.id).tabIndex).to.equal(-1);
 								expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
 
-								item1.focus();
+								MockInteractions.focus(item1);
 								expect(document.getElementById(item0.id).tabIndex).to.equal(-1);
 								expect(document.getElementById(item1.id).tabIndex).to.equal(0);
 								expect(document.getElementById(item2.id).tabIndex).to.equal(-1);

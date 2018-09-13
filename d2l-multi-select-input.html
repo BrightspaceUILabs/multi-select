@@ -22,9 +22,11 @@
 		 */
 		class D2LMultiSelectInput extends Polymer.Element {
 			static get is() { return 'd2l-multi-select-input'; }
+
 			constructor() {
 				super();
 			}
+
 			addItem(text, ctx = this) {
 				const item = document.createElement('d2l-multi-select-list-item');
 				item.setAttribute('text',  text);
