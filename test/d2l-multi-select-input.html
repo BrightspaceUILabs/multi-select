@@ -35,20 +35,18 @@
 						Polymer.RenderStatus.afterNextRender(inputFixture, done);
 					});
 
-					it('should be able to add a list item', (done) => {
+					it('should be able to add a list item', () => {
 						expect(getListItems().length).to.equal(4);
 						inputFixture.addItem('item4');
+						Polymer.flush();
 
-						Polymer.RenderStatus.afterNextRender(inputFixture, () => {
-							expect(getListItems().length).to.equal(5);
-							const newItem = document.querySelector('[text="item4"]');
-							expect(newItem).to.not.be.null;
-							done();
-						});
+						expect(getListItems().length).to.equal(5);
+						const newItem = document.querySelector('[text="item4"]');
+						expect(newItem).to.not.be.null;
 					});
 
 					it('should fire an event when the item is added', done => {
-						document.addEventListener('d2l-multi-select-list-item-added', event => {
+						inputFixture.addEventListener('d2l-multi-select-list-item-added', event => {
 							expect(event.detail.value).to.equal('item4');
 							done();
 						});

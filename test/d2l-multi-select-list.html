@@ -60,7 +60,7 @@
 						});
 
 						function testDeleteAndFocus(itemToDelete, expectedFocusItem, keyCode, done) {
-							MockInteractions.pressAndReleaseKeyOn(itemToDelete, keyCode);
+							MockInteractions.keyDownOn(itemToDelete, keyCode);
 
 							Polymer.RenderStatus.afterNextRender(listFixture, () => {
 								expect(document.getElementById(itemToDelete.id)).to.be.null;
@@ -81,19 +81,17 @@
 						it('should delete the item when Delete is pressed and switch focus to the previous item when it is the last item', done =>
 							testDeleteAndFocus(item2, item1, _keyCodes.DELETE, done));
 
-						it('should switch tabindex when moving focusing different items', done => {
+						it('should switch tabindex when moving focusing different items', () => {
+							expect(document.getElementById(item0.id).tabIndex).to.equal(0);
+							expect(document.getElementById(item1.id).tabIndex).to.equal(-1);
+							expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
 
-							Polymer.RenderStatus.afterNextRender(listFixture, () => {
-								expect(document.getElementById(item0.id).tabIndex).to.equal(0);
-								expect(document.getElementById(item1.id).tabIndex).to.equal(-1);
-								expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
+							MockInteractions.focus(item1);
+							Polymer.flush();
 
-								MockInteractions.focus(item1);
-								expect(document.getElementById(item0.id).tabIndex).to.equal(-1);
-								expect(document.getElementById(item1.id).tabIndex).to.equal(0);
-								expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
-								done();
-							});
+							expect(document.getElementById(item0.id).tabIndex).to.equal(-1);
+							expect(document.getElementById(item1.id).tabIndex).to.equal(0);
+							expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
 						});
 					});
 				});

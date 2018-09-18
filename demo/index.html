@@ -82,13 +82,13 @@
 			const button = document.getElementById('slotted-input-demo-button');
 			const input = document.getElementById('slotted-input-demo-input');
 
-			input.addEventListener('keydown', event => {
+			input.addEventListener('keydown', function(event) {
 				if (event.keyCode === 13 && input.value) {
 					slottedDemo.addItem(input.value);
 					input.value = '';
 				}
 			});
-			button.addEventListener('click', () => {
+			button.addEventListener('click', function() {
 				if (input.value) {
 					slottedDemo.addItem(input.value);
 					input.value = '';

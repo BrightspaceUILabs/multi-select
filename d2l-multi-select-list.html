@@ -56,11 +56,13 @@
 			connectedCallback() {
 				super.connectedCallback();
 
-				Polymer.RenderStatus.afterNextRender(this, () => {
+				Polymer.RenderStatus.afterNextRender(this, function() {
 					const listItems = this.getEffectiveChildren();
 					// Set up for d2l-focusable-arrowkeys-behavior
 					this.arrowKeyFocusablesContainer = this;
-					this.arrowKeyFocusablesProvider = () => Promise.resolve(this.getEffectiveChildren());
+					this.arrowKeyFocusablesProvider = function() {
+						return Promise.resolve(this.getEffectiveChildren());
+					}.bind(this);
 
 					// Set tabindex to allow component to be focusable
 					if (listItems.length) {
@@ -72,7 +74,7 @@
 					this.addEventListener('d2l-multi-select-list-item-deleted', this._onListItemDeleted);
 					this.addEventListener('focus', this._onListItemFocus, true);
 					this.addEventListener('keydown', this._onKeyDown);
-				});
+				}.bind(this));
 			}
 
 			disconnectedCallback() {
