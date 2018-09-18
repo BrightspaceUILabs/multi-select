@@ -8,8 +8,7 @@
 		<script src="../../web-component-tester/browser.js"></script>
 		<script src="../../iron-test-helpers/mock-interactions.js"></script>
 		<link rel="import" href="../../d2l-polymer-behaviors/d2l-dom-focus.html">
-		<link rel="import" href="../d2l-multi-select-list-item.html">
-		<link rel="import" href="../d2l-multi-select-list.html">
+		<link rel="import" href="../all-imports.html">
 	</head>
 	<body>
 		<test-fixture id="basic">
@@ -61,7 +60,7 @@
 						});
 
 						function testDeleteAndFocus(itemToDelete, expectedFocusItem, keyCode, done) {
-							MockInteractions.pressAndReleaseKeyOn(itemToDelete, keyCode);
+							MockInteractions.keyDownOn(itemToDelete, keyCode);
 
 							Polymer.RenderStatus.afterNextRender(listFixture, () => {
 								expect(document.getElementById(itemToDelete.id)).to.be.null;
@@ -87,7 +86,9 @@
 							expect(document.getElementById(item1.id).tabIndex).to.equal(-1);
 							expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
 
-							item1.focus();
+							MockInteractions.focus(item1);
+							Polymer.flush();
+
 							expect(document.getElementById(item0.id).tabIndex).to.equal(-1);
 							expect(document.getElementById(item1.id).tabIndex).to.equal(0);
 							expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
