@@ -17,7 +17,13 @@
 
 		<d2l-multi-select-input id="d2l-multi-select-input">
 			<slot></slot>
-			<d2l-text-input slot="input" value={{value}} on-keydown="_onKeyDown"></d2l-text-input>
+			<d2l-text-input
+				on-keydown="_onKeyDown"
+				placeholder$="[[placeholder]]"
+				slot="input"
+				type$="[[type]]"
+				value="{{value}}"
+			></d2l-input-text>
 		</d2l-multi-select-input>
 
 	</template>
@@ -32,11 +38,17 @@
 			static get properties() {
 				return {
 					/**
-					* Value of the d2l-text-input
+					* These properties are used by d2l-text-input
 					*/
+					placeholder: {
+						type: String,
+					},
+					type: {
+						type: String,
+						value: 'text'
+					},
 					value: {
 						type: String,
-						value: ''
 					}
 				};
 			}

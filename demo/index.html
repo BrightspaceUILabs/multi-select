@@ -77,22 +77,24 @@
 			</demo-snippet>
 		</div>
 		<script>
-			document.body.classList.add('d2l-typography');
-			const slottedDemo = document.getElementById('slotted-input-demo');
-			const button = document.getElementById('slotted-input-demo-button');
-			const input = document.getElementById('slotted-input-demo-input');
+			document.addEventListener('WebComponentsReady', function() {
+				document.body.classList.add('d2l-typography');
+				const slottedDemo = document.getElementById('slotted-input-demo');
+				const button = document.getElementById('slotted-input-demo-button');
+				const input = document.getElementById('slotted-input-demo-input');
 
-			input.addEventListener('keydown', function(event) {
-				if (event.keyCode === 13 && input.value) {
-					slottedDemo.addItem(input.value);
-					input.value = '';
-				}
-			});
-			button.addEventListener('click', function() {
-				if (input.value) {
-					slottedDemo.addItem(input.value);
-					input.value = '';
-				}
+				input.addEventListener('keydown', function(event) {
+					if (event.keyCode === 13 && input.value) {
+						slottedDemo.addItem(input.value);
+						input.value = '';
+					}
+				});
+				button.addEventListener('click', function() {
+					if (input.value) {
+						slottedDemo.addItem(input.value);
+						input.value = '';
+					}
+				});
 			});
 		</script>
 	</body>

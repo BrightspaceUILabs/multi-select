@@ -55,15 +55,16 @@
 
 			connectedCallback() {
 				super.connectedCallback();
+				// Set up for d2l-focusable-arrowkeys-behavior
+				this.arrowKeyFocusablesContainer = this;
+				this.arrowKeyFocusablesDirection = 'updownleftright';
+				this.arrowKeyFocusablesNoWrap = true;
+				this.arrowKeyFocusablesProvider = function() {
+					return Promise.resolve(this.getEffectiveChildren());
+				};
 
 				Polymer.RenderStatus.afterNextRender(this, function() {
 					const listItems = this.getEffectiveChildren();
-					// Set up for d2l-focusable-arrowkeys-behavior
-					this.arrowKeyFocusablesContainer = this;
-					this.arrowKeyFocusablesProvider = function() {
-						return Promise.resolve(this.getEffectiveChildren());
-					}.bind(this);
-
 					// Set tabindex to allow component to be focusable
 					if (listItems.length) {
 						listItems[0].tabIndex = 0;
