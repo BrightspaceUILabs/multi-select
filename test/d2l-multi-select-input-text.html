@@ -35,12 +35,7 @@
 						Polymer.RenderStatus.afterNextRender(inputFixture, done);
 					});
 
-					/**
-					 * TODO:
-					 * This test doesn't seem to trigger the event or add the item to the DOM, despite
-					 * flushing and waiting via Polymer.RenderStatus.afterNextRender on TravisCI.
-					**/
-					it.skip('should be able to add a list item', done => {
+					it('should be able to add a list item', done => {
 						inputFixture.addEventListener('d2l-multi-select-list-item-added', event => {
 							expect(inputFixture.children.length).to.equal(5);
 							expect(event.detail.value).to.equal('item4');
