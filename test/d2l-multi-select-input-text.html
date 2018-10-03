@@ -12,16 +12,16 @@
 	<body>
 		<test-fixture id="basic">
 			<template>
-				<d2l-multi-select-text-input>
+				<d2l-multi-select-input-text>
 					<d2l-multi-select-list-item deletable text="item0"></d2l-multi-select-list-item>
 					<d2l-multi-select-list-item deletable text="item1"></d2l-multi-select-list-item>
 					<d2l-multi-select-list-item deletable text="item2"></d2l-multi-select-list-item>
 					<d2l-multi-select-list-item deletable text="item3"></d2l-multi-select-list-item>
-				</d2l-multi-select-text-input>
+				</d2l-multi-select-input-text>
 			</template>
 		</test-fixture>
 		<script>
-			describe('<d2l-multi-select-text-input>', () => {
+			describe('<d2l-multi-select-input-text>', () => {
 				describe('basic', () => {
 					let inputFixture;
 					let inputShadowRoot;
@@ -31,7 +31,7 @@
 					beforeEach(done => {
 						inputFixture = fixture('basic');
 						inputShadowRoot = inputFixture.shadowRoot;
-						textInput = inputShadowRoot.querySelector('d2l-text-input');
+						textInput = inputShadowRoot.querySelector('d2l-input-text');
 						Polymer.RenderStatus.afterNextRender(inputFixture, done);
 					});
 

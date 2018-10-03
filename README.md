@@ -26,9 +26,9 @@ Include the [webcomponents.js](http://webcomponents.org/polyfills/) polyfill loa
 
 ### Inputs
 
-#### `d2l-multi-select-text-input`
+#### `d2l-multi-select-input-text`
 
-`d2l-multi-select-text-input` includes a `d2l-text-input` that is hooked up to add items when 'Enter' is pressed.
+`d2l-multi-select-input-text` includes a `d2l-input-text` that is hooked up to add items when 'Enter' is pressed.
 
 <!---
 ```
@@ -36,7 +36,7 @@ Include the [webcomponents.js](http://webcomponents.org/polyfills/) polyfill loa
   <template>
     <script src="../webcomponentsjs/webcomponents-loader.js"></script>
     <link rel="import" href="../d2l-typography/d2l-typography.html">
-    <link rel="import" href="d2l-multi-select-text-input.html">
+    <link rel="import" href="d2l-multi-select-input-text.html">
     <link rel="import" href="d2l-multi-select-list-item.html">
     <custom-style include="d2l-typography">
       <style is="custom-style" include="d2l-typography"></style>
@@ -53,9 +53,9 @@ Include the [webcomponents.js](http://webcomponents.org/polyfills/) polyfill loa
 ```
 -->
 ```html
-<d2l-multi-select-text-input>
+<d2l-multi-select-input-text>
 	<d2l-multi-select-list-item deletable text="Item 1"></d2l-multi-select-list-item>
-</d2l-multi-select-text-input>
+</d2l-multi-select-input-text>
 ```
 
 #### `d2l-multi-select-input`

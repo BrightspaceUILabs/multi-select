@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../d2l-text-input/d2l-text-input.html">
+<link rel="import" href="../d2l-inputs/d2l-input-text.html">
 
-<dom-module id="d2l-multi-select-text-input">
+<dom-module id="d2l-multi-select-input-text">
 	<template strip-whitespace>
 		<style>
 			:host {
@@ -9,7 +9,7 @@
 				flex-direction: column;
 			}
 
-			d2l-text-input {
+			d2l-input-text {
 				width: 100%;
 				padding-top: 0.5rem;
 			}
@@ -17,7 +17,7 @@
 
 		<d2l-multi-select-input id="d2l-multi-select-input">
 			<slot></slot>
-			<d2l-text-input
+			<d2l-input-text
 				on-keydown="_onKeyDown"
 				placeholder$="[[placeholder]]"
 				slot="input"
@@ -29,16 +29,16 @@
 	</template>
 	<script>
 		/**
-		 * `<d2l-multi-select-text-input>`
-		 * Polymer-based web component for D2L multi-select-text-input
+		 * `<d2l-multi-select-input-text>`
+		 * Polymer-based web component for D2L multi-select-input-text
 		 * @demo demo/index.hmtl
 		 */
-		class D2LMultiSelectTextInput extends Polymer.Element {
-			static get is() { return 'd2l-multi-select-text-input'; }
+		class D2LMultiSelectInputText extends Polymer.Element {
+			static get is() { return 'd2l-multi-select-input-text'; }
 			static get properties() {
 				return {
 					/**
-					* These properties are used by d2l-text-input
+					* These properties are used by d2l-input-text
 					*/
 					placeholder: {
 						type: String,
@@ -63,6 +63,6 @@
 				}
 			}
 		}
-		customElements.define(D2LMultiSelectTextInput.is, D2LMultiSelectTextInput);
+		customElements.define(D2LMultiSelectInputText.is, D2LMultiSelectInputText);
 	</script>
 </dom-module>
