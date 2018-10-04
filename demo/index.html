@@ -31,14 +31,14 @@
 	</head>
 	<body unresolved class="d2l-typography">
 		<div class="vertical-section-container centered">
-			<h3>d2l-multi-select-text-input</h3>
+			<h3>d2l-multi-select-input-text</h3>
 			<demo-snippet>
 				<template>
-					<d2l-multi-select-text-input>
+					<d2l-multi-select-input-text placeholder="Press Enter to add an item">
 						<d2l-multi-select-list-item deletable text="Existing list item 0"></d2l-multi-select-list-item>
 						<d2l-multi-select-list-item deletable text="Existing list item 1"></d2l-multi-select-list-item>
 						<d2l-multi-select-list-item deletable text="Existing list item 2"></d2l-multi-select-list-item>
-					</d2l-multi-select-text-input>
+					</d2l-multi-select-input-text>
 				</template>
 			</demo-snippet>
 			<h3>d2l-multi-select-input (slotted)</h3>
@@ -49,7 +49,7 @@
 						<d2l-multi-select-list-item deletable text="Existing list item 1"></d2l-multi-select-list-item>
 						<d2l-multi-select-list-item deletable text="Existing list item 2"></d2l-multi-select-list-item>
 						<div class="custom-input" slot="input">
-							<input id="slotted-input-demo-input">
+							<input id="slotted-input-demo-input" placeholder="Press Enter or click Add to add an item">
 							<button id="slotted-input-demo-button">Add</button>
 						</div>
 					</d2l-multi-select-input>
@@ -77,22 +77,25 @@
 			</demo-snippet>
 		</div>
 		<script>
-			document.body.classList.add('d2l-typography');
-			const slottedDemo = document.getElementById('slotted-input-demo');
-			const button = document.getElementById('slotted-input-demo-button');
-			const input = document.getElementById('slotted-input-demo-input');
+			document.addEventListener('WebComponentsReady', function() {
+				document.body.classList.add('d2l-typography');
+				const slottedDemo = document.getElementById('slotted-input-demo');
+				const button = document.getElementById('slotted-input-demo-button');
+				const input = document.getElementById('slotted-input-demo-input');
 
-			input.addEventListener('keydown', function(event) {
-				if (event.keyCode === 13 && input.value) {
-					slottedDemo.addItem(input.value);
-					input.value = '';
-				}
-			});
-			button.addEventListener('click', function() {
-				if (input.value) {
-					slottedDemo.addItem(input.value);
-					input.value = '';
-				}
+				input.addEventListener('keydown', function(event) {
+					if (event.keyCode === 13 && input.value) {
+						slottedDemo.addItem(input.value);
+						input.value = '';
+					}
+				});
+
+				button.addEventListener('click', function() {
+					if (input.value) {
+						slottedDemo.addItem(input.value);
+						input.value = '';
+					}
+				});
 			});
 		</script>
 	</body>
