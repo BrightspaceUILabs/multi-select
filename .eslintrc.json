@@ -4,6 +4,10 @@
 		"es6": true
   },
   "globals": {
-    "localize": true
+    "require": true,
+    "localize": true,
+    "isAttestInstalled": true,
+    "ally_tests": true,
+    "attest": true
   }
 }

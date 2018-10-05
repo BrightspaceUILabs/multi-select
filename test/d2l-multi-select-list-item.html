@@ -7,6 +7,8 @@
 		<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
 		<script src="../../web-component-tester/browser.js"></script>
 		<script src="../../iron-test-helpers/mock-interactions.js"></script>
+		<script src="../node_modules/attest/attest.js"></script>
+		<script src="./ally-test-script.js"></script>
 		<link rel="import" href="../d2l-multi-select-list-item.html">
 	</head>
 	<body>
@@ -69,6 +71,29 @@
 
 						expect(deleteItemSpy.callCount).to.equal(1);
 						expect(deleteItemSpy.args[0][0].detail.value).to.equal('deletable-item');
+					});
+				});
+
+				describe('accessibility', () => {
+					describe('basic', () => {
+						before(() => fixture('basic'));
+
+						it('should pass attest run', () => {
+							if (!isAttestInstalled()) {
+								this.skip();
+							}
+							return ally_tests();
+						});
+					});
+					describe('deletable', () => {
+						before(() => fixture('deletable'));
+
+						it('should pass attest run', () => {
+							if (!isAttestInstalled()) {
+								this.skip();
+							}
+							return ally_tests();
+						});
 					});
 				});
 			});

@@ -8,6 +8,8 @@
 		<script src="../../web-component-tester/browser.js"></script>
 		<script src="../../iron-test-helpers/mock-interactions.js"></script>
 		<link rel="import" href="../../d2l-polymer-behaviors/d2l-dom-focus.html">
+		<script src="../node_modules/attest/attest.js"></script>
+		<script src="./ally-test-script.js"></script>
 		<link rel="import" href="../all-imports.html">
 	</head>
 	<body>
@@ -93,6 +95,18 @@
 							expect(document.getElementById(item1.id).tabIndex).to.equal(0);
 							expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
 						});
+					});
+				});
+				describe('accessibility', () => {
+					beforeEach(done => {
+						Polymer.RenderStatus.afterNextRender(fixture('basic'), done);
+					});
+
+					it('should pass attest run', () => {
+						if (!isAttestInstalled()) {
+							this.skip();
+						}
+						return ally_tests();
 					});
 				});
 			});

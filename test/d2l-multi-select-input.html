@@ -7,6 +7,8 @@
 		<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
 		<script src="../../web-component-tester/browser.js"></script>
 		<script src="../../iron-test-helpers/mock-interactions.js"></script>
+		<script src="../node_modules/attest/attest.js"></script>
+		<script src="./ally-test-script.js"></script>
 		<link rel="import" href="../all-imports.html">
 	</head>
 	<body>
@@ -17,7 +19,7 @@
 					<d2l-multi-select-list-item deletable text="item1"></d2l-multi-select-list-item>
 					<d2l-multi-select-list-item deletable text="item2"></d2l-multi-select-list-item>
 					<d2l-multi-select-list-item deletable text="item3"></d2l-multi-select-list-item>
-					<input slot="input">
+					<input aria-label="test-select-input" slot="input">
 				</d2l-multi-select-input>
 			</template>
 		</test-fixture>
@@ -54,6 +56,18 @@
 					});
 				});
 
+				describe('accessibility', () => {
+					beforeEach(done => {
+						Polymer.RenderStatus.afterNextRender(fixture('basic'), done);
+					});
+
+					it('should pass attest run', () => {
+						if (!isAttestInstalled()) {
+							this.skip();
+						}
+						return ally_tests();
+					});
+				});
 			});
 		</script>
 	</body>

@@ -19,6 +19,11 @@
 		<d2l-multi-select-input id="d2l-multi-select-input">
 			<slot></slot>
 			<d2l-input-text
+				aria-describedby$="[[ariaDescribedby]]"
+				aria-invalid$="[[ariaInvalid]]"
+				aria-label$="[[ariaLabel]]"
+				aria-labelledby$="[[ariaLabelledby]]"
+				autofocus$="[[autofocus]]"
 				on-keydown="_onKeyDown"
 				placeholder$="[[placeholder]]"
 				slot="input"
@@ -41,6 +46,22 @@
 					/**
 					* These properties are used by d2l-input-text
 					*/
+					ariaDescribedby: {
+						type: String
+					},
+					ariaInvalid: {
+						type: String,
+					},
+					ariaLabel: {
+						type: String,
+					},
+					ariaLabelledby: {
+						type: String,
+					},
+					autofocus: {
+						type: Boolean,
+						value: false,
+					},
 					placeholder: {
 						type: String,
 					},
