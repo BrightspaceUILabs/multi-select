@@ -23,22 +23,22 @@
 			</template>
 		</test-fixture>
 		<script>
-			describe('<d2l-multi-select-input-text>', () => {
-				describe('basic', () => {
+			describe('<d2l-multi-select-input-text>', function() {
+				describe('basic', function() {
 					let inputFixture;
 					let inputShadowRoot;
 					let textInput;
 					const keyCodes = { ENTER: 13 };
 
-					beforeEach(done => {
+					beforeEach(function(done) {
 						inputFixture = fixture('basic');
 						inputShadowRoot = inputFixture.shadowRoot;
 						textInput = inputShadowRoot.querySelector('d2l-input-text');
 						Polymer.RenderStatus.afterNextRender(inputFixture, done);
 					});
 
-					it('should be able to add a list item', done => {
-						inputFixture.addEventListener('d2l-multi-select-list-item-added', event => {
+					it('should be able to add a list item', function(done) {
+						inputFixture.addEventListener('d2l-multi-select-list-item-added', function(event) {
 							expect(inputFixture.children.length).to.equal(5);
 							expect(event.detail.value).to.equal('item4');
 							done();
@@ -50,12 +50,12 @@
 					});
 				});
 
-				describe('accessibility', () => {
-					beforeEach(done => {
+				describe('accessibility', function() {
+					beforeEach(function(done) {
 						Polymer.RenderStatus.afterNextRender(fixture('basic'), done);
 					});
 
-					it('should pass attest run', () => {
+					it('should pass attest run', function() {
 						if (!isAttestInstalled()) {
 							this.skip();
 						}

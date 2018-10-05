@@ -24,20 +24,20 @@
 			</template>
 		</test-fixture>
 		<script>
-			describe('<d2l-multi-select-input>', () => {
-				describe('basic', () => {
+			describe('<d2l-multi-select-input>', function() {
+				describe('basic', function() {
 					let inputFixture;
 
 					function getListItems() {
 						return inputFixture.querySelectorAll('d2l-multi-select-list-item');
 					}
 
-					beforeEach(done => {
+					beforeEach(function(done) {
 						inputFixture = fixture('basic');
 						Polymer.RenderStatus.afterNextRender(inputFixture, done);
 					});
 
-					it('should be able to add a list item', () => {
+					it('should be able to add a list item', function() {
 						expect(getListItems().length).to.equal(4);
 						inputFixture.addItem('item4');
 						Polymer.flush();
@@ -47,8 +47,8 @@
 						expect(newItem).to.not.be.null;
 					});
 
-					it('should fire an event when the item is added', done => {
-						inputFixture.addEventListener('d2l-multi-select-list-item-added', event => {
+					it('should fire an event when the item is added', function(done) {
+						inputFixture.addEventListener('d2l-multi-select-list-item-added', function(event) {
 							expect(event.detail.value).to.equal('item4');
 							done();
 						});
@@ -56,12 +56,12 @@
 					});
 				});
 
-				describe('accessibility', () => {
-					beforeEach(done => {
+				describe('accessibility', function() {
+					beforeEach(function(done) {
 						Polymer.RenderStatus.afterNextRender(fixture('basic'), done);
 					});
 
-					it('should pass attest run', () => {
+					it('should pass attest run', function() {
 						if (!isAttestInstalled()) {
 							this.skip();
 						}
