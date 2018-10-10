@@ -2,6 +2,10 @@ language: node_js
 node_js: node
 addons:
   chrome: stable
+before_install:
+  - curl -u${ARTIFACTORY_USER}:${ARTIFACTORY_PASS} https://d2lartifacts.artifactoryonline.com/d2lartifacts/api/npm/attest/auth/attest > .npmrc
+  - npm install attest --registry=https://d2lartifacts.artifactoryonline.com/d2lartifacts/api/npm/attest/
+before_script:
 script:
 - npm run lint
 - |
