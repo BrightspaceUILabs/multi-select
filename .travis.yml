@@ -2,6 +2,13 @@ language: node_js
 node_js: node
 addons:
   chrome: stable
+before_install:
+- curl -u${ARTIFACTORY_USER}:${ARTIFACTORY_PASS} https://d2lartifacts.artifactoryonline.com/d2lartifacts/api/npm/attest/auth/attest
+  > .npmrc
+- npm install attest --registry=https://d2lartifacts.artifactoryonline.com/d2lartifacts/api/npm/attest/
+install:
+- npm install
+before_script:
 script:
 - npm run lint
 - |
@@ -12,6 +19,3 @@ script:
     echo "Not a pull request and/or no secure environment variables, running headless tests...";
     npm run test:polymer:local || travis_terminate 1;
   fi
-env:
-  global:
-    SAUCE_USERNAME: Desire2Learn

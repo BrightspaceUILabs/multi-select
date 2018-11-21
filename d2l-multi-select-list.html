@@ -14,7 +14,9 @@
 
 		</style>
 
-		<slot></slot>
+		<div role="row">
+			<slot></slot>
+		</div>
 	</template>
 	<script>
 		/**
@@ -63,15 +65,20 @@
 					return Promise.resolve(this.getEffectiveChildren());
 				};
 
+				this.setAttribute('role', 'grid');
+
 				Polymer.RenderStatus.afterNextRender(this, function() {
 					const listItems = this.getEffectiveChildren();
-					// Set tabindex to allow component to be focusable
+					// Set tabindex to allow component to be focusable, and set role on list items
 					if (listItems.length) {
 						listItems[0].tabIndex = 0;
 						this._currentlyFocusedElement = listItems[0];
+
+						listItems.forEach(function(listItem) {
+							listItem.setAttribute('role', 'gridcell');
+						});
 					}
 
-					this.addEventListener('blur', this._onListItemBlur, true);
 					this.addEventListener('d2l-multi-select-list-item-deleted', this._onListItemDeleted);
 					this.addEventListener('focus', this._onListItemFocus, true);
 					this.addEventListener('keydown', this._onKeyDown);
@@ -80,23 +87,9 @@
 
 			disconnectedCallback() {
 				super.disconnectedCallback();
-				this.removeEventListener('blur', this._onListItemBlur, true);
 				this.removeEventListener('d2l-multi-select-list-item-deleted', this._onListItemDeleted);
 				this.removeEventListener('focus', this._onListItemFocus, true);
 				this.removeEventListener('keydown', this._onKeyDown);
-			}
-
-			_onListItemBlur(event) {
-				const listItems = this.getEffectiveChildren();
-				const { relatedTarget } = event;
-
-				this._currentlyFocusedElement.tabIndex = -1;
-
-				// Reset tabindex to the first element when the next focused element is not a list item
-				if (listItems.indexOf(relatedTarget) === -1) {
-					listItems[0].tabIndex = 0;
-					this._currentlyFocusedElement = listItems[0];
-				}
 			}
 
 			_onListItemFocus(event) {

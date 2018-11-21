@@ -8,6 +8,8 @@
 		<script src="../../web-component-tester/browser.js"></script>
 		<script src="../../iron-test-helpers/mock-interactions.js"></script>
 		<link rel="import" href="../../d2l-polymer-behaviors/d2l-dom-focus.html">
+		<script src="../node_modules/attest/attest.js"></script>
+		<script src="./ally-test-script.js"></script>
 		<link rel="import" href="../all-imports.html">
 	</head>
 	<body>
@@ -21,21 +23,21 @@
 			</template>
 		</test-fixture>
 		<script>
-			describe('<d2l-multi-select-List>', () => {
+			describe('<d2l-multi-select-List>', function() {
 				let listFixture;
 				const _keyCodes = { BACKSPACE: 8, DELETE: 46 };
 
-				describe('basic', () => {
-					beforeEach(done => {
+				describe('basic', function() {
+					beforeEach(function(done) {
 						listFixture = fixture('basic');
 						Polymer.RenderStatus.afterNextRender(listFixture, done);
 					});
 
-					it('should render all list items', () => {
+					it('should render all list items', function() {
 						expect(listFixture.children.length).to.equal(3);
 					});
 
-					it('should delete the item when the icon is clicked', () => {
+					it('should delete the item when the icon is clicked', function() {
 						let item = document.getElementById('item0');
 						expect(item).to.not.be.null;
 
@@ -48,10 +50,10 @@
 						expect(item).to.be.null;
 					});
 
-					describe('keyboard-behavior', () => {
+					describe('keyboard-behavior', function() {
 						let item0, item1, item2;
-						beforeEach(done => {
-							Polymer.RenderStatus.afterNextRender(listFixture, () => {
+						beforeEach(function(done) {
+							Polymer.RenderStatus.afterNextRender(listFixture, function() {
 								item0 = document.getElementById('item0');
 								item1 = document.getElementById('item1');
 								item2 = document.getElementById('item2');
@@ -62,26 +64,30 @@
 						function testDeleteAndFocus(itemToDelete, expectedFocusItem, keyCode, done) {
 							MockInteractions.keyDownOn(itemToDelete, keyCode);
 
-							Polymer.RenderStatus.afterNextRender(listFixture, () => {
+							Polymer.RenderStatus.afterNextRender(listFixture, function() {
 								expect(document.getElementById(itemToDelete.id)).to.be.null;
 								expect(D2L.Dom.Focus.getComposedActiveElement()).to.equal(expectedFocusItem);
 								done();
 							});
 						}
 
-						it('should delete the item when Backspace is pressed and switch focus to the previous item', done =>
-							testDeleteAndFocus(item1, item0, _keyCodes.BACKSPACE, done));
+						it('should delete the item when Backspace is pressed and switch focus to the previous item', function(done) {
+							testDeleteAndFocus(item1, item0, _keyCodes.BACKSPACE, done);
+						});
 
-						it('should delete the item when Backspace is pressed and switch focus to the next item when it is the first of the list', done =>
-							testDeleteAndFocus(item0, item1, _keyCodes.BACKSPACE, done));
+						it('should delete the item when Backspace is pressed and switch focus to the next item when it is the first of the list', function(done) {
+							testDeleteAndFocus(item0, item1, _keyCodes.BACKSPACE, done);
+						});
 
-						it('should delete the item when Delete is pressed and switch focus to the next item', done =>
-							testDeleteAndFocus(item1, item2, _keyCodes.DELETE, done));
+						it('should delete the item when Delete is pressed and switch focus to the next item', function(done) {
+							testDeleteAndFocus(item1, item2, _keyCodes.DELETE, done);
+						});
 
-						it('should delete the item when Delete is pressed and switch focus to the previous item when it is the last item', done =>
-							testDeleteAndFocus(item2, item1, _keyCodes.DELETE, done));
+						it('should delete the item when Delete is pressed and switch focus to the previous item when it is the last item', function(done) {
+							testDeleteAndFocus(item2, item1, _keyCodes.DELETE, done);
+						});
 
-						it('should switch tabindex when moving focusing different items', () => {
+						it('should switch tabindex when moving focusing different items', function() {
 							expect(document.getElementById(item0.id).tabIndex).to.equal(0);
 							expect(document.getElementById(item1.id).tabIndex).to.equal(-1);
 							expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
@@ -93,6 +99,18 @@
 							expect(document.getElementById(item1.id).tabIndex).to.equal(0);
 							expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
 						});
+					});
+				});
+				describe('accessibility', function() {
+					beforeEach(function(done) {
+						Polymer.RenderStatus.afterNextRender(fixture('basic'), done);
+					});
+
+					it('should pass attest run', function() {
+						if (!isAttestInstalled()) {
+							this.skip();
+						}
+						return ally_tests();
 					});
 				});
 			});

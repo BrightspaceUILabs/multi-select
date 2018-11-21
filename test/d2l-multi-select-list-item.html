@@ -7,6 +7,8 @@
 		<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
 		<script src="../../web-component-tester/browser.js"></script>
 		<script src="../../iron-test-helpers/mock-interactions.js"></script>
+		<script src="../node_modules/attest/attest.js"></script>
+		<script src="./ally-test-script.js"></script>
 		<link rel="import" href="../d2l-multi-select-list-item.html">
 	</head>
 	<body>
@@ -21,7 +23,7 @@
 			</template>
 		</test-fixture>
 		<script>
-			describe('<d2l-multi-select-list-item>', () => {
+			describe('<d2l-multi-select-list-item>', function() {
 				let item;
 				let itemShadowRoot;
 				let text;
@@ -33,42 +35,69 @@
 					deleteIcon = itemShadowRoot.querySelector('d2l-icon');
 				}
 
-				describe('basic', () => {
-					beforeEach(() => {
+				describe('basic', function() {
+					beforeEach(function() {
 						item = fixture('basic');
 						setItemVariables();
 					});
 
-					it('should pass text parameter correctly', () => {
+					it('should pass text parameter correctly', function() {
 						expect(text).to.equal('basic-item');
 					});
 
-					it('should not show the delete button', () => {
+					it('should not show the delete button', function() {
 						expect(deleteIcon.hidden).to.be.true;
 					});
 				});
 
-				describe('deletable', () => {
-					before(() => {
+				describe('deletable', function() {
+					before(function() {
 						item = fixture('deletable');
 						setItemVariables();
 					});
 
-					it('should pass text parameter correctly', () => {
+					it('should pass text parameter correctly', function() {
 						expect(text).to.equal('deletable-item');
 					});
 
-					it('should show the delete icon', () => {
+					it('should show the delete icon', function() {
 						expect(deleteIcon.hidden).to.be.false;
 					});
 
-					it('should send the deleted event when delete icon is clicked', () => {
+					it('should send the deleted event when delete icon is clicked', function() {
 						const deleteItemSpy = sinon.spy();
 						item.addEventListener('d2l-multi-select-list-item-deleted', deleteItemSpy);
 						MockInteractions.tap(deleteIcon);
 
 						expect(deleteItemSpy.callCount).to.equal(1);
 						expect(deleteItemSpy.args[0][0].detail.value).to.equal('deletable-item');
+					});
+				});
+
+				describe('accessibility', function() {
+					describe('basic', function() {
+						before(function() {
+							fixture('basic');
+						});
+
+						it('should pass attest run', function() {
+							if (!isAttestInstalled()) {
+								this.skip();
+							}
+							return ally_tests();
+						});
+					});
+					describe('deletable', function() {
+						before(function() {
+							fixture('deletable');
+						});
+
+						it('should pass attest run', function() {
+							if (!isAttestInstalled()) {
+								this.skip();
+							}
+							return ally_tests();
+						});
 					});
 				});
 			});

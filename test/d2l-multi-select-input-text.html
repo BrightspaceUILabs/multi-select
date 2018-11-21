@@ -7,12 +7,14 @@
 		<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
 		<script src="../../web-component-tester/browser.js"></script>
 		<script src="../../iron-test-helpers/mock-interactions.js"></script>
+		<script src="../node_modules/attest/attest.js"></script>
+		<script src="./ally-test-script.js"></script>
 		<link rel="import" href="../all-imports.html">
 	</head>
 	<body>
 		<test-fixture id="basic">
 			<template>
-				<d2l-multi-select-input-text>
+				<d2l-multi-select-input-text aria-label="test-input-text">
 					<d2l-multi-select-list-item deletable text="item0"></d2l-multi-select-list-item>
 					<d2l-multi-select-list-item deletable text="item1"></d2l-multi-select-list-item>
 					<d2l-multi-select-list-item deletable text="item2"></d2l-multi-select-list-item>
@@ -21,22 +23,22 @@
 			</template>
 		</test-fixture>
 		<script>
-			describe('<d2l-multi-select-input-text>', () => {
-				describe('basic', () => {
+			describe('<d2l-multi-select-input-text>', function() {
+				describe('basic', function() {
 					let inputFixture;
 					let inputShadowRoot;
 					let textInput;
 					const keyCodes = { ENTER: 13 };
 
-					beforeEach(done => {
+					beforeEach(function(done) {
 						inputFixture = fixture('basic');
 						inputShadowRoot = inputFixture.shadowRoot;
 						textInput = inputShadowRoot.querySelector('d2l-input-text');
 						Polymer.RenderStatus.afterNextRender(inputFixture, done);
 					});
 
-					it('should be able to add a list item', done => {
-						inputFixture.addEventListener('d2l-multi-select-list-item-added', event => {
+					it('should be able to add a list item', function(done) {
+						inputFixture.addEventListener('d2l-multi-select-list-item-added', function(event) {
 							expect(inputFixture.children.length).to.equal(5);
 							expect(event.detail.value).to.equal('item4');
 							done();
@@ -45,6 +47,19 @@
 						expect(inputFixture.children.length).to.equal(4);
 						textInput.value = 'item4';
 						MockInteractions.keyDownOn(textInput, keyCodes.ENTER);
+					});
+				});
+
+				describe('accessibility', function() {
+					beforeEach(function(done) {
+						Polymer.RenderStatus.afterNextRender(fixture('basic'), done);
+					});
+
+					it('should pass attest run', function() {
+						if (!isAttestInstalled()) {
+							this.skip();
+						}
+						return ally_tests();
 					});
 				});
 			});
