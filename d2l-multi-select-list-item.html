@@ -88,14 +88,14 @@
 
 		</style>
 
-		<div class="d2l-multi-select-list-item-wrapper" on-click="_onClick">
-			<div class="d2l-multi-select-list-item-text" id="tag" aria-hidden="true">[[_getVisibleText(text,shortText,maxChars)]]</div>
+		<div class="d2l-multi-select-list-item-wrapper" id="tag" on-click="_onClick">
+			<div class="d2l-multi-select-list-item-text" aria-hidden="true">[[_getVisibleText(text,shortText,maxChars)]]</div>
 			<d2l-offscreen>[[_getScreenReaderText(text,shortText)]]</d2l-offscreen>
 			<d2l-icon icon="d2l-tier1:close-large-thick" hidden=[[!deletable]] on-click="_onDeleteItem"></d2l-icon>
-			<template is="dom-if" if="[[_hasTooltip(text,shortText,maxChars)]]">
-				<d2l-tooltip for="tag" position="[[tooltipPosition]]">[[text]]</d2l-tooltip>
-			</template>
 		</div>
+		<template is="dom-if" if="[[_hasTooltip(text,shortText,maxChars)]]">
+			<d2l-tooltip for="tag" position="[[tooltipPosition]]">[[text]]</d2l-tooltip>
+		</template>
 	</template>
 	<script>
 		/**
