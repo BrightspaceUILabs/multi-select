@@ -61,8 +61,20 @@
 			<h3>d2l-multi-select-list-item</h3>
 			<demo-snippet>
 				<template>
-					<d2l-multi-select-list-item text="Default select-list-item"></d2l-multi-select-list-item>
-					<d2l-multi-select-list-item deletable text="Default select-list-item with delete"></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item
+						text="Short Text"
+						deletable
+					></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item
+						text="Long Truncated Text"
+						max-chars="11"
+						deletable
+					></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item
+						text="Longer text for the tooltip"
+						short-text="Alternate Text"
+						deletable
+					></d2l-multi-select-list-item>
 				</template>
 			</demo-snippet>
 			<h3>d2l-multi-select-list</h3>
