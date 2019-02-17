@@ -25,5 +25,6 @@
     "polymer-cli": "^1.8.0",
     "sauce-connect-launcher": "^1.2.4"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "version": "1.1.1"
 }
