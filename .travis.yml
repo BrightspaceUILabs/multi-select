@@ -8,7 +8,7 @@ before_install:
 - npm install attest --registry=https://d2lartifacts.artifactoryonline.com/d2lartifacts/api/npm/attest/
 install:
 - npm install
-before_script:
+before_script: 
 script:
 - npm run lint
 - |
@@ -19,3 +19,6 @@ script:
     echo "Not a pull request and/or no secure environment variables, running headless tests...";
     npm run test:polymer:local || travis_terminate 1;
   fi
+env:
+  global:
+    secure: 1JV6Q7ex1bFdQy0MeeHX0VD+yQwjIwNescRPZJRG+iR6Z1BGgFcUwDQFC5vMibgnOlHO20WlRMyXnuO8/RgGnlDtmhkLn2MpLsQjSbLxptwkWGlYKiSyRJWZ6BXt7z41SViw6rHpv6o+GPIEJpFC6hRvch5BxdGSjdAWQc6EeWUO8ksZmIXItOrRerCViTcyD+bmAbdPZF7gYrQ4MZcp7jfsH/Hf2M1d4DCQqNjC7UExXMa3HFBN71l9e38vcnHrLglySberDk5ynOmotv+Bxh1WNV8KO0LxXyA4HnlAtEj4PbuuHyJmxokjlqbdKYt57VJSIsCWqZSvoQEz+O2mSvP7FcV7jQcgD/7dVtevts3SfwWr+G+p2oSIoxWGODOm5LD/ePtOaI1vFznNfyD9qHPOEZqr+I6bE8YbrCa7xzJF7fqGtup/B/SLwIFfmEDFzDY4XUbj17O38WjtF723TNhdUbnYtJ0uKuSiqiAjGpCr6ljZPNJcB9DTkR2JDLUQFkUiTNH/NOovudKt1IwLxx2Pc+k96A29LvqyJ3TD9vitHMfMBeuV7Jv+xgmYIrRyhm+AYTjqMZlwUH7T2wQp0s5NRKpuTCbZtLvqryV60cRPxwRM6PGoKm7HYFiO0BQGsFq1Kk9K9CSBCytzaZ7dgQz11/nCgXmx6pq6TxrGuh8=
