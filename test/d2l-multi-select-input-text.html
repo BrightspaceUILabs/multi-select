@@ -4,9 +4,9 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 		<title>d2l-multi-select-input test</title>
-		<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
-		<script src="../../web-component-tester/browser.js"></script>
-		<script src="../../iron-test-helpers/mock-interactions.js"></script>
+		<script src="../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+		<script src="../../wct-browser-legacy/browser.js"></script>
+		<script src="../../@polymer/iron-test-helpers/mock-interactions.js" type="module"></script>
 		<script src="../node_modules/attest/attest.js"></script>
 		<script src="./ally-test-script.js"></script>
 		<link rel="import" href="../all-imports.html">
@@ -22,47 +22,48 @@
 				</d2l-multi-select-input-text>
 			</template>
 		</test-fixture>
-		<script>
-			describe('<d2l-multi-select-input-text>', function() {
-				describe('basic', function() {
-					let inputFixture;
-					let inputShadowRoot;
-					let textInput;
-					const keyCodes = { ENTER: 13 };
+		<script type="module">
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+describe('<d2l-multi-select-input-text>', function() {
+	describe('basic', function() {
+		let inputFixture;
+		let inputShadowRoot;
+		let textInput;
+		const keyCodes = { ENTER: 13 };
 
-					beforeEach(function(done) {
-						inputFixture = fixture('basic');
-						inputShadowRoot = inputFixture.shadowRoot;
-						textInput = inputShadowRoot.querySelector('d2l-input-text');
-						Polymer.RenderStatus.afterNextRender(inputFixture, done);
-					});
+		beforeEach(function(done) {
+			inputFixture = fixture('basic');
+			inputShadowRoot = inputFixture.shadowRoot;
+			textInput = inputShadowRoot.querySelector('d2l-input-text');
+			afterNextRender(inputFixture, done);
+		});
 
-					it('should be able to add a list item', function(done) {
-						inputFixture.addEventListener('d2l-multi-select-list-item-added', function(event) {
-							expect(inputFixture.children.length).to.equal(5);
-							expect(event.detail.value).to.equal('item4');
-							done();
-						});
-
-						expect(inputFixture.children.length).to.equal(4);
-						textInput.value = 'item4';
-						MockInteractions.keyDownOn(textInput, keyCodes.ENTER);
-					});
-				});
-
-				describe('accessibility', function() {
-					beforeEach(function(done) {
-						Polymer.RenderStatus.afterNextRender(fixture('basic'), done);
-					});
-
-					it('should pass attest run', function() {
-						if (!isAttestInstalled()) {
-							this.skip();
-						}
-						return ally_tests();
-					});
-				});
+		it('should be able to add a list item', function(done) {
+			inputFixture.addEventListener('d2l-multi-select-list-item-added', function(event) {
+				expect(inputFixture.children.length).to.equal(5);
+				expect(event.detail.value).to.equal('item4');
+				done();
 			});
-		</script>
+
+			expect(inputFixture.children.length).to.equal(4);
+			textInput.value = 'item4';
+			MockInteractions.keyDownOn(textInput, keyCodes.ENTER);
+		});
+	});
+
+	describe('accessibility', function() {
+		beforeEach(function(done) {
+			afterNextRender(fixture('basic'), done);
+		});
+
+		it('should pass attest run', function() {
+			if (!isAttestInstalled()) {
+				this.skip();
+			}
+			return ally_tests();
+		});
+	});
+});
+</script>
 	</body>
 </html>

@@ -1,4 +1,4 @@
-<link rel="import" href="../polymer/polymer-element.html">
+<script type="module" src="../@polymer/polymer/polymer-element.js"></script>
 <link rel="import" href="./all-imports.html">
 
 <dom-module id="d2l-multi-select-input">
@@ -15,30 +15,31 @@
 		<slot name="input"></slot>
 
 	</template>
-	<script>
-		/**
-		 * `<d2l-multi-select-input>`
-		 * Polymer-based web component for D2L multi-select-input
-		 * @demo demo/index.hmtl
-		 */
-		class D2LMultiSelectInput extends Polymer.Element {
-			static get is() { return 'd2l-multi-select-input'; }
+	<script type="module">
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+/**
+ * `<d2l-multi-select-input>`
+ * Polymer-based web component for D2L multi-select-input
+ * @demo demo/index.hmtl
+ */
+class D2LMultiSelectInput extends PolymerElement {
+	static get is() { return 'd2l-multi-select-input'; }
 
-			constructor() {
-				super();
-			}
+	constructor() {
+		super();
+	}
 
-			addItem(text, ctx = this) {
-				const item = document.createElement('d2l-multi-select-list-item');
-				item.setAttribute('text',  text);
-				item.setAttribute('deletable', true);
-				item.setAttribute('role', 'gridcell');
+	addItem(text, ctx = this) {
+		const item = document.createElement('d2l-multi-select-list-item');
+		item.setAttribute('text',  text);
+		item.setAttribute('deletable', true);
+		item.setAttribute('role', 'gridcell');
 
-				// Context is passed to add the element to the light dom of the calling element
-				ctx.appendChild(item);
-				this.$['d2l-multi-select-list'].addItem(item);
-			}
-		}
-		customElements.define(D2LMultiSelectInput.is, D2LMultiSelectInput);
-	</script>
+		// Context is passed to add the element to the light dom of the calling element
+		ctx.appendChild(item);
+		this.$['d2l-multi-select-list'].addItem(item);
+	}
+}
+customElements.define(D2LMultiSelectInput.is, D2LMultiSelectInput);
+</script>
 </dom-module>

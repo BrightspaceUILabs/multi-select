@@ -4,18 +4,41 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 		<title>d2l-multi-select demo</title>
-		<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
-		<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-		<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-		<link rel="import" href="../../d2l-typography/d2l-typography.html">
+		<script src="../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+		<script type="module" src="../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+		<script type="module" src="../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
+		<script type="module" src="../../d2l-typography/d2l-typography.js"></script>
 		<link rel="import" href="../all-imports.html">
-		<custom-style>
+		<!-- FIXME(polymer-modulizer):
+		These imperative modules that innerHTML your HTML are
+		a hacky way to be sure that any mixins in included style
+		modules are ready before any elements that reference them are
+		instantiated, otherwise the CSS @apply mixin polyfill won't be
+		able to expand the underlying CSS custom properties.
+		See: https://github.com/Polymer/polymer-modulizer/issues/154
+		-->
+	<script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
 			<style is="custom-style" include="demo-pages-shared-styles"></style>
-		</custom-style>
-		<custom-style include="d2l-typography">
+		</custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+		<script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style include="d2l-typography">
 			<style is="custom-style" include="d2l-typography"></style>
-		</custom-style>
-		<style>
+		</custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+		<script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<style>
 			html {
 				font-size: 20px;
 			}
@@ -27,17 +50,23 @@
 			.custom-input input {
 				width: 100%;
 			}
-		</style>
+		</style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
 	</head>
 	<body unresolved class="d2l-typography">
-		<div class="vertical-section-container centered">
+		<script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
 			<h3>d2l-multi-select-input-text</h3>
 			<demo-snippet>
 				<template>
 					<d2l-multi-select-input-text aria-label="Multi select demo" placeholder="Press Enter to add an item">
-						<d2l-multi-select-list-item deletable text="Existing list item 0"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable text="Existing list item 1"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable text="Existing list item 2"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable="" text="Existing list item 0"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable="" text="Existing list item 1"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable="" text="Existing list item 2"></d2l-multi-select-list-item>
 					</d2l-multi-select-input-text>
 				</template>
 			</demo-snippet>
@@ -45,15 +74,11 @@
 			<demo-snippet>
 				<template>
 					<d2l-multi-select-input id="slotted-input-demo">
-						<d2l-multi-select-list-item deletable text="Existing list item 0"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable text="Existing list item 1"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable text="Existing list item 2"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable="" text="Existing list item 0"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable="" text="Existing list item 1"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable="" text="Existing list item 2"></d2l-multi-select-list-item>
 						<div class="custom-input" slot="input">
-							<input
-								aria-label="Slotted input multi select demo"
-								id="slotted-input-demo-input"
-								placeholder="Press Enter or click Add to add an item"
-							><button id="slotted-input-demo-button">Add</button>
+							<input aria-label="Slotted input multi select demo" id="slotted-input-demo-input" placeholder="Press Enter or click Add to add an item"><button id="slotted-input-demo-button">Add</button>
 						</div>
 					</d2l-multi-select-input>
 				</template>
@@ -61,57 +86,50 @@
 			<h3>d2l-multi-select-list-item</h3>
 			<demo-snippet>
 				<template>
-					<d2l-multi-select-list-item
-						text="Short Text"
-						deletable
-					></d2l-multi-select-list-item>
-					<d2l-multi-select-list-item
-						text="Long Truncated Text"
-						max-chars="11"
-						deletable
-					></d2l-multi-select-list-item>
-					<d2l-multi-select-list-item
-						text="Longer text for the tooltip"
-						short-text="Alternate Text"
-						deletable
-					></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item text="Short Text" deletable=""></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item text="Long Truncated Text" max-chars="11" deletable=""></d2l-multi-select-list-item>
+					<d2l-multi-select-list-item text="Longer text for the tooltip" short-text="Alternate Text" deletable=""></d2l-multi-select-list-item>
 				</template>
 			</demo-snippet>
 			<h3>d2l-multi-select-list</h3>
 			<demo-snippet>
 				<template>
 					<d2l-multi-select-list>
-						<d2l-multi-select-list-item deletable text="List item 0"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable text="List item 1"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable text="List item 2"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable text="List item 3"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable text="List item 4"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable text="List item 5"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable="" text="List item 0"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable="" text="List item 1"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable="" text="List item 2"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable="" text="List item 3"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable="" text="List item 4"></d2l-multi-select-list-item>
+						<d2l-multi-select-list-item deletable="" text="List item 5"></d2l-multi-select-list-item>
 					</d2l-multi-select-list>
 				</template>
 			</demo-snippet>
-		</div>
-		<script>
-			document.addEventListener('WebComponentsReady', function() {
-				document.body.classList.add('d2l-typography');
-				const slottedDemo = document.getElementById('slotted-input-demo');
-				const button = document.getElementById('slotted-input-demo-button');
-				const input = document.getElementById('slotted-input-demo-input');
+		</div>`;
 
-				input.addEventListener('keydown', function(event) {
-					if (event.keyCode === 13 && input.value) {
-						slottedDemo.addItem(input.value);
-						input.value = '';
-					}
-				});
+document.body.appendChild($_documentContainer.content);
+</script>
+		<script type="module">
+import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
+import '@polymer/iron-demo-helpers/demo-snippet.js';
+import 'd2l-typography/d2l-typography.js';
+document.body.classList.add('d2l-typography');
+const slottedDemo = document.getElementById('slotted-input-demo');
+const button = document.getElementById('slotted-input-demo-button');
+const input = document.getElementById('slotted-input-demo-input');
 
-				button.addEventListener('click', function() {
-					if (input.value) {
-						slottedDemo.addItem(input.value);
-						input.value = '';
-					}
-				});
-			});
-		</script>
+input.addEventListener('keydown', function(event) {
+	if (event.keyCode === 13 && input.value) {
+		slottedDemo.addItem(input.value);
+		input.value = '';
+	}
+});
+
+button.addEventListener('click', function() {
+	if (input.value) {
+		slottedDemo.addItem(input.value);
+		input.value = '';
+	}
+});
+</script>
 	</body>
 </html>

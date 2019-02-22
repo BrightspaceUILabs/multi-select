@@ -1,7 +1,5 @@
-bower_components*
 node_modules
-bower-*.json
 package-lock.json
 *.log
-"toPolymer3.sh" 
-"dependency-map.txt" 
+
+node_modules
