@@ -10,7 +10,7 @@
 		<script type="module" src="../../d2l-polymer-behaviors/d2l-dom-focus.js"></script>
 		<script src="../node_modules/attest/attest.js"></script>
 		<script src="./ally-test-script.js"></script>
-		<link rel="import" href="../all-imports.html">
+		<script type="module" src="../all-imports.js">
 	</head>
 	<body>
 		<test-fixture id="basic">
@@ -44,6 +44,7 @@ describe('<d2l-multi-select-List>', function() {
 			let item = document.getElementById('item0');
 			expect(item).to.not.be.null;
 
+			console.info(item);
 			const itemShadowRoot = item.shadowRoot;
 			const deleteIcon = itemShadowRoot.querySelector('d2l-icon');
 			MockInteractions.tap(deleteIcon);
