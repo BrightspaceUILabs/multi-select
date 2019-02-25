@@ -87,7 +87,18 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list-item">
 				margin-left: 0;
 				margin-right: 0.15rem;
 			}
-
+			
+			d2l-tooltip {
+				@apply --d2l-body-small-text;
+				color: var(--d2l-color-white);
+				width: max-content;
+				max-width: 300px;
+			}
+			
+			:host[_fallback-css] d2l-tooltip {
+				min-width: 200px;
+			}
+			
 		</style>
 
 		<div class="d2l-multi-select-list-item-wrapper" id="tag" on-click="_onClick">
@@ -157,6 +168,17 @@ class D2LMultiSelectItem extends mixinBehaviors(
 			tooltipPosition: {
 				type: String,
 				value: 'top'
+			},
+			
+			/**
+			 * Fallback CSS for Microsoft browsers
+			 */
+			_fallbackCss: {
+				type: Boolean,
+				value: function() {
+					return !window.CSS || !window.CSS.supports || !window.CSS.supports('width', 'max-content');
+				},
+				reflectToAttribute: true
 			}
 		};
 	}
