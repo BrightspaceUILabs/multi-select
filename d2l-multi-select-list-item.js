@@ -169,7 +169,7 @@ class D2LMultiSelectItem extends mixinBehaviors(
 				type: String,
 				value: 'top'
 			},
-			
+
 			/**
 			 * Fallback CSS for Microsoft browsers
 			 */
