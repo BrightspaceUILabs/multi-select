@@ -1,8 +1,9 @@
-<script type="module" src="../@polymer/polymer/polymer-element.js"></script>
-<script type="module" src="../d2l-inputs/d2l-input-text.js"></script>
-<link rel="import" href="./all-imports.html">
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '../d2l-inputs/d2l-input-text.js';
+import './d2l-multi-select-input.js';
 
-<dom-module id="d2l-multi-select-input-text">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-input-text">
 	<template strip-whitespace>
 		<style>
 			:host {
@@ -33,9 +34,10 @@
 		</d2l-multi-select-input>
 
 	</template>
-	<script type="module">
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import 'd2l-inputs/d2l-input-text.js';
+</dom-module>`;
+
+document.head.appendChild($_documentContainer.content);
+
 /**
  * `<d2l-multi-select-input-text>`
  * Polymer-based web component for D2L multi-select-input-text
@@ -79,7 +81,7 @@ class D2LMultiSelectInputText extends PolymerElement {
 	constructor() {
 		super();
 	}
-
+	
 	_onKeyDown(event) {
 		if (event.keyCode === 13 && this.value) {
 			this.$['d2l-multi-select-input'].addItem(this.value, this);
@@ -88,5 +90,3 @@ class D2LMultiSelectInputText extends PolymerElement {
 	}
 }
 customElements.define(D2LMultiSelectInputText.is, D2LMultiSelectInputText);
-</script>
-</dom-module>

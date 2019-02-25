@@ -12,7 +12,8 @@
     "lint:wc": "polymer lint",
     "test:polymer:local": "polymer test --skip-plugin sauce",
     "test:polymer:sauce": "polymer test --skip-plugin local",
-    "test": "npm run lint && npm run test:polymer:local"
+    "test": "npm run lint && npm run test:polymer:local",
+    "serve": "polymer serve"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",

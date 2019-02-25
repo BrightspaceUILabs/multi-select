@@ -7,8 +7,8 @@ import 'd2l-offscreen/d2l-offscreen.js';
 import 'd2l-tooltip/d2l-tooltip.js';
 import './localize-behavior.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-const $_documentContainer = document.createElement('template');
 
+const $_documentContainer = document.createElement('template');
 $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list-item">
 	<template strip-whitespace="">
 		<style>

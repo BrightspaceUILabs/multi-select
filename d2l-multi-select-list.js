@@ -1,7 +1,10 @@
-<script type="module" src="../@polymer/polymer/polymer-element.js"></script>
-<script type="module" src="../d2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js"></script>
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import 'd2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 
-<dom-module id="d2l-multi-select-list">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list">
 	<template strip-whitespace>
 		<style>
 			:host {
@@ -18,11 +21,10 @@
 			<slot></slot>
 		</div>
 	</template>
-	<script type="module">
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import 'd2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+</dom-module>`;
+
+document.head.appendChild($_documentContainer.content);
+
 /**
  * `<d2l-multi-select-list>`
  * Polymer-based web component for D2L multi-select-list
@@ -30,7 +32,6 @@ import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
  */
 class D2LMultiSelectList extends mixinBehaviors(
 	[
-		D2L.PolymerBehaviors.D2LMultiSelect.LocalizeBehavior,
 		D2L.PolymerBehaviors.FocusableArrowKeysBehavior,
 	],
 	PolymerElement
@@ -141,5 +142,3 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 }
 customElements.define(D2LMultiSelectList.is, D2LMultiSelectList);
-</script>
-</dom-module>
