@@ -4,13 +4,13 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 		<title>d2l-multi-select-list test</title>
-		<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
-		<script src="../../web-component-tester/browser.js"></script>
-		<script src="../../iron-test-helpers/mock-interactions.js"></script>
-		<link rel="import" href="../../d2l-polymer-behaviors/d2l-dom-focus.html">
-		<script src="../node_modules/attest/attest.js"></script>
+		<script src="../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+		<script src="../../wct-browser-legacy/browser.js"></script>
+		<script src="../../@polymer/iron-test-helpers/mock-interactions.js" type="module"></script>
+		<script type="module" src="../../d2l-polymer-behaviors/d2l-dom-focus.js"></script>
+		<script src="../node_modules/attest/dist/attest.js"></script>
 		<script src="./ally-test-script.js"></script>
-		<link rel="import" href="../all-imports.html">
+		<script type="module" src="../all-imports.js">
 	</head>
 	<body>
 		<test-fixture id="basic">
@@ -22,98 +22,102 @@
 				</d2l-multi-select-list>
 			</template>
 		</test-fixture>
-		<script>
-			describe('<d2l-multi-select-List>', function() {
-				let listFixture;
-				const _keyCodes = { BACKSPACE: 8, DELETE: 46 };
+		<script type="module">
+import 'd2l-polymer-behaviors/d2l-dom-focus.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
+describe('<d2l-multi-select-List>', function() {
+	let listFixture;
+	const _keyCodes = { BACKSPACE: 8, DELETE: 46 };
 
-				describe('basic', function() {
-					beforeEach(function(done) {
-						listFixture = fixture('basic');
-						Polymer.RenderStatus.afterNextRender(listFixture, done);
-					});
+	describe('basic', function() {
+		beforeEach(function(done) {
+			listFixture = fixture('basic');
+			afterNextRender(listFixture, done);
+		});
 
-					it('should render all list items', function() {
-						expect(listFixture.children.length).to.equal(3);
-					});
+		it('should render all list items', function() {
+			expect(listFixture.children.length).to.equal(3);
+		});
 
-					it('should delete the item when the icon is clicked', function() {
-						let item = document.getElementById('item0');
-						expect(item).to.not.be.null;
+		it('should delete the item when the icon is clicked', function() {
+			let item = document.getElementById('item0');
+			expect(item).to.not.be.null;
 
-						const itemShadowRoot = item.shadowRoot;
-						const deleteIcon = itemShadowRoot.querySelector('d2l-icon');
-						MockInteractions.tap(deleteIcon);
+			console.info(item);
+			const itemShadowRoot = item.shadowRoot;
+			const deleteIcon = itemShadowRoot.querySelector('d2l-icon');
+			MockInteractions.tap(deleteIcon);
 
-						item = document.getElementById('item0');
-						expect(listFixture.children.length).to.equal(2);
-						expect(item).to.be.null;
-					});
+			item = document.getElementById('item0');
+			expect(listFixture.children.length).to.equal(2);
+			expect(item).to.be.null;
+		});
 
-					describe('keyboard-behavior', function() {
-						let item0, item1, item2;
-						beforeEach(function(done) {
-							Polymer.RenderStatus.afterNextRender(listFixture, function() {
-								item0 = document.getElementById('item0');
-								item1 = document.getElementById('item1');
-								item2 = document.getElementById('item2');
-								done();
-							});
-						});
-
-						function testDeleteAndFocus(itemToDelete, expectedFocusItem, keyCode, done) {
-							MockInteractions.keyDownOn(itemToDelete, keyCode);
-
-							Polymer.RenderStatus.afterNextRender(listFixture, function() {
-								expect(document.getElementById(itemToDelete.id)).to.be.null;
-								expect(D2L.Dom.Focus.getComposedActiveElement()).to.equal(expectedFocusItem);
-								done();
-							});
-						}
-
-						it('should delete the item when Backspace is pressed and switch focus to the previous item', function(done) {
-							testDeleteAndFocus(item1, item0, _keyCodes.BACKSPACE, done);
-						});
-
-						it('should delete the item when Backspace is pressed and switch focus to the next item when it is the first of the list', function(done) {
-							testDeleteAndFocus(item0, item1, _keyCodes.BACKSPACE, done);
-						});
-
-						it('should delete the item when Delete is pressed and switch focus to the next item', function(done) {
-							testDeleteAndFocus(item1, item2, _keyCodes.DELETE, done);
-						});
-
-						it('should delete the item when Delete is pressed and switch focus to the previous item when it is the last item', function(done) {
-							testDeleteAndFocus(item2, item1, _keyCodes.DELETE, done);
-						});
-
-						it('should switch tabindex when moving focusing different items', function() {
-							expect(document.getElementById(item0.id).tabIndex).to.equal(0);
-							expect(document.getElementById(item1.id).tabIndex).to.equal(-1);
-							expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
-
-							MockInteractions.focus(item1);
-							Polymer.flush();
-
-							expect(document.getElementById(item0.id).tabIndex).to.equal(-1);
-							expect(document.getElementById(item1.id).tabIndex).to.equal(0);
-							expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
-						});
-					});
-				});
-				describe('accessibility', function() {
-					beforeEach(function(done) {
-						Polymer.RenderStatus.afterNextRender(fixture('basic'), done);
-					});
-
-					it('should pass attest run', function() {
-						if (!isAttestInstalled()) {
-							this.skip();
-						}
-						return ally_tests();
-					});
+		describe('keyboard-behavior', function() {
+			let item0, item1, item2;
+			beforeEach(function(done) {
+				afterNextRender(listFixture, function() {
+					item0 = document.getElementById('item0');
+					item1 = document.getElementById('item1');
+					item2 = document.getElementById('item2');
+					done();
 				});
 			});
-		</script>
+
+			function testDeleteAndFocus(itemToDelete, expectedFocusItem, keyCode, done) {
+				MockInteractions.keyDownOn(itemToDelete, keyCode);
+
+				afterNextRender(listFixture, function() {
+					expect(document.getElementById(itemToDelete.id)).to.be.null;
+					expect(D2L.Dom.Focus.getComposedActiveElement()).to.equal(expectedFocusItem);
+					done();
+				});
+			}
+
+			it('should delete the item when Backspace is pressed and switch focus to the previous item', function(done) {
+				testDeleteAndFocus(item1, item0, _keyCodes.BACKSPACE, done);
+			});
+
+			it('should delete the item when Backspace is pressed and switch focus to the next item when it is the first of the list', function(done) {
+				testDeleteAndFocus(item0, item1, _keyCodes.BACKSPACE, done);
+			});
+
+			it('should delete the item when Delete is pressed and switch focus to the next item', function(done) {
+				testDeleteAndFocus(item1, item2, _keyCodes.DELETE, done);
+			});
+
+			it('should delete the item when Delete is pressed and switch focus to the previous item when it is the last item', function(done) {
+				testDeleteAndFocus(item2, item1, _keyCodes.DELETE, done);
+			});
+
+			it('should switch tabindex when moving focusing different items', function() {
+				expect(document.getElementById(item0.id).tabIndex).to.equal(0);
+				expect(document.getElementById(item1.id).tabIndex).to.equal(-1);
+				expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
+
+				MockInteractions.focus(item1);
+				flush();
+
+				expect(document.getElementById(item0.id).tabIndex).to.equal(-1);
+				expect(document.getElementById(item1.id).tabIndex).to.equal(0);
+				expect(document.getElementById(item2.id).tabIndex).to.equal(-1);
+			});
+		});
+	});
+	describe('accessibility', function() {
+		beforeEach(function(done) {
+			afterNextRender(fixture('basic'), done);
+		});
+
+		it('should pass attest run', function() {
+			if (!isAttestInstalled()) {
+				this.skip();
+			}
+			return ally_tests();
+		});
+	});
+});
+</script>
 	</body>
 </html>
