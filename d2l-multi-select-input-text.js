@@ -81,7 +81,7 @@ class D2LMultiSelectInputText extends PolymerElement {
 	constructor() {
 		super();
 	}
-	
+
 	_onKeyDown(event) {
 		if (event.keyCode === 13 && this.value) {
 			this.$['d2l-multi-select-input'].addItem(this.value, this);

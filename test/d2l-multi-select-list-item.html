@@ -83,7 +83,7 @@ describe('<d2l-multi-select-list-item>', function() {
 
 			it('should pass attest run', function() {
 				if (!isAttestInstalled()) {
-					this.skip();
+					this.skip(); //eslint-disable-line no-invalid-this
 				}
 				return ally_tests();
 			});
@@ -95,7 +95,7 @@ describe('<d2l-multi-select-list-item>', function() {
 
 			it('should pass attest run', function() {
 				if (!isAttestInstalled()) {
-					this.skip();
+					this.skip(); //eslint-disable-line no-invalid-this
 				}
 				return ally_tests();
 			});
