@@ -171,15 +171,6 @@ class D2LMultiSelectItem extends mixinBehaviors(
 			},
 
 			/**
-			* Automatically remove this element from its parent
-			* when its remove button is clicked
-			*/
-			autoremove: {
-				type: Boolean,
-				value: false
-			},
-
-			/**
 			 * Fallback CSS for Microsoft browsers
 			 */
 			_fallbackCss: {
