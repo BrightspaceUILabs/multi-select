@@ -54,8 +54,8 @@ class D2LMultiSelectList extends mixinBehaviors(
 				value: null
 			},
 			/**
-			* Automatically remove this element from its parent
-			* when its remove button is clicked
+			* Automatically remove list items when they fire a
+			* d2l-multi-select-list-item-deleted event
 			*/
 			autoremove: {
 				type: Boolean,
