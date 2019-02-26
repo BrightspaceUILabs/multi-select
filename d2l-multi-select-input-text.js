@@ -17,7 +17,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-input-text">
 			}
 		</style>
 
-		<d2l-multi-select-input id="d2l-multi-select-input">
+		<d2l-multi-select-input id="d2l-multi-select-input" autoremove="[[autoremove]]">
 			<slot></slot>
 			<d2l-input-text
 				aria-describedby$="[[ariaDescribedby]]"
@@ -75,6 +75,10 @@ class D2LMultiSelectInputText extends PolymerElement {
 			},
 			value: {
 				type: String,
+			},
+			autoremove: {
+				type: Boolean,
+				value: false
 			}
 		};
 	}

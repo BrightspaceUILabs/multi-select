@@ -52,12 +52,21 @@ class D2LMultiSelectList extends mixinBehaviors(
 			_currentlyFocusedElement: {
 				type: Node,
 				value: null
+			},
+			/**
+			* Automatically remove list items when they fire a
+			* d2l-multi-select-list-item-deleted event
+			*/
+			autoremove: {
+				type: Boolean,
+				value: false
 			}
 		};
 	}
 
 	constructor() {
 		super();
+		this._onListItemDeleted = this._onListItemDeleted.bind(this);
 	}
 
 	connectedCallback() {
@@ -104,7 +113,9 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 
 	_onListItemDeleted(event) {
-		event.target.deleteItem();
+		if (this.autoremove) {
+			event.target.deleteItem();
+		}
 	}
 
 	_onKeyDown(event) {
@@ -126,7 +137,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 					? this.__focusPrevious(rootTarget)
 					: this.__focusNext(rootTarget);
 			}
-			rootTarget.deleteItem();
+			rootTarget._onDeleteItem();
 		}
 	}
 
