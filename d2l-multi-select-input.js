@@ -10,7 +10,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-input">
 			}
 		</style>
 
-		<d2l-multi-select-list id="d2l-multi-select-list">
+		<d2l-multi-select-list id="d2l-multi-select-list" autoremove="[[autoremove]]">
 			<slot></slot>
 		</d2l-multi-select-list>
 		<slot name="input"></slot>
@@ -31,6 +31,19 @@ class D2LMultiSelectInput extends PolymerElement {
 
 	constructor() {
 		super();
+	}
+
+	static get properties() {
+		return {
+			/**
+			* Automatically remove this element from its parent
+			* when its remove button is clicked
+			*/
+			autoremove: {
+				type: Boolean,
+				value: false
+			}
+		};
 	}
 
 	addItem(text, ctx = this) {

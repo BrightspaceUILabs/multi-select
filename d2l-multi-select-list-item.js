@@ -235,9 +235,7 @@ class D2LMultiSelectItem extends mixinBehaviors(
 	}
 
 	deleteItem() {
-		if (this.autoremove) {
-			this.parentNode.removeChild(this);
-		}
+		this.parentNode.removeChild(this);
 	}
 }
 customElements.define(D2LMultiSelectItem.is, D2LMultiSelectItem);
