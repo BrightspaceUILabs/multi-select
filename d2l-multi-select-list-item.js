@@ -171,6 +171,15 @@ class D2LMultiSelectItem extends mixinBehaviors(
 			},
 
 			/**
+			* Automatically remove this element from its parent
+			* when its remove button is clicked
+			*/
+			autoremove: {
+				type: Boolean,
+				value: false
+			},
+
+			/**
 			 * Fallback CSS for Microsoft browsers
 			 */
 			_fallbackCss: {
@@ -226,7 +235,9 @@ class D2LMultiSelectItem extends mixinBehaviors(
 	}
 
 	deleteItem() {
-		this.parentNode.removeChild(this);
+		if (this.autoremove) {
+			this.parentNode.removeChild(this);
+		}
 	}
 }
 customElements.define(D2LMultiSelectItem.is, D2LMultiSelectItem);
