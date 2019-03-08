@@ -87,18 +87,18 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list-item">
 				margin-left: 0;
 				margin-right: 0.15rem;
 			}
-			
+
 			d2l-tooltip {
 				@apply --d2l-body-small-text;
 				color: var(--d2l-color-white);
 				width: max-content;
 				max-width: 300px;
 			}
-			
+
 			:host[_fallback-css] d2l-tooltip {
 				min-width: 200px;
 			}
-			
+
 		</style>
 
 		<div class="d2l-multi-select-list-item-wrapper" id="tag" on-click="_onClick">
@@ -107,10 +107,10 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list-item">
 			<d2l-icon icon="d2l-tier1:close-large-thick" hidden="[[!deletable]]" on-click="_onDeleteItem"></d2l-icon>
 		</div>
 		<template is="dom-if" if="[[_hasTooltip(text,shortText,maxChars)]]">
-			<d2l-tooltip for="tag" position="[[tooltipPosition]]">[[text]]</d2l-tooltip>
+			<d2l-tooltip for="tag" position="[[tooltipPosition]]" boundary="[[containerBoundary]]>[[text]]</d2l-tooltip>
 		</template>
 	</template>
-	
+
 </dom-module>`;
 
 document.head.appendChild($_documentContainer.content);
@@ -168,6 +168,13 @@ class D2LMultiSelectItem extends mixinBehaviors(
 			tooltipPosition: {
 				type: String,
 				value: 'top'
+			},
+
+			/**
+			 * Object describing the boundaries for tooltips
+			 */
+			containerBoundary: {
+				type: Object
 			},
 
 			/**
