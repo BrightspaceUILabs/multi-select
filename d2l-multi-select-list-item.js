@@ -95,7 +95,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list-item">
 				max-width: 300px;
 			}
 			
-			:host[_fallback-css] d2l-tooltip {
+			:host([_fallback-css]) d2l-tooltip {
 				min-width: 200px;
 			}
 			
