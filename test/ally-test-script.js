@@ -1,6 +1,6 @@
 /* exported isAttestInstalled, ally_tests */
 
-var isAttestInstalled = function() {
+var isAttestInstalled = function() { //eslint-disable-line no-unused-vars
 
 	try {
 		attest.reset();
@@ -10,7 +10,7 @@ var isAttestInstalled = function() {
 	}
 	return true;
 };
-var ally_tests = function(my_delay = 0) {
+var ally_tests = function(my_delay = 0) { //eslint-disable-line no-unused-vars
 
 	function delay(t, v) {
 		return new Promise(function(resolve) {
