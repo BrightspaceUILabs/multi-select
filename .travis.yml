@@ -4,9 +4,10 @@ addons:
   chrome: stable
 install:
 - npm install
+before_script:
 - curl -u${ARTIFACTORY_USER}:${ARTIFACTORY_PASS} https://d2lartifacts.artifactoryonline.com/d2lartifacts/api/npm/attest/auth/attest
   > .npmrc
-- npm install attest --registry=https://d2lartifacts.artifactoryonline.com/d2lartifacts/api/npm/attest/
+- npm install attest --registry=https://d2lartifacts.artifactoryonline.com/d2lartifacts/api/npm/attest/ --no-save
 script:
 - npm run lint
 - |
