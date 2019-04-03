@@ -8,7 +8,7 @@ before_install:
 - npm install attest --registry=https://d2lartifacts.artifactoryonline.com/d2lartifacts/api/npm/attest/
 install:
 - npm install
-before_script:
+before_script: 
 script:
 - npm run lint
 - |
@@ -19,3 +19,19 @@ script:
     echo "Not a pull request and/or no secure environment variables, running headless tests...";
     npm run test:polymer:local || travis_terminate 1;
   fi
+- |
+  if [ "$TRAVIS_BRANCH" == "master" ] && [ $TRAVIS_PULL_REQUEST == false ]; then
+    echo "Not a Pull Request and on branch master so bumping version";
+    frauci-update-version;
+    export TRAVIS_TAG=$(frauci-get-version)
+  fi
+deploy:
+  provider: releases
+  api_key: "$GITHUB_RELEASE_TOKEN"
+  on:
+    tags: true
+env:
+  global:
+  - OWNER_NAME=BrightspaceUI
+  - REPO_NAME=multi-select
+  - secure: E9h0keAlzBYjqFeTNNByzs6UVl1e3LpMYaUuz6Ic+I707AjmNMo1XExZR+2oJNHJAdd2LxHhoJpDO2hprcPadhG77Hvo//Lb45vw3h/gmOzg7p754btEtOAXmkLW9iUw/uzYxHtAaG8fvZoH8LXgsx0mJtsCEW8QfjgsLZPNPFIVE/qaxAsN6ht6H12dZa3X5q04VKFQxxGAJvgW8xsk0z99raApNUQBeg1ed74WirjJdCRIjXj+AWO4OmDzWDI31Qy33Oz388Ld263Ln4zxx773yS/rqYGT+h1UEIS2G6QkG3EwKxda1Z2Vr5EJiUWwtNKmywuei+jn9OlfkPzH+QGplxgl2iUfLNPqavsLzo2HvJo//9xPdnq/GTCQxIP9u/Wm/tHrv1X0oD90wRT52lgAd12sdaXnZKEksoHpNiymWkpqMEiPFtJlqSyXXO0tAsiZrLzJziywDE9FCQlmNpw43uXTKCe0ZNSnCOD3xujmegq48IshEeYQOf2Hoexdz7fpNuVeh4I1WAg+CX2yp+m1BherXSdgJJ1cZY9rZP62EXEbtlJWkR/PPNzBTCgE6U2Z3chrMwScT+SVgvtlS2DPmR37Vycv2U+qpze4sKQcG1ILNknWLh4JSI9dUJ9Tg13sWT+AJrEzKMueKSJMuG/XBScneukdAmguYmKsjZ8=
