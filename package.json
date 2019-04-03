@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
+    "attest": "^2.7.1",
     "d2l-button": "BrightspaceUI/button#semver:^5",
     "d2l-colors": "BrightspaceUI/colors#semver:^4",
     "d2l-icons": "BrightspaceUI/icons#semver:^6",
@@ -44,7 +45,7 @@
     "d2l-tooltip": "BrightspaceUI/tooltip#semver:^3",
     "d2l-typography": "BrightspaceUI/typography#semver:^7"
   },
-  "version": "2.1.2",
+  "version": "2.2.0",
   "resolutions": {
     "inherits": "2.0.3",
     "samsam": "1.1.3",
