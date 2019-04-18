@@ -9,10 +9,17 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list">
 		<style>
 			:host {
 				display: inline-block;
+				width: 100%;
 			}
 
-			::slotted(d2l-multi-select-list-item) {
+			div[role="row"] {
+				display: flex;
+				flex-wrap: wrap;
+			}
+
+			div[role="row"] > ::slotted(d2l-multi-select-list-item) {
 				padding: 0.15rem;
+				display: block;
 			}
 
 		</style>
