@@ -120,6 +120,13 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 
 	_onListItemDeleted(event) {
+		if (event && event.detail && event.detail.handleFocus) {
+			const rootTarget = event.composedPath()[0];
+			const itemIndex = this.getEffectiveChildren().indexOf(rootTarget);
+			itemIndex === this.getEffectiveChildren().length - 1
+				? this.__focusPrevious(rootTarget)
+				: this.__focusNext(rootTarget);
+		}
 		if (this.autoremove) {
 			event.target.deleteItem();
 		}

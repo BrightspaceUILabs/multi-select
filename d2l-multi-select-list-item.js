@@ -87,18 +87,18 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list-item">
 				margin-left: 0;
 				margin-right: 0.15rem;
 			}
-			
+
 			d2l-tooltip {
 				@apply --d2l-body-small-text;
 				color: var(--d2l-color-white);
 				width: max-content;
 				max-width: 300px;
 			}
-			
+
 			:host([_fallback-css]) d2l-tooltip {
 				min-width: 200px;
 			}
-			
+
 		</style>
 
 		<div class="d2l-multi-select-list-item-wrapper" id="tag" on-click="_onClick">
@@ -110,7 +110,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list-item">
 			<d2l-tooltip for="tag" position="[[tooltipPosition]]">[[text]]</d2l-tooltip>
 		</template>
 	</template>
-	
+
 </dom-module>`;
 
 document.head.appendChild($_documentContainer.content);
@@ -218,10 +218,11 @@ class D2LMultiSelectItem extends mixinBehaviors(
 		this.focus();
 	}
 
-	_onDeleteItem() {
+	_onDeleteItem(e) {
+		const handleFocus = e && e.composedPath()[0].tagName === 'D2L-ICON';
 		this.dispatchEvent(new CustomEvent(
 			'd2l-multi-select-list-item-deleted',
-			{ bubbles: true, composed: true, detail: { value: this.text } }
+			{ bubbles: true, composed: true, detail: { value: this.text, handleFocus } }
 		));
 	}
 
