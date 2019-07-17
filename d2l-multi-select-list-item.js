@@ -91,12 +91,10 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-multi-select-list-i
 			}
 
 			:host(:focus) .d2l-multi-select-list-item-wrapper d2l-icon {
-				color: #ffffff;
-				opacity: 0.75;
+				color: #c6dbef; // this color is the same as #ffffff with opacity of 0.75
 			}
 
-			:host(:focus) .d2l-multi-select-list-item-wrapper d2l-icon:hover,
-			:host(:focus[show-delete-hover-focus]) .d2l-multi-select-list-item-wrapper d2l-icon {
+            :host(:focus) .d2l-multi-select-list-item-wrapper d2l-icon:hover {
 				color: #ffffff;
 				opacity: 1;
 			}
