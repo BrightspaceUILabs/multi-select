@@ -22,6 +22,11 @@
 				<d2l-multi-select-list-item deletable text="deletable-item"></d2l-multi-select-list-item>
 			</template>
 		</test-fixture>
+		<test-fixture id="show-delete-on-hover-or-focus-only">
+			<template>
+				<d2l-multi-select-list-item id='abc' deletable show-delete-hover-focus text="show-delete-on-hover-or-focus-only-item"></d2l-multi-select-list-item>
+			</template>
+		</test-fixture>
 		<script type="module">
 import '../d2l-multi-select-list-item.js';
 describe('<d2l-multi-select-list-item>', function() {
@@ -72,6 +77,21 @@ describe('<d2l-multi-select-list-item>', function() {
 
 			expect(deleteItemSpy.callCount).to.equal(1);
 			expect(deleteItemSpy.args[0][0].detail.value).to.equal('deletable-item');
+		});
+	});
+
+	describe('show delete on hover or focus only', function() {
+		before(function() {
+			item = fixture('show-delete-on-hover-or-focus-only');
+			setItemVariables();
+		});
+
+		it('should pass text parameter correctly', function() {
+			expect(text).to.equal('show-delete-on-hover-or-focus-only-item');
+		});
+
+		it('should not show the delete icon when show-delete-hover-focus attribute is present', function() {
+			expect(deleteIcon.hidden).to.be.true;
 		});
 	});
 
