@@ -23,7 +23,6 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list-item">
 			}
 
 			.d2l-multi-select-list-item-wrapper {
-				//@apply --d2l-body-compact-text;
 				@apply --d2l-multi-select-font;
 				-moz-user-select: none;
 				-ms-user-select: none;
@@ -44,9 +43,19 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list-item">
 				padding-right: 0.4rem;
 			}
 
-			:host(:hover[deletable][show-delete-hover-focus]) .d2l-multi-select-list-item-wrapper d2l-icon,
+			:host([deletable][show-delete-hover-focus]) .d2l-multi-select-list-item-wrapper d2l-icon {
+				visibility: hidden;
+				margin-left: -0.7rem;	
+			}
+
+			:host(:hover[deletable][show-delete-hover-focus]) .d2l-multi-select-list-item-wrapper d2l-icon {
+				visibility: unset;
+				background-color: var(--d2l-color-gypsum);
+			}
+
 			:host(:focus[deletable][show-delete-hover-focus]) .d2l-multi-select-list-item-wrapper d2l-icon {
-				display: flex;
+				visibility: unset;
+				background-color: var(--d2l-color-celestine);
 			}
 
 			:host([dir='rtl'][deletable]) .d2l-multi-select-list-item-wrapper {
@@ -113,7 +122,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list-item">
 		<div class="d2l-multi-select-list-item-wrapper" id="tag" on-click="_onClick">
 			<div class="d2l-multi-select-list-item-text" aria-hidden="true">[[_getVisibleText(text,shortText,maxChars)]]</div>
 			<d2l-offscreen>[[_getScreenReaderText(text,shortText)]]</d2l-offscreen>
-			<d2l-icon icon="d2l-tier1:close-large-thick" hidden="[[_hideDeleteIcon(deletable, showDeleteHoverFocus)]]" on-click="_onDeleteItem"></d2l-icon>
+			<d2l-icon icon="d2l-tier1:close-large-thick" hidden="[[!deletable]]" on-click="_onDeleteItem"></d2l-icon>
 		</div>
 		<template is="dom-if" if="[[_hasTooltip(text,shortText,maxChars)]]">
 			<d2l-tooltip for="tag" position="[[tooltipPosition]]">[[text]]</d2l-tooltip>
@@ -208,10 +217,6 @@ class D2LMultiSelectItem extends mixinBehaviors(
 		super.connectedCallback();
 		// Set tabindex to allow focusable behaviour from the list
 		this.tabIndex = -1;
-	}
-
-	_hideDeleteIcon(deletable, showDeleteHoverFocus) {
-		return !deletable || showDeleteHoverFocus;
 	}
 
 	_hasTooltip(text, shortText, maxChars) {
