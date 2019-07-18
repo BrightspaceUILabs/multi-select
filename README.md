@@ -81,9 +81,23 @@ button.addEventListener('click', () => {
 
 #### `d2l-multi-select-list-item`
 
-`d2l-multi-select-list-item` is a compact representation of information. A `deletable` property can be set to enable the option of deleting the item, although there is no wire-up.
+`d2l-multi-select-list-item` is a compact representation of information.
+
+A `deletable` property can be set to enable the option of deleting the item, although there is no wire-up.
 ```html
 <d2l-multi-select-list-item deletable text="List item"></d2l-multi-select-list-item>
+```
+A 'show-delete-hover-focus' property can be set to allow delete icon to show on hover or focus only.
+```html
+<d2l-multi-select-list-item deletable show-delete-hover-focus text="List item"></d2l-multi-select-list-item>
+```
+Also the following css variables are exposed to clients and can be use to override some of the appearance of the list item.
+```html
+--d2l-multi-select-list-item-font
+--d2l-multi-select-list-item-padding
+--d2l-multi-select-list-item-padding-rtl
+--d2l-multi-select-list-item-padding-deletable
+--d2l-multi-select-list-item-padding-deletable-rtl
 ```
 
 #### `d2l-multi-select-list`

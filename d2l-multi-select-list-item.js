@@ -17,17 +17,17 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-multi-select-list-i
 				display: inline-block;
 				outline: none;
 				position: relative;
-				--d2l-multi-select-padding: 0.25rem 0.75rem 0.2rem;
-				--d2l-multi-select-padding-rtl: 0.25rem 0.75rem 0.2rem;
-				--d2l-multi-select-padding-deletable: 0.25rem 0.4rem 0.2rem 0.75rem;
-				--d2l-multi-select-padding-deletable-rtl: 0.25rem 0.75rem 0.2rem 0.4rem;
-				--d2l-multi-select-font: {
+				--d2l-multi-select-list-item-padding: 0.25rem 0.75rem 0.2rem;
+				--d2l-multi-select-list-item-padding-rtl: 0.25rem 0.75rem 0.2rem;
+				--d2l-multi-select-list-item-padding-deletable: 0.25rem 0.4rem 0.2rem 0.75rem;
+				--d2l-multi-select-list-item-padding-deletable-rtl: 0.25rem 0.75rem 0.2rem 0.4rem;
+				--d2l-multi-select-list-item-font: {
 					@apply --d2l-body-compact-text;
 				};
 			}
 
 			.d2l-multi-select-list-item-wrapper {
-				@apply --d2l-multi-select-font;
+				@apply --d2l-multi-select-list-item-font;
 				-moz-user-select: none;
 				-ms-user-select: none;
 				-webkit-user-select: none;
@@ -40,15 +40,15 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-multi-select-list-i
 				display: flex;
 				line-height: normal;
 				outline: none;
-				padding: var(--d2l-multi-select-padding);
+				padding: var(--d2l-multi-select-list-item-padding);
 			}
 
 			:host([dir='rtl']) .d2l-multi-select-list-item-wrapper {
-				padding: var(--d2l-multi-select-padding-rtl);
+				padding: var(--d2l-multi-select-list-item-padding-rtl);
 			}
 
 			:host([deletable]) .d2l-multi-select-list-item-wrapper {
-				padding: var(--d2l-multi-select-padding-deletable);
+				padding: var(--d2l-multi-select-list-item-padding-deletable);
 			}
 
 			:host([deletable][show-delete-hover-focus]) .d2l-multi-select-list-item-wrapper d2l-icon {
@@ -72,7 +72,7 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-multi-select-list-i
 			}
 
 			:host([dir='rtl'][deletable]) .d2l-multi-select-list-item-wrapper {
-				padding: var(--d2l-multi-select-padding-deletable-rtl);
+				padding: var(--d2l-multi-select-list-item-padding-deletable-rtl);
 			}
 
 			:host(:hover) .d2l-multi-select-list-item-wrapper {
