@@ -153,8 +153,8 @@ npm test
 
 [bower-url]: http://bower.io/search/?q=d2l-multi-select
 [bower-image]: https://badge.fury.io/bo/d2l-multi-select.svg
-[ci-url]: https://travis-ci.org/BrightspaceUI/multi-select
-[ci-image]: https://travis-ci.org/BrightspaceUI/multi-select.svg?branch=master
+[ci-url]: https://travis-ci.com/BrightspaceUI/multi-select
+[ci-image]: https://travis-ci.com/BrightspaceUI/multi-select.svg?branch=master
 [design.d2l-url]: http://design.d2l/components/tags/
 
 ## Versioning & Releasing
