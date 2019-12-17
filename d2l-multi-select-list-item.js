@@ -129,12 +129,16 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-multi-select-list-i
 				min-width: 200px;
 			}
 
+			.d2l-multi-select-delete-icon {
+				z-index: 0;
+			}
+
 		</style>
 
 		<div class="d2l-multi-select-list-item-wrapper" id="tag" on-click="_onClick">
 			<div class="d2l-multi-select-list-item-text" aria-hidden="true">[[_getVisibleText(text,shortText,maxChars)]]</div>
 			<d2l-offscreen>[[_getScreenReaderText(text,shortText)]]</d2l-offscreen>
-			<d2l-icon icon="d2l-tier1:close-large-thick" hidden="[[!deletable]]" on-click="_onDeleteItem"></d2l-icon>
+			<d2l-icon class="d2l-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" hidden="[[!deletable]]" on-click="_onDeleteItem"></d2l-icon>
 		</div>
 		<template is="dom-if" if="[[_hasTooltip(text,shortText,maxChars)]]">
 			<d2l-tooltip for="tag" position="[[tooltipPosition]]">[[text]]</d2l-tooltip>
