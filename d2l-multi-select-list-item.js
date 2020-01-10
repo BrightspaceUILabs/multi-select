@@ -141,7 +141,7 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-multi-select-list-i
 			<d2l-icon class="d2l-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" hidden="[[!deletable]]" on-click="_onDeleteItem"></d2l-icon>
 		</div>
 		<template is="dom-if" if="[[_hasTooltip(text,shortText,maxChars)]]">
-			<d2l-tooltip for="tag" position="[[tooltipPosition]]">[[text]]</d2l-tooltip>
+			<d2l-tooltip position="[[tooltipPosition]]">[[text]]</d2l-tooltip>
 		</template>
 	</template>
 
