@@ -20,14 +20,12 @@ script:
   fi
 after_success:
 - frauci-update-version -d=skip && export TRAVIS_TAG=$(frauci-get-version)
-deploy:
-  provider: releases
-  api_key: "$GITHUB_RELEASE_TOKEN"
-  on:
-    tags: true
 env:
   global:
   - OWNER_NAME=BrightspaceUI
   - REPO_NAME=multi-select
   - SAUCE_USERNAME: D2L_Federation
+  # SAUCE_ACCESS_KEY
   - secure: WRjY0q5PELl3MABRxFN4oVXXvLxav0yGuFleBpzWe2JyGcc9gVrdh+y6+5J9SFgxNDCk18/hk0oW3EN/+FhePa9SuRX3xo+9250XOE2NLPtKkz07fGVMVD11jVg6NMSCdL2mBH++kyaDwxqcr4eDx88JB4F/4aqZ1aE8TxVv9cMxLJNdMJnd0uV+1U6cLEHHudpy1qCr4cI9sGbc2S5rByC8q6OqxWIwQJevGaU1plykLOCjUfrpv6kleeNTfK7Od6lJB4tUa4KhDSrNcAI4DGXnFMeah/yH280WpLTnFqRfi+1ASOYgTPQ9czWFZdE60M2trdO/ZibhYm1p5UNx7Q34tFbHpq6QCKBF6xLOyC6NY5x090cC0MM3dp7tb0zyLe/CCcWGKj5n0ZsUIr+0O8qM6UHdVZnJmoag58ajLDR+jzmcQsrIigoQFmXLbqcsjTyJotBpA/Xv+F4jIXBv501Pd/G1WjHvmwYyTQTAtAXvywh6+xtvTAn4vs0cTH4G10uIuL05Sxx/8ViKoMiFzIuLqunYLZERH03oM0nLY07D5A4aqaJpfjn8esyr++1elloefED4+EEA268BOeGfRc+Jwg0usby3gV1PgAhXwGjyE3L374x1YHKZWzWWbHiLL4HO9hcqcWiq+pRNoumbNnLcdueHkJYYQ+hwJBIsxdw=
+  # GITHUB_RELEASE_TOKEN (brightspace-ui-multi-select)
+  - secure: j9QMl0IIvi+l3f7R9+soofefNqTjTzPsn5Oc2tCqRdaUyOrVYNj+oGfBxnXE14MtGN94B2+aZ7Lsmg298culxhbiNOloYgl6Mmj+Lno41Tzev2WEcYoor90WvGDdzedIWipEcr3YFlsef2jEhrIvg686YzDh9su9yb0isKlVegfHvqv79V4Yg7LMY7w7tmKab5pgC6bPTgrnkFunp6HIlWAFZXhpUkeZKfoMalcmCPeo/2U8dy9zP7mXB72v/X1zc36fmjsSOoWe5PWn0RhsvenvgvijtiLCcCyd3QLsmNUIhke7oZRjkX01RdOli0YVNIBTffCmRtiuZOAw6bmDmd4IuSpk8RIRxkkTlNZM1UyOSTaHgy+I7ZImJkrY4inqW3cecZK+Qk5n/JKuKUIUdqyK0GwfmSU6JoqnPItq3XoU47duoESyheKHgFa0Cs56R6vrJo3p0e5nho3rld2PuAY5Yv69ck8crHsXWQE9QWpGyW5fcGlzQgU5lrWuNecesTG5RTNEwULJ/QXfVWWw3L3oV05fHgA8GEF+FQGSBMRSf3xg2h+VPiCEx2GBl9IpXMCaN1eGLgaJTO1N8g+G3b3Sgg1r9ArKq/PGBu8u70CjicU3XjlN3qh4oZKV2/68KP2md90RYkhm+4zjv2PlA5sSVZo6daV/7zvPf0r7YCA=
