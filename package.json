@@ -44,7 +44,7 @@
     "d2l-tooltip": "BrightspaceUI/tooltip#semver:^3",
     "d2l-typography": "BrightspaceUI/typography#semver:^7"
   },
-  "version": "2.9.2",
+  "version": "2.9.3",
   "resolutions": {
     "inherits": "2.0.3",
     "samsam": "1.1.3",
