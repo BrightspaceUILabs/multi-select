@@ -25,11 +25,12 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-input-text">
 				aria-label$="[[ariaLabel]]"
 				aria-labelledby$="[[ariaLabelledby]]"
 				autofocus$="[[autofocus]]"
-				on-keydown="_onKeyDown"
+				on-input="_onInput"
+				on-keypress="_onKeyPress"
 				placeholder$="[[placeholder]]"
 				slot="input"
 				type$="[[type]]"
-				value="{{value}}"
+				value="[[value]]"
 			></d2l-input-text>
 		</d2l-multi-select-input>
 
@@ -86,7 +87,11 @@ class D2LMultiSelectInputText extends PolymerElement {
 		super();
 	}
 
-	_onKeyDown(event) {
+	_onInput(event) {
+		this.value = event.target.value;
+	}
+
+	_onKeyPress(event) {
 		if (event.keyCode === 13 && this.value) {
 			this.$['d2l-multi-select-input'].addItem(this.value, this);
 			this.value = '';
