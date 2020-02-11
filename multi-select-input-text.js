@@ -1,9 +1,9 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import '../d2l-inputs/d2l-input-text.js';
-import './d2l-multi-select-input.js';
+import '@brightspace-ui/core/components/inputs/input-text.js';
+import './multi-select-input.js';
 
 const $_documentContainer = document.createElement('template');
-$_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-input-text">
+$_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-input-text">
 	<template strip-whitespace>
 		<style>
 			:host {
@@ -17,7 +17,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-input-text">
 			}
 		</style>
 
-		<d2l-multi-select-input id="d2l-multi-select-input" autoremove="[[autoremove]]">
+		<d2l-labs-multi-select-input id="d2l-labs-multi-select-input" autoremove="[[autoremove]]">
 			<slot></slot>
 			<d2l-input-text
 				aria-describedby$="[[ariaDescribedby]]"
@@ -32,7 +32,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-input-text">
 				type$="[[type]]"
 				value="[[value]]"
 			></d2l-input-text>
-		</d2l-multi-select-input>
+		</d2l-labs-multi-select-input>
 
 	</template>
 </dom-module>`;
@@ -40,12 +40,12 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-input-text">
 document.head.appendChild($_documentContainer.content);
 
 /**
- * `<d2l-multi-select-input-text>`
+ * `<d2l-labs-multi-select-input-text>`
  * Polymer-based web component for D2L multi-select-input-text
  * @demo demo/index.hmtl
  */
 class D2LMultiSelectInputText extends PolymerElement {
-	static get is() { return 'd2l-multi-select-input-text'; }
+	static get is() { return 'd2l-labs-multi-select-input-text'; }
 	static get properties() {
 		return {
 			/**
@@ -93,7 +93,7 @@ class D2LMultiSelectInputText extends PolymerElement {
 
 	_onKeyPress(event) {
 		if (event.keyCode === 13 && this.value) {
-			this.$['d2l-multi-select-input'].addItem(this.value, this);
+			this.$['d2l-labs-multi-select-input'].addItem(this.value, this);
 			this.value = '';
 		}
 	}

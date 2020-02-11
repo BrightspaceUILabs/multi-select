@@ -1,13 +1,6 @@
 {
-	"extends": "brightspace/polymer-3-config",
-	"env": {
+  "extends": "brightspace/polymer-3-config",
+  "env": {
 		"es6": true
-  },
-  "globals": {
-    "require": true,
-    "localize": true,
-    "isAttestInstalled": true,
-    "ally_tests": true,
-    "attest": true
   }
 }

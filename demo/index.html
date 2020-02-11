@@ -3,138 +3,105 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-		<title>d2l-multi-select demo</title>
-		<script src="../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-		<script type="module" src="../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
-		<script type="module" src="../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
-		<script type="module" src="../../d2l-typography/d2l-typography.js"></script>
-		
-		<script type="module" src="../all-imports.js"></script>
-
+		<link rel="stylesheet" href="/node_modules/@brightspace-ui/core/components/demo/styles.css" type="text/css">
+		<script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 		<script type="module">
-			const $_documentContainer = document.createElement('template');
-			$_documentContainer.innerHTML = `<custom-style>
-				<style is="custom-style" include="demo-pages-shared-styles"></style>
-			</custom-style>`;
-
-			document.body.appendChild($_documentContainer.content);
+			import '/node_modules/@brightspace-ui/core/components/demo/demo-page.js';
+			import '../multi-select-input.js';
+			import '../multi-select-input-text.js';
+			import '../multi-select-list.js';
+			import '../multi-select-list-item.js';
 		</script>
-		
-		<script type="module">
-			const $_documentContainer = document.createElement('template');
-
-			$_documentContainer.innerHTML = `<custom-style include="d2l-typography">
-				<style is="custom-style" include="d2l-typography"></style>
-			</custom-style>`;
-
-			document.body.appendChild($_documentContainer.content);
-		</script>
-		
-		<script type="module">
-			const $_documentContainer = document.createElement('template');
-
-			$_documentContainer.innerHTML = `<style>
-						html {
-							font-size: 20px;
-						}
-
-						.custom-input {
-							display: flex;
-						}
-
-						.custom-input input {
-							width: 100%;
-						}
-					</style>`;
-
-			document.body.appendChild($_documentContainer.content);
-		</script>
+		<style>
+			.custom-input {
+				display: flex;
+			}
+			.custom-input input {
+				width: 100%;
+			}
+		</style>
 	</head>
-	<body class="d2l-typography">
-		<div class="vertical-section-container centered">
-			<h3>d2l-multi-select-input-text</h3>
-			<demo-snippet>
+	<body unresolved>
+		<d2l-demo-page page-title="d2l-labs-multi-select">
+			<h3>d2l-labs-multi-select-input-text</h3>
+			<d2l-demo-snippet>
 				<template>
-					<d2l-multi-select-input-text autoremove aria-label="Multi select demo" placeholder="Press Enter to add an item">
-						<d2l-multi-select-list-item deletable="" text="Existing list item 0"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable="" text="Existing list item 1"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable="" text="Existing list item 2"></d2l-multi-select-list-item>
-					</d2l-multi-select-input-text>
+					<d2l-labs-multi-select-input-text autoremove aria-label="Multi select demo" placeholder="Press Enter to add an item">
+						<d2l-labs-multi-select-list-item deletable="" text="Existing list item 0"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="Existing list item 1"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="Existing list item 2"></d2l-labs-multi-select-list-item>
+					</d2l-labs-multi-select-input-text>
 				</template>
-			</demo-snippet>
-			<h3>d2l-multi-select-input (slotted)</h3>
-			<demo-snippet>
+			</d2l-demo-snippet>
+			<h3>d2l-labs-multi-select-input (slotted)</h3>
+			<d2l-demo-snippet>
+				<d2l-labs-multi-select-input autoremove id="slotted-input-demo">
+					<d2l-labs-multi-select-list-item deletable="" text="Existing list item 0"></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item deletable="" text="Existing list item 1"></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item deletable="" text="Existing list item 2"></d2l-labs-multi-select-list-item>
+					<div class="custom-input" slot="input">
+						<input aria-label="Slotted input multi select demo" id="slotted-input-demo-input" placeholder="Press Enter or click Add to add an item"><button id="slotted-input-demo-button">Add</button>
+					</div>
+				</d2l-labs-multi-select-input>
+			</d2l-demo-snippet>
+			<h3>d2l-labs-multi-select-list-item</h3>
+			<d2l-demo-snippet>
 				<template>
-					<d2l-multi-select-input autoremove id="slotted-input-demo">
-						<d2l-multi-select-list-item deletable="" text="Existing list item 0"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable="" text="Existing list item 1"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable="" text="Existing list item 2"></d2l-multi-select-list-item>
-						<div class="custom-input" slot="input">
-							<input aria-label="Slotted input multi select demo" id="slotted-input-demo-input" placeholder="Press Enter or click Add to add an item"><button id="slotted-input-demo-button">Add</button>
-						</div>
-					</d2l-multi-select-input>
+					<d2l-labs-multi-select-list-item text="Short Text" deletable=""></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item text="Long Truncated Text" max-chars="11" deletable=""></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item text="Longer text for the tooltip" short-text="Alternate Text" deletable=""></d2l-labs-multi-select-list-item>
 				</template>
-			</demo-snippet>
-			<h3>d2l-multi-select-list-item</h3>
-			<demo-snippet>
+			</d2l-demo-snippet>
+			<h3>d2l-labs-multi-select-list</h3>
+			<d2l-demo-snippet>
 				<template>
-					<d2l-multi-select-list-item text="Short Text" deletable=""></d2l-multi-select-list-item>
-					<d2l-multi-select-list-item text="Long Truncated Text" max-chars="11" deletable=""></d2l-multi-select-list-item>
-					<d2l-multi-select-list-item text="Longer text for the tooltip" short-text="Alternate Text" deletable=""></d2l-multi-select-list-item>
+					<d2l-labs-multi-select-list autoremove>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 0"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 1"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 2"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 3"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 4"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 5"></d2l-labs-multi-select-list-item>
+					</d2l-labs-multi-select-list>
 				</template>
-			</demo-snippet>
-			<h3>d2l-multi-select-list</h3>
-			<demo-snippet>
-				<template>
-					<d2l-multi-select-list autoremove>
-						<d2l-multi-select-list-item deletable="" text="List item 0"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable="" text="List item 1"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable="" text="List item 2"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable="" text="List item 3"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable="" text="List item 4"></d2l-multi-select-list-item>
-						<d2l-multi-select-list-item deletable="" text="List item 5"></d2l-multi-select-list-item>
-					</d2l-multi-select-list>
-				</template>
-			</demo-snippet>
+			</d2l-demo-snippet>
 			<h3>Show delete icon on hover/focus only</h3>
-			<demo-snippet>
+			<d2l-demo-snippet>
 				<template>
-					<d2l-multi-select-list autoremove>
-						<d2l-multi-select-list-item deletable="" show-delete-hover-focus text="List item 0"></d2l-multi-select-list-item>
-					</d2l-multi-select-list>
+					<d2l-labs-multi-select-list autoremove>
+						<d2l-labs-multi-select-list-item deletable="" show-delete-hover-focus text="List item 0"></d2l-labs-multi-select-list-item>
+					</d2l-labs-multi-select-list>
 				</template>
-			</demo-snippet>
-		</div>
+			</d2l-demo-snippet>
+			<script>
+				
+				var runAfterLoadeded = function() {
+					const slottedDemo = document.getElementById('slotted-input-demo');
+					const button = document.getElementById('slotted-input-demo-button');
+					const input = document.getElementById('slotted-input-demo-input');
 
-		<script>
-			document.body.classList.add('d2l-typography');
-			
-			var runAfterLoadeded = function() {
-				const slottedDemo = document.getElementById('slotted-input-demo');
-				const button = document.getElementById('slotted-input-demo-button');
-				const input = document.getElementById('slotted-input-demo-input');
-
-				if (!slottedDemo || !button || !input) {
-					setTimeout(runAfterLoadeded, 0);
-					return;
-				}
-
-				input.addEventListener('keydown', function(event) {
-					if (event.keyCode === 13 && input.value) {
-						slottedDemo.addItem(input.value);
-						input.value = '';
+					if (!slottedDemo || !button || !input) {
+						setTimeout(runAfterLoadeded, 0);
+						return;
 					}
-				});
 
-				button.addEventListener('click', function() {
-					if (input.value) {
-						slottedDemo.addItem(input.value);
-						input.value = '';
-					}
-				});
-			};
-			
-			runAfterLoadeded();
-		</script>
+					input.addEventListener('keydown', function(event) {
+						if (event.keyCode === 13 && input.value) {
+							slottedDemo.addItem(input.value);
+							input.value = '';
+						}
+					});
+
+					button.addEventListener('click', function() {
+						if (input.value) {
+							slottedDemo.addItem(input.value);
+							input.value = '';
+						}
+					});
+				};
+				
+				runAfterLoadeded();
+			</script>
+		</d2l-demo-page>
 	</body>
 </html>

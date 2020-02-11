@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+		<title>d2l-labs-multi-select-input test</title>
+		<script src="/node_modules/@babel/polyfill/browser.js"></script>
+		<script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+		<script src="/node_modules/wct-browser-legacy/browser.js"></script>
+	</head>
+	<body>
+		<test-fixture id="basic">
+			<template>
+				<d2l-labs-multi-select-input-text aria-label="test-input-text">
+					<d2l-labs-multi-select-list-item deletable text="item0"></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item deletable text="item1"></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item deletable text="item2"></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item deletable text="item3"></d2l-labs-multi-select-list-item>
+				</d2l-labs-multi-select-input-text>
+			</template>
+		</test-fixture>
+		<script type="module">
+			import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+			import '../multi-select-input-text.js';
+			import '../multi-select-list-item.js';
+			describe('<d2l-labs-multi-select-input-text>', function() {
+				describe('basic', function() {
+					let inputFixture;
+					const keyCodes = { ENTER: 13 };
+
+					beforeEach(function(done) {
+						inputFixture = fixture('basic');
+						afterNextRender(inputFixture, done);
+					});
+
+					it('should be able to add a list item', function(done) {
+						inputFixture.addEventListener('d2l-labs-multi-select-list-item-added', function(event) {
+							expect(inputFixture.children.length).to.equal(5);
+							expect(event.detail.value).to.equal('item4');
+							done();
+						});
+
+						expect(inputFixture.children.length).to.equal(4);
+						inputFixture.value = 'item4';
+						inputFixture._onKeyPress({keyCode: keyCodes.ENTER});
+					});
+				});
+			});
+		</script>
+	</body>
+</html>

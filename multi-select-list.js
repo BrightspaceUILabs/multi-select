@@ -4,7 +4,7 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 
 const $_documentContainer = document.createElement('template');
-$_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list">
+$_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 	<template strip-whitespace>
 		<style>
 			:host {
@@ -17,7 +17,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list">
 				flex-wrap: wrap;
 			}
 
-			div[role="row"] > ::slotted(d2l-multi-select-list-item) {
+			div[role="row"] > ::slotted(d2l-labs-multi-select-list-item) {
 				padding: 0.15rem;
 				display: block;
 			}
@@ -33,7 +33,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-list">
 document.head.appendChild($_documentContainer.content);
 
 /**
- * `<d2l-multi-select-list>`
+ * `<d2l-labs-multi-select-list>`
  * Polymer-based web component for D2L multi-select-list
  * @demo demo/index.hmtl
  */
@@ -43,7 +43,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	],
 	PolymerElement
 ) {
-	static get is() { return 'd2l-multi-select-list'; }
+	static get is() { return 'd2l-labs-multi-select-list'; }
 	static get properties() {
 		return {
 			/**
@@ -62,7 +62,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 			},
 			/**
 			* Automatically remove list items when they fire a
-			* d2l-multi-select-list-item-deleted event
+			* d2l-labs-multi-select-list-item-deleted event
 			*/
 			autoremove: {
 				type: Boolean,
@@ -100,7 +100,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 				});
 			}
 
-			this.addEventListener('d2l-multi-select-list-item-deleted', this._onListItemDeleted);
+			this.addEventListener('d2l-labs-multi-select-list-item-deleted', this._onListItemDeleted);
 			this.addEventListener('focus', this._onListItemFocus, true);
 			this.addEventListener('keydown', this._onKeyDown);
 		}.bind(this));
@@ -108,7 +108,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 	disconnectedCallback() {
 		super.disconnectedCallback();
-		this.removeEventListener('d2l-multi-select-list-item-deleted', this._onListItemDeleted);
+		this.removeEventListener('d2l-labs-multi-select-list-item-deleted', this._onListItemDeleted);
 		this.removeEventListener('focus', this._onListItemFocus, true);
 		this.removeEventListener('keydown', this._onKeyDown);
 	}
@@ -161,7 +161,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 		this.getEffectiveChildren()[0].tabIndex = 0;
 		this.dispatchEvent(new CustomEvent(
-			'd2l-multi-select-list-item-added',
+			'd2l-labs-multi-select-list-item-added',
 			{ bubbles: true, composed: true, detail: { value: item.text } }
 		));
 	}

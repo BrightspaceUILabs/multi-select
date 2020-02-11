@@ -1,8 +1,8 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import './d2l-multi-select-list.js';
+import './multi-select-list.js';
 
 const $_documentContainer = document.createElement('template');
-$_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-input">
+$_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-input">
 	<template strip-whitespace>
 		<style>
 			:host {
@@ -10,9 +10,9 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-input">
 			}
 		</style>
 
-		<d2l-multi-select-list id="d2l-multi-select-list" autoremove="[[autoremove]]">
+		<d2l-labs-multi-select-list id="d2l-labs-multi-select-list" autoremove="[[autoremove]]">
 			<slot></slot>
-		</d2l-multi-select-list>
+		</d2l-labs-multi-select-list>
 		<slot name="input"></slot>
 
 	</template>
@@ -22,22 +22,18 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-multi-select-input">
 document.head.appendChild($_documentContainer.content);
 
 /**
- * `<d2l-multi-select-input>`
+ * `<d2l-labs-multi-select-input>`
  * Polymer-based web component for D2L multi-select-input
  * @demo demo/index.hmtl
  */
 class D2LMultiSelectInput extends PolymerElement {
-	static get is() { return 'd2l-multi-select-input'; }
-
-	constructor() {
-		super();
-	}
+	static get is() { return 'd2l-labs-multi-select-input'; }
 
 	static get properties() {
 		return {
 			/**
 			* Automatically remove list items when they fire a
-			* d2l-multi-select-list-item-deleted event
+			* d2l-labs-multi-select-list-item-deleted event
 			*/
 			autoremove: {
 				type: Boolean,
@@ -46,15 +42,19 @@ class D2LMultiSelectInput extends PolymerElement {
 		};
 	}
 
+	constructor() {
+		super();
+	}
+
 	addItem(text, ctx = this) {
-		const item = document.createElement('d2l-multi-select-list-item');
+		const item = document.createElement('d2l-labs-multi-select-list-item');
 		item.setAttribute('text',  text);
 		item.setAttribute('deletable', true);
 		item.setAttribute('role', 'gridcell');
 
 		// Context is passed to add the element to the light dom of the calling element
 		ctx.appendChild(item);
-		this.$['d2l-multi-select-list'].addItem(item);
+		this.$['d2l-labs-multi-select-list'].addItem(item);
 	}
 }
 customElements.define(D2LMultiSelectInput.is, D2LMultiSelectInput);
