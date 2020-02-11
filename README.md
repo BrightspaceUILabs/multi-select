@@ -1,5 +1,5 @@
 # d2l-multi-select
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/BrightspaceUI/multi-select)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/BrightspaceUI/multi-select) [![Greenkeeper badge](https://badges.greenkeeper.io/BrightspaceUILabs/multi-select.svg)](https://greenkeeper.io/)
 [![Bower version][bower-image]][bower-url]
 [![Build status][ci-image]][ci-url]
 
