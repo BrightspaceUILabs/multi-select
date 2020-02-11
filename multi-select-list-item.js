@@ -1,15 +1,14 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import 'd2l-colors/d2l-colors.js';
+import '@brightspace-ui/core/components/colors/colors.js';
 import 'd2l-typography/d2l-typography-shared-styles.js';
-import 'd2l-icons/d2l-icon.js';
-import 'd2l-icons/tier1-icons.js';
-import 'd2l-offscreen/d2l-offscreen.js';
+import '@brightspace-ui/core/components/icons/icon.js';
+import '@brightspace-ui/core/components/offscreen/offscreen.js';
 import 'd2l-tooltip/d2l-tooltip.js';
 import './localize-behavior.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 
 const $_documentContainer = document.createElement('template');
-$_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-multi-select-list-item">
+$_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-list-item">
 	<template strip-whitespace="">
 		<style>
 			:host {
@@ -17,17 +16,17 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-multi-select-list-i
 				display: inline-block;
 				outline: none;
 				position: relative;
-				--d2l-multi-select-list-item-padding: 0.25rem 0.75rem 0.2rem;
-				--d2l-multi-select-list-item-padding-rtl: 0.25rem 0.75rem 0.2rem;
-				--d2l-multi-select-list-item-padding-deletable: 0.25rem 0.4rem 0.2rem 0.75rem;
-				--d2l-multi-select-list-item-padding-deletable-rtl: 0.25rem 0.75rem 0.2rem 0.4rem;
-				--d2l-multi-select-list-item-font: {
+				--d2l-labs-multi-select-list-item-padding: 0.25rem 0.75rem 0.2rem;
+				--d2l-labs-multi-select-list-item-padding-rtl: 0.25rem 0.75rem 0.2rem;
+				--d2l-labs-multi-select-list-item-padding-deletable: 0.25rem 0.4rem 0.2rem 0.75rem;
+				--d2l-labs-multi-select-list-item-padding-deletable-rtl: 0.25rem 0.75rem 0.2rem 0.4rem;
+				--d2l-labs-multi-select-list-item-font: {
 					@apply --d2l-body-compact-text;
 				};
 			}
 
-			.d2l-multi-select-list-item-wrapper {
-				@apply --d2l-multi-select-list-item-font;
+			.d2l-labs-multi-select-list-item-wrapper {
+				@apply --d2l-labs-multi-select-list-item-font;
 				-moz-user-select: none;
 				-ms-user-select: none;
 				-webkit-user-select: none;
@@ -40,61 +39,61 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-multi-select-list-i
 				display: flex;
 				line-height: normal;
 				outline: none;
-				padding: var(--d2l-multi-select-list-item-padding);
+				padding: var(--d2l-labs-multi-select-list-item-padding);
 			}
 
-			:host([dir='rtl']) .d2l-multi-select-list-item-wrapper {
-				padding: var(--d2l-multi-select-list-item-padding-rtl);
+			:host([dir='rtl']) .d2l-labs-multi-select-list-item-wrapper {
+				padding: var(--d2l-labs-multi-select-list-item-padding-rtl);
 			}
 
-			:host([deletable]) .d2l-multi-select-list-item-wrapper {
-				padding: var(--d2l-multi-select-list-item-padding-deletable);
+			:host([deletable]) .d2l-labs-multi-select-list-item-wrapper {
+				padding: var(--d2l-labs-multi-select-list-item-padding-deletable);
 			}
 
-			:host([deletable][show-delete-hover-focus]) .d2l-multi-select-list-item-wrapper d2l-icon {
+			:host([deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
 				visibility: hidden;
 				margin-left: -0.7rem;
 			}
 
-			:host([dir='rtl'][deletable][show-delete-hover-focus]) .d2l-multi-select-list-item-wrapper d2l-icon {
+			:host([dir='rtl'][deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
 				margin-left: 0;
 				margin-right: -0.7rem;
 			}
 
-			:host(:hover[deletable][show-delete-hover-focus]) .d2l-multi-select-list-item-wrapper d2l-icon {
+			:host(:hover[deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
 				visibility: unset;
 				background-color: var(--d2l-color-gypsum);
 			}
 
-			:host(:focus[deletable][show-delete-hover-focus]) .d2l-multi-select-list-item-wrapper d2l-icon {
+			:host(:focus[deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
 				visibility: unset;
 				background-color: var(--d2l-color-celestine);
 			}
 
-			:host([dir='rtl'][deletable]) .d2l-multi-select-list-item-wrapper {
-				padding: var(--d2l-multi-select-list-item-padding-deletable-rtl);
+			:host([dir='rtl'][deletable]) .d2l-labs-multi-select-list-item-wrapper {
+				padding: var(--d2l-labs-multi-select-list-item-padding-deletable-rtl);
 			}
 
-			:host(:hover) .d2l-multi-select-list-item-wrapper {
+			:host(:hover) .d2l-labs-multi-select-list-item-wrapper {
 				background-color: var(--d2l-color-gypsum);
 				border-color: var(--d2l-color-mica);
 			}
 
-			:host(:hover) .d2l-multi-select-list-item-wrapper d2l-icon:hover {
+			:host(:hover) .d2l-labs-multi-select-list-item-wrapper d2l-icon:hover {
 				color: var(--d2l-color-ferrite);
 			}
 
-			:host(:focus) .d2l-multi-select-list-item-wrapper {
+			:host(:focus) .d2l-labs-multi-select-list-item-wrapper {
 				background-color: var(--d2l-color-celestine);
 				border-color: var(--d2l-color-celestine-minus-1);
 				color: #ffffff;
 			}
 
-			:host(:focus) .d2l-multi-select-list-item-wrapper d2l-icon {
+			:host(:focus) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
 				color: #c6dbef; // this color is the same as #ffffff with opacity of 0.75
 			}
 
-            :host(:focus) .d2l-multi-select-list-item-wrapper d2l-icon:hover {
+            :host(:focus) .d2l-labs-multi-select-list-item-wrapper d2l-icon:hover {
 				color: #ffffff;
 				opacity: 1;
 			}
@@ -129,16 +128,16 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-multi-select-list-i
 				min-width: 200px;
 			}
 
-			.d2l-multi-select-delete-icon {
+			.d2l-labs-multi-select-delete-icon {
 				z-index: 0;
 			}
 
 		</style>
 
-		<div class="d2l-multi-select-list-item-wrapper" id="tag" on-click="_onClick">
-			<div class="d2l-multi-select-list-item-text" aria-hidden="true">[[_getVisibleText(text,shortText,maxChars)]]</div>
+		<div class="d2l-labs-multi-select-list-item-wrapper" id="tag" on-click="_onClick">
+			<div class="d2l-labs-multi-select-list-item-text" aria-hidden="true">[[_getVisibleText(text,shortText,maxChars)]]</div>
 			<d2l-offscreen>[[_getScreenReaderText(text,shortText)]]</d2l-offscreen>
-			<d2l-icon class="d2l-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" hidden="[[!deletable]]" on-click="_onDeleteItem"></d2l-icon>
+			<d2l-icon class="d2l-labs-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" hidden="[[!deletable]]" on-click="_onDeleteItem"></d2l-icon>
 		</div>
 		<template is="dom-if" if="[[_hasTooltip(text,shortText,maxChars)]]">
 			<d2l-tooltip position="[[tooltipPosition]]">[[text]]</d2l-tooltip>
@@ -149,14 +148,14 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-multi-select-list-i
 
 document.head.appendChild($_documentContainer.content);
 /**
- * `<d2l-multi-select-list-item>`
+ * `<d2l-labs-multi-select-list-item>`
  * Polymer-based web component for D2L multi-select-list-item
  * @demo demo/index.hmtl
  */
 class D2LMultiSelectItem extends mixinBehaviors(
 	[D2L.PolymerBehaviors.D2LMultiSelect.LocalizeBehavior], PolymerElement
 ) {
-	static get is() { return 'd2l-multi-select-list-item'; }
+	static get is() { return 'd2l-labs-multi-select-list-item'; }
 	static get properties() {
 		return {
 
@@ -263,7 +262,7 @@ class D2LMultiSelectItem extends mixinBehaviors(
 	_onDeleteItem(e) {
 		const handleFocus = e && e.composedPath()[0].tagName === 'D2L-ICON';
 		this.dispatchEvent(new CustomEvent(
-			'd2l-multi-select-list-item-deleted',
+			'd2l-labs-multi-select-list-item-deleted',
 			{ bubbles: true, composed: true, detail: { value: this.text, handleFocus } }
 		));
 	}

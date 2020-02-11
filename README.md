@@ -1,74 +1,64 @@
-# d2l-multi-select
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/BrightspaceUI/multi-select) [![Greenkeeper badge](https://badges.greenkeeper.io/BrightspaceUILabs/multi-select.svg)](https://greenkeeper.io/)
-[![Bower version][bower-image]][bower-url]
-[![Build status][ci-image]][ci-url]
+# d2l-labs-multi-select
 
-Polymer-based web component for D2L multi select and related components
+[![NPM version](https://img.shields.io/npm/v/@brightspace-ui-labs/multi-select.svg)](https://www.npmjs.org/package/@brightspace-ui-labs/multi-select)
+[![Greenkeeper badge](https://badges.greenkeeper.io/BrightspaceUILabs/multi-select.svg)](https://greenkeeper.io/)
+[![Build status](https://travis-ci.com/brightspaceUILabs/multi-select.svg?branch=master)](https://travis-ci.com/brightspaceUILabs/multi-select)
 
-(See [design.d2l][design.d2l-url])
+> Note: this is a ["labs" component](https://github.com/BrightspaceUI/guide/wiki/Component-Tiers). While functional, these tasks are prerequisites to promotion to BrightspaceUI "official" status:
+>
+> - [ ] [Design organization buy-in](https://github.com/BrightspaceUI/guide/wiki/Before-you-build#working-with-design)
+> - [ ] [design.d2l entry](http://design.d2l/)
+> - [ ] [Architectural sign-off](https://github.com/BrightspaceUI/guide/wiki/Before-you-build#web-component-architecture)
+> - [x] [Continuous integration](https://github.com/BrightspaceUI/guide/wiki/Testing#testing-continuously-with-travis-ci)
+> - [x] [Cross-browser testing](https://github.com/BrightspaceUI/guide/wiki/Testing#cross-browser-testing-with-sauce-labs)
+> - [ ] [Unit tests](https://github.com/BrightspaceUI/guide/wiki/Testing#testing-with-polymer-test) (if applicable)
+> - [ ] [Accessibility tests](https://github.com/BrightspaceUI/guide/wiki/Testing#automated-accessibility-testing-with-axe)
+> - [ ] [Visual diff tests](https://github.com/BrightspaceUI/visual-diff)
+> - [x] [Localization](https://github.com/BrightspaceUI/guide/wiki/Localization) with Serge (if applicable)
+> - [x] Demo page
+> - [ ] README documentation
+
+Polymer-based web component for D2L multi select and related components.
 
 ## Installation
 
-`d2l-multi-select` can be installed from [Bower][bower-url]:
 ```shell
-bower install d2l-multi-select
+npm install @brightspace-ui-labs/multi-select
 ```
 
 ## Usage
 
-Include the [webcomponents.js](http://webcomponents.org/polyfills/) polyfill loader (for browsers who don't natively support web components), then import the appropriate `d2l-multi-select` components as needed:
+Include the [webcomponents.js](http://webcomponents.org/polyfills/) polyfill loader (for browsers who don't natively support web components), then import the appropriate `multi-select` components as needed:
 
 ```html
 <head>
-	<script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+	<script src="node_modules/webcomponentsjs/webcomponents-loader.js"></script>
 </head>
 ```
 
 ### Inputs
 
-#### `d2l-multi-select-input-text`
+#### `d2l-labs-multi-select-input-text`
 
-`d2l-multi-select-input-text` includes a `d2l-input-text` that is hooked up to add items when 'Enter' is pressed.
-
-<!---
-```
-<custom-element-demo>
-  <template>
-    <script src="../webcomponentsjs/webcomponents-loader.js"></script>
-    <link rel="import" href="../d2l-typography/d2l-typography.html">
-    <link rel="import" href="d2l-multi-select-input-text.html">
-    <link rel="import" href="d2l-multi-select-list-item.html">
-    <custom-style include="d2l-typography">
-      <style is="custom-style" include="d2l-typography"></style>
-    </custom-style>
-    <style>
-      html {
-        font-size: 20px;
-        font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-      }
-    </style>
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
-```
--->
-```html
-<d2l-multi-select-input-text>
-	<d2l-multi-select-list-item deletable text="Item 1"></d2l-multi-select-list-item>
-</d2l-multi-select-input-text>
-```
-
-#### `d2l-multi-select-input`
-
-You can use your own input component instead by putting it as a child of `d2l-multi-select-input` and setting `slot="input"` on your input element. To add items to the list, call `addItem` with the item text.
+`d2l-labs-multi-select-input-text` includes a `d2l-input-text` that is hooked up to add items when 'Enter' is pressed.
 
 ```html
-<d2l-multi-select-input id="multi-select-input">
+<d2l-labs-multi-select-input-text>
+	<d2l-labs-multi-select-list-item deletable text="Item 1"></d2l-labs-multi-select-list-item>
+</d2l-labs-multi-select-input-text>
+```
+
+#### `d2l-labs-multi-select-input`
+
+You can use your own input component instead by putting it as a child of `d2l-labs-multi-select-input` and setting `slot="input"` on your input element. To add items to the list, call `addItem` with the item text.
+
+```html
+<d2l-labs-multi-select-input id="multi-select-input">
 	<div slot="input">
 		<input>
 		<button>Add</button>
 	</div>
-</d2l-multi-select-input>
+</d2l-labs-multi-select-input>
 ```
 
 ```js
@@ -79,43 +69,43 @@ button.addEventListener('click', () => {
 
 ### Components
 
-#### `d2l-multi-select-list-item`
+#### `d2l-labs-multi-select-list-item`
 
-`d2l-multi-select-list-item` is a compact representation of information.
+`d2l-labs-multi-select-list-item` is a compact representation of information.
 
 A `deletable` property can be set to enable the option of deleting the item, although there is no wire-up.
 ```html
-<d2l-multi-select-list-item deletable text="List item"></d2l-multi-select-list-item>
+<d2l-labs-multi-select-list-item deletable text="List item"></d2l-labs-multi-select-list-item>
 ```
 A 'show-delete-hover-focus' property can be set to allow delete icon to show on hover or focus only.
 ```html
-<d2l-multi-select-list-item deletable show-delete-hover-focus text="List item"></d2l-multi-select-list-item>
+<d2l-labs-multi-select-list-item deletable show-delete-hover-focus text="List item"></d2l-labs-multi-select-list-item>
 ```
 Also the following css variables are exposed to clients and can be use to override some of the appearance of the list item.
 ```html
---d2l-multi-select-list-item-font
---d2l-multi-select-list-item-padding
---d2l-multi-select-list-item-padding-rtl
---d2l-multi-select-list-item-padding-deletable
---d2l-multi-select-list-item-padding-deletable-rtl
+--d2l-labs-multi-select-list-item-font
+--d2l-labs-multi-select-list-item-padding
+--d2l-labs-multi-select-list-item-padding-rtl
+--d2l-labs-multi-select-list-item-padding-deletable
+--d2l-labs-multi-select-list-item-padding-deletable-rtl
 ```
 
-#### `d2l-multi-select-list`
+#### `d2l-labs-multi-select-list`
 
-`d2l-multi-select-list` wraps a list of items, and provides spacing between the items, as well as keyboard navigation (arrow keys) and handling of item deletion (backspace/delete).
+`d2l-labs-multi-select-list` wraps a list of items, and provides spacing between the items, as well as keyboard navigation (arrow keys) and handling of item deletion (backspace/delete).
 ```html
-<d2l-multi-select-list>
-	<d2l-multi-select-list-item text="List item 1"></d2l-multi-select-list-item>
-	<d2l-multi-select-list-item text="List item 2"></d2l-multi-select-list-item>
+<d2l-labs-multi-select-list>
+	<d2l-labs-multi-select-list-item text="List item 1"></d2l-labs-multi-select-list-item>
+	<d2l-labs-multi-select-list-item text="List item 2"></d2l-labs-multi-select-list-item>
 	...
-</d2l-multi-select-list>
+</d2l-labs-multi-select-list>
 ```
 
 ### Events
 
-- `d2l-multi-select-list-item-deleted`: fired on item deletion
+- `d2l-labs-multi-select-list-item-deleted`: fired on item deletion
 
-- `d2l-multi-select-list-item-added`: fired on item added to the `d2l-multi-select-list`
+- `d2l-labs-multi-select-list-item-added`: fired on item added to the `d2l-labs-multi-select-list`
 
 ## Developing, Testing and Contributing
 
@@ -151,14 +141,8 @@ To lint AND run local unit tests:
 npm test
 ```
 
-[bower-url]: http://bower.io/search/?q=d2l-multi-select
-[bower-image]: https://badge.fury.io/bo/d2l-multi-select.svg
-[ci-url]: https://travis-ci.com/BrightspaceUI/multi-select
-[ci-image]: https://travis-ci.com/BrightspaceUI/multi-select.svg?branch=master
-[design.d2l-url]: http://design.d2l/components/tags/
-
-## Versioning & Releasing
+## Versioning, Releasing & Deploying
 
 All version changes should obey [semantic versioning](https://semver.org/) rules.
 
-Include either `[increment major]`, `[increment minor]` or `[increment patch]` in your merge commit message to automatically increment the `package.json` version and create a tag during the next build.
+Include either `[increment major]`, `[increment minor]` or `[increment patch]` in your merge commit message to automatically increment the `package.json` version, create a tag, and trigger a deployment to NPM.
