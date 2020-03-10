@@ -1,7 +1,7 @@
 # d2l-labs-multi-select
 
 [![NPM version](https://img.shields.io/npm/v/@brightspace-ui-labs/multi-select.svg)](https://www.npmjs.org/package/@brightspace-ui-labs/multi-select)
-[![Greenkeeper badge](https://badges.greenkeeper.io/BrightspaceUILabs/multi-select.svg)](https://greenkeeper.io/)
+[![Dependabot badge](https://flat.badgen.net/dependabot/BrightspaceUILabs/multi-select?icon=dependabot)](https://app.dependabot.com/)
 [![Build status](https://travis-ci.com/brightspaceUILabs/multi-select.svg?branch=master)](https://travis-ci.com/brightspaceUILabs/multi-select)
 
 > Note: this is a ["labs" component](https://github.com/BrightspaceUI/guide/wiki/Component-Tiers). While functional, these tasks are prerequisites to promotion to BrightspaceUI "official" status:
