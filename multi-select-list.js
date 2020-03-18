@@ -39,7 +39,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			</div>
 			<template is="dom-if" if="[[_hasHiddenChildren(collapsed, hiddenChildren)]]">
 				<div class="aux-button" >
-					<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" on-click="collapseExpand"></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" on-click="_expand"></d2l-labs-multi-select-list-item>
 				</div>
 			</template>
 	</template>
@@ -110,42 +110,15 @@ class D2LMultiSelectList extends mixinBehaviors(
 			this._debounceChildren();
 		});
 	}
-	_debounceChildren() {
-		this._debounceJob = Debouncer.debounce(this._debounceJob,
-			microTask, () => this._updateChildren());
-	}
-	_hasHiddenChildren(collapsed, children) {
-		return collapsed && children > 0;
-	}
-	collapseExpand() {
-		this.collapsed = false;
-		this.hiddenChildren = 0;
-	}
-	_updateChildren() {
-		if (!this.collapsed) {
-			return;
-		}
-		this.childrenWidthTotal = 0;
-		const children = this.getEffectiveChildren();
-		let newHiddenChildren = 0;
-		for (const listItem of children) {
-			this.childrenWidthTotal += listItem.clientWidth;
-			if (this.childrenWidthTotal > this.shadowRoot.querySelector('div[role="row"]').clientWidth) {
-				newHiddenChildren++;
-			}
-		}
-		this.hiddenChildren = newHiddenChildren;
-	}
-	focusableProvider() {
-		return Promise.resolve(this._getVisibileEffectiveChildren());
-	}
 	connectedCallback() {
 		super.connectedCallback();
 		// Set up for d2l-focusable-arrowkeys-behavior
 		this.arrowKeyFocusablesContainer = this.shadowRoot;
 		this.arrowKeyFocusablesDirection = 'updownleftright';
 		this.arrowKeyFocusablesNoWrap = true;
-		this.arrowKeyFocusablesProvider = this.focusableProvider;
+		this.arrowKeyFocusablesProvider = function() {
+			return Promise.resolve(this._getVisibileEffectiveChildren());
+		};
 
 		this.setAttribute('role', 'grid');
 		afterNextRender(this, function() {
@@ -216,6 +189,32 @@ class D2LMultiSelectList extends mixinBehaviors(
 		const children = this.getEffectiveChildren();
 		const auxButton = this.collapsed ? [this.shadowRoot.querySelector('.aux-button d2l-labs-multi-select-list-item')] : [];
 		return children.slice(0, children.length - this.hiddenChildren).concat(auxButton);
+	}
+	_debounceChildren() {
+		this._debounceJob = Debouncer.debounce(this._debounceJob,
+			microTask, () => this._updateChildren());
+	}
+	_hasHiddenChildren(collapsed, children) {
+		return collapsed && children > 0;
+	}
+	_expand() {
+		this.collapsed = false;
+		this.hiddenChildren = 0;
+	}
+	_updateChildren() {
+		if (!this.collapsed) {
+			return;
+		}
+		this.childrenWidthTotal = 0;
+		const children = this.getEffectiveChildren();
+		let newHiddenChildren = 0;
+		for (const listItem of children) {
+			this.childrenWidthTotal += listItem.clientWidth;
+			if (this.childrenWidthTotal > this.shadowRoot.querySelector('div[role="row"]').clientWidth) {
+				newHiddenChildren++;
+			}
+		}
+		this.hiddenChildren = newHiddenChildren;
 	}
 	addItem(item) {
 		if (this._currentlyFocusedElement === null) {
