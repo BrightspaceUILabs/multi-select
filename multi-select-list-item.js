@@ -23,6 +23,7 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-l
 				--d2l-labs-multi-select-list-item-font: {
 					@apply --d2l-body-compact-text;
 				};
+				width: max-content;
 			}
 
 			.d2l-labs-multi-select-list-item-wrapper {
