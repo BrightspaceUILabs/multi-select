@@ -31,19 +31,17 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			}
 			.aux-button {
 				display: inline-block;
-				width: 25%;
 			}
 
 		</style>
-
-		<div role="row" collapse$=[[collapsed]]>
-			<slot></slot>
-		</div>
-		<template is="dom-if" if="[[_hasHiddenChildren(collapsed, hiddenChildren)]]">
-			<div class="aux-button" >
-				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" on-click="collapseExpand"></d2l-labs-multi-select-list-item>
+			<div role="row" collapse$=[[collapsed]]>
+				<slot></slot>
 			</div>
-		</template>
+			<template is="dom-if" if="[[_hasHiddenChildren(collapsed, hiddenChildren)]]">
+				<div class="aux-button" >
+					<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" on-click="collapseExpand"></d2l-labs-multi-select-list-item>
+				</div>
+			</template>
 	</template>
 </dom-module>`;
 
@@ -132,7 +130,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		let newHiddenChildren = 0;
 		for (const listItem of children) {
 			this.childrenWidthTotal += listItem.clientWidth;
-			if (this.childrenWidthTotal > this.clientWidth) {
+			if (this.childrenWidthTotal > this.shadowRoot.querySelector('div[role="row"]').clientWidth) {
 				newHiddenChildren++;
 			}
 		}
@@ -144,7 +142,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	connectedCallback() {
 		super.connectedCallback();
 		// Set up for d2l-focusable-arrowkeys-behavior
-		this.arrowKeyFocusablesContainer = this;
+		this.arrowKeyFocusablesContainer = this.shadowRoot;
 		this.arrowKeyFocusablesDirection = 'updownleftright';
 		this.arrowKeyFocusablesNoWrap = true;
 		this.arrowKeyFocusablesProvider = this.focusableProvider;
@@ -175,9 +173,8 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 
 	_onListItemFocus(event) {
-		console.log(event);
 		this._currentlyFocusedElement.tabIndex = -1;
-		this._currentlyFocusedElement = event.originalTarget;
+		this._currentlyFocusedElement = event.target;
 		this._currentlyFocusedElement.tabIndex = 0;
 	}
 
@@ -195,12 +192,10 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 
 	_onKeyDown(event) {
-		console.log(event);
 		const { BACKSPACE, DELETE } = this._keyCodes;
 		const { keyCode } = event;
 		const rootTarget = event.composedPath()[0];
 		const itemIndex = this._getVisibileEffectiveChildren().indexOf(rootTarget);
-		console.log(itemIndex);
 		if ((keyCode === BACKSPACE || keyCode === DELETE) && itemIndex !== -1) {
 			event.preventDefault();
 			event.stopPropagation();
