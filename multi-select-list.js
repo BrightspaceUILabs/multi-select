@@ -1,14 +1,17 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import 'd2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import {microTask} from '@polymer/polymer/lib/utils/async.js';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-
+import './localize-behavior.js';
 const $_documentContainer = document.createElement('template');
 $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 	<template strip-whitespace>
 		<style>
 			:host {
-				display: inline-block;
+				display: flex;
 				width: 100%;
 			}
 
@@ -17,16 +20,30 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				flex-wrap: wrap;
 			}
 
+			div[collapse] {
+				max-Height: 35px;
+				overflow: hidden;
+			}
+
 			div[role="row"] > ::slotted(d2l-labs-multi-select-list-item) {
 				padding: 0.15rem;
 				display: block;
 			}
+			.aux-button {
+				display: inline-block;
+				width: 25%;
+			}
 
 		</style>
 
-		<div role="row">
+		<div role="row" collapse$=[[collapse]]>
 			<slot></slot>
 		</div>
+		<template is="dom-if" if="[[_hasHiddenChildren(collapse, hiddenChildren)]]">
+			<div class="aux-button">
+				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" on-click="collapseExpand"></d2l-labs-multi-select-list-item>
+			</div>
+		</template>
 	</template>
 </dom-module>`;
 
@@ -39,6 +56,7 @@ document.head.appendChild($_documentContainer.content);
  */
 class D2LMultiSelectList extends mixinBehaviors(
 	[
+		D2L.PolymerBehaviors.D2LMultiSelect.LocalizeBehavior,
 		D2L.PolymerBehaviors.FocusableArrowKeysBehavior,
 	],
 	PolymerElement
@@ -67,6 +85,20 @@ class D2LMultiSelectList extends mixinBehaviors(
 			autoremove: {
 				type: Boolean,
 				value: false
+			},
+			/**
+			 * Collapses list items into one row and displays the number of list items hidden
+			 */
+			collapse: {
+				type: Boolean,
+				value: false
+			},
+			/**
+			 * number of children elements that are hidden from view
+			 */
+			hiddenChildren: {
+				type: Number,
+				value: 0
 			}
 		};
 	}
@@ -74,8 +106,37 @@ class D2LMultiSelectList extends mixinBehaviors(
 	constructor() {
 		super();
 		this._onListItemDeleted = this._onListItemDeleted.bind(this);
+		this.observer = new ResizeObserver(this._debounceChildren.bind(this));
+		this.observer.observe(this);
+		this._nodeObserver = new FlattenedNodesObserver(this, () => {
+			this._debounceChildren();
+		});
 	}
-
+	_debounceChildren() {
+		this._debounceJob = Debouncer.debounce(this._debounceJob,
+			microTask, () => this._updateChildren());
+	}
+	_hasHiddenChildren(collapse, children) {
+		return collapse && children > 0;
+	}
+	collapseExpand() {
+		this.collapse = !this.collapse;
+	}
+	_updateChildren() {
+		if (!this.collapse) {
+			return;
+		}
+		this.childrenWidthTotal = 0;
+		const children = this.getEffectiveChildren();
+		let newHiddenChildren = 0;
+		for (const listItem of children) {
+			this.childrenWidthTotal += listItem.clientWidth;
+			if (this.childrenWidthTotal > this.clientWidth) {
+				newHiddenChildren++;
+			}
+		}
+		this.hiddenChildren = newHiddenChildren;
+	}
 	connectedCallback() {
 		super.connectedCallback();
 		// Set up for d2l-focusable-arrowkeys-behavior
@@ -87,14 +148,12 @@ class D2LMultiSelectList extends mixinBehaviors(
 		};
 
 		this.setAttribute('role', 'grid');
-
 		afterNextRender(this, function() {
 			const listItems = this.getEffectiveChildren();
 			// Set tabindex to allow component to be focusable, and set role on list items
 			if (listItems.length) {
 				listItems[0].tabIndex = 0;
 				this._currentlyFocusedElement = listItems[0];
-
 				listItems.forEach(function(listItem) {
 					listItem.setAttribute('role', 'gridcell');
 				});
