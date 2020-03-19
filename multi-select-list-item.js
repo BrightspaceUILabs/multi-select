@@ -25,7 +25,9 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-l
 				};
 				width: max-content;
 			}
-
+			:host([_fallback-css]) {
+				min-width: 125px;
+			}
 			.d2l-labs-multi-select-list-item-wrapper {
 				@apply --d2l-labs-multi-select-list-item-font;
 				-moz-user-select: none;
