@@ -25,7 +25,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			}
 
 			div[collapse] {
-				max-height: 35px;
+				max-height: 1.94rem;
 				overflow: hidden;
 			}
 
