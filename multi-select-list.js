@@ -211,15 +211,15 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 		let childrenWidthTotal = 0;
 		const children = this.getEffectiveChildren();
-		let newHiddenChildren = 0;
 		const widthOfListItems = this.shadowRoot.querySelector('div[role="row"]').clientWidth;
-		for (const listItem of children) {
+		for (let i = 0; i < children.length; i++) {
+			const listItem = children[i];
 			childrenWidthTotal += listItem.clientWidth;
 			if (childrenWidthTotal > widthOfListItems) {
-				newHiddenChildren++;
+				this.hiddenChildren = children.length - i;
+				break;
 			}
 		}
-		this.hiddenChildren = newHiddenChildren;
 	}
 	addItem(item) {
 		if (this._currentlyFocusedElement === null) {
