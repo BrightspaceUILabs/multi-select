@@ -211,11 +211,11 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 		let childrenWidthTotal = 0;
 		const children = this.getEffectiveChildren();
-		const widthOfListItems = this.shadowRoot.querySelector('div[role="row"]').clientWidth;
+		const widthOfListItems = this.shadowRoot.querySelector('div[role="row"]').getBoundingClientRect().width;
 		let newHiddenChildren = 0;
 		for (let i = 0; i < children.length; i++) {
 			const listItem = children[i];
-			childrenWidthTotal += listItem.clientWidth;
+			childrenWidthTotal += listItem.getBoundingClientRect().width;
 			if (childrenWidthTotal > widthOfListItems) {
 				newHiddenChildren = children.length - i;
 				break;
