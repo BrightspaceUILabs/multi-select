@@ -1,11 +1,15 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import 'd2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { microTask } from '@polymer/polymer/lib/utils/async.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+
+import 'd2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js';
+import 'd2l-resize-aware/resize-observer-polyfill.js';
+
 import './localize-behavior.js';
+
 const $_documentContainer = document.createElement('template');
 $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 	<template strip-whitespace>
