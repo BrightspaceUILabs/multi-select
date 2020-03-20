@@ -38,6 +38,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			}
 			.aux-button {
 				display: inline-block;
+				padding: 0.15rem;
 			}
 			.hide-aux {
 				display: none;
