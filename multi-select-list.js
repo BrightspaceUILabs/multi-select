@@ -17,8 +17,11 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			:host {
 				display: flex;
 				width: 100%;
+				flex-direction: column;
 			}
-
+			:host([collapsed]) {
+				flex-direction: row;
+			}
 			div[role="row"] {
 				display: flex;
 				flex-wrap: wrap;
@@ -36,14 +39,17 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			.aux-button {
 				display: inline-block;
 			}
-
+			.hide-aux {
+				display: none;
+			}
 		</style>
 			<div role="row" collapse$=[[collapsed]]>
 				<slot></slot>
 			</div>
-			<template is="dom-if" if="[[_hasHiddenChildren(collapsed, hiddenChildren)]]">
-				<div class="aux-button" >
-					<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" on-click="_expand"></d2l-labs-multi-select-list-item>
+			<template is="dom-if" if="[[collapsable]]">
+				<div class$="[[_displayAux(hiddenChildren)]]" >
+					<d2l-labs-multi-select-list-item  text="[[_expandCollapseText(hiddenChildren, collapsed)]]" on-click="_expandCollapse"></d2l-labs-multi-select-list-item>
+					<slot name="aux-button"></slot>
 				</div>
 			</template>
 	</template>
@@ -71,7 +77,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 			*/
 			_keyCodes: {
 				type: Object,
-				value: { BACKSPACE: 8, DELETE: 46 }
+				value: { BACKSPACE: 8, DELETE: 46, SPACE: 32 }
 			},
 			/**
 			* Tracks the currently focused item for managing tabindex
@@ -89,13 +95,22 @@ class D2LMultiSelectList extends mixinBehaviors(
 				value: false
 			},
 			/**
-			 * Collapses list items into one row and displays the number of list items hidden
+			 * Toggles collpasing mode
 			 */
-			collapsed: {
+			collapsable: {
 				type: Boolean,
 				value: false
 			},
 			/**
+			 * internal reflected attribute that shows the current state
+			 */
+			collapsed: {
+				type: Boolean,
+				value: false,
+				reflectToAttribute: true
+			},
+			/**
+			 *
 			 * number of children elements that are hidden from view
 			 */
 			hiddenChildren: {
@@ -120,6 +135,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this.arrowKeyFocusablesContainer = this.shadowRoot;
 		this.arrowKeyFocusablesDirection = 'updownleftright';
 		this.arrowKeyFocusablesNoWrap = true;
+
 		this.arrowKeyFocusablesProvider = function() {
 			return Promise.resolve(this._getVisibileEffectiveChildren());
 		};
@@ -140,6 +156,9 @@ class D2LMultiSelectList extends mixinBehaviors(
 			this.addEventListener('focus', this._onListItemFocus, true);
 			this.addEventListener('keydown', this._onKeyDown);
 		}.bind(this));
+		if (this.collapsable) {
+			this._expandCollapse();
+		}
 	}
 
 	disconnectedCallback() {
@@ -169,7 +188,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 
 	_onKeyDown(event) {
-		const { BACKSPACE, DELETE } = this._keyCodes;
+		const { BACKSPACE, DELETE, SPACE } = this._keyCodes;
 		const { keyCode } = event;
 		const rootTarget = event.composedPath()[0];
 		const itemIndex = this._getVisibileEffectiveChildren().indexOf(rootTarget);
@@ -188,25 +207,34 @@ class D2LMultiSelectList extends mixinBehaviors(
 			}
 			rootTarget._onDeleteItem();
 		}
+		if (keyCode === SPACE && itemIndex !== -1) {
+			event.preventDefault();
+			event.stopPropagation();
+			this._expandCollapse();
+		}
 	}
 	_getVisibileEffectiveChildren() {
 		const children = this.getEffectiveChildren();
-		const auxButton = this.collapsed ? [this.shadowRoot.querySelector('.aux-button d2l-labs-multi-select-list-item')] : [];
-		return children.slice(0, children.length - this.hiddenChildren).concat(auxButton);
+		const auxButton = this.collapsable ? [this.shadowRoot.querySelector('.aux-button d2l-labs-multi-select-list-item')] : [];
+		const hiddenChildren = this.collapsed ? this.hiddenChildren : 0;
+		const vChildren = children.slice(0, children.length - hiddenChildren).concat(auxButton);
+		return vChildren;
 	}
 	_debounceChildren() {
 		this._debounceJob = Debouncer.debounce(this._debounceJob,
 			microTask, () => this._updateChildren());
 	}
-	_hasHiddenChildren(collapsed, children) {
-		return collapsed && children > 0;
+	_displayAux(children) {
+		return children > 0 ? 'aux-button' : 'hide-aux';
 	}
-	_expand() {
-		this.collapsed = false;
-		this.hiddenChildren = 0;
+	_expandCollapse() {
+		this.collapsed = !this.collapsed;
+	}
+	_expandCollapseText(hiddenChildren, collapsed) {
+		return collapsed ? this.localize('hiddenChildren', 'num', hiddenChildren) : this.localize('hide');
 	}
 	_updateChildren() {
-		if (!this.collapsed) {
+		if (!this.collapsable) {
 			return;
 		}
 		let childrenWidthTotal = 0;

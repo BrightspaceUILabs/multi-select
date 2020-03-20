@@ -13,50 +13,62 @@ D2L.PolymerBehaviors.D2LMultiSelect.LocalizeBehaviorImpl = {
 				return {
 					'ar': {
 						'delete': 'حذف',
+						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
 					},
 					'en': {
 						'delete': 'Delete',
+						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
 					},
 					'es': {
 						'delete': 'Eliminar',
+						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
 					},
 					'fr': {
 						'delete': 'Supprimer',
+						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
 					},
 					'ja': {
 						'delete': '削除',
+						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
 					},
 					'ko': {
 						'delete': '삭제',
+						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
 					},
 					'nl': {
 						'delete': 'Verwijderen',
+						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
 					},
 					'pt': {
 						'delete': 'Excluir',
+						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
 					},
 					'sv': {
 						'delete': 'Ta bort',
+						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
 					},
 					'tr': {
 						'delete': 'Sil',
+						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
 					},
 					'zh': {
 						'delete': '删除',
+						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
 					},
 					'zh-tw': {
 						'delete': '刪除',
+						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
 					}
 				};
