@@ -21,7 +21,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				width: 100%;
 				flex-direction: column;
 			}
-			:host([collapsed]) {
+			:host([_collapsed]) {
 				flex-direction: row;
 			}
 			div[role="row"] {
@@ -46,15 +46,15 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				display: none;
 			}
 		</style>
-			<div role="row" collapse$=[[collapsed]]>
+			<div role="row" collapse$=[[_collapsed]]>
 				<slot></slot>
-				<div class$="[[_hideVisibility(collapsable, collapsed)]]">
+				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
 					<d2l-button-subtle text="[[localize('hide')]]" on-click="_expandCollapse" ></d2l-button-subtle>
 					<slot name="aux-button"></slot>
 				</div>
 
 			</div>
-			<div class$="[[_showMoreVisibility(collapsable, collapsed, hiddenChildren)]]">
+			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
 				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" on-click="_expandCollapse"></d2l-labs-multi-select-list-item>
 			</div>
 	</template>
@@ -109,7 +109,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 			/**
 			 * internal reflected attribute that shows the current state
 			 */
-			collapsed: {
+			_collapsed: {
 				type: Boolean,
 				value: false,
 				reflectToAttribute: true
@@ -221,22 +221,22 @@ class D2LMultiSelectList extends mixinBehaviors(
 	_getVisibileEffectiveChildren() {
 		const children = this.getEffectiveChildren();
 		const auxButton = this.collapsable ? getComposedChildren(this.shadowRoot.querySelector('.aux-button')) : [];
-		const hiddenChildren = this.collapsed ? this.hiddenChildren : 0;
+		const hiddenChildren = this._collapsed ? this.hiddenChildren : 0;
 		const vChildren = children.slice(0, children.length - hiddenChildren).concat(auxButton);
 		return vChildren;
 	}
-	_showMoreVisibility(collapsable, collapsed, hiddenChildren) {
-		return collapsable && collapsed && hiddenChildren > 0 ? 'aux-button' : 'hide';
+	_showMoreVisibility(collapsable, _collapsed, hiddenChildren) {
+		return collapsable && _collapsed && hiddenChildren > 0 ? 'aux-button' : 'hide';
 	}
-	_hideVisibility(collapsable, collapsed) {
-		return collapsable && !collapsed ? '' : 'hide';
+	_hideVisibility(collapsable, _collapsed) {
+		return collapsable && !_collapsed ? '' : 'hide';
 	}
 	_debounceChildren() {
 		this._debounceJob = Debouncer.debounce(this._debounceJob,
 			microTask, () => this._updateChildren());
 	}
 	_expandCollapse() {
-		this.collapsed = !this.collapsed;
+		this._collapsed = !this._collapsed;
 	}
 	_updateChildren() {
 		if (!this.collapsable) {
