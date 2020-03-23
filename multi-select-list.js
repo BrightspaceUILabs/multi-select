@@ -4,6 +4,8 @@ import { microTask } from '@polymer/polymer/lib/utils/async.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+import { getComposedChildren } from '@brightspace-ui/core/helpers/dom';
+import '@brightspace-ui/core/components/button/button-subtle.js';
 
 import 'd2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js';
 import 'd2l-resize-aware/resize-observer-polyfill.js';
@@ -40,19 +42,21 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				display: inline-block;
 				padding: 0.15rem;
 			}
-			.hide-aux {
+			.hide {
 				display: none;
 			}
 		</style>
 			<div role="row" collapse$=[[collapsed]]>
 				<slot></slot>
-			</div>
-			<template is="dom-if" if="[[collapsable]]">
-				<div class$="[[_displayAux(hiddenChildren)]]" >
-					<d2l-labs-multi-select-list-item  text="[[_expandCollapseText(hiddenChildren, collapsed)]]" on-click="_expandCollapse"></d2l-labs-multi-select-list-item>
+				<div class$="[[_hideVisibility(collapsable, collapsed)]]">
+					<d2l-button-subtle text="[[localize('hide')]]" on-click="_expandCollapse" ></d2l-button-subtle>
 					<slot name="aux-button"></slot>
 				</div>
-			</template>
+
+			</div>
+			<div class$="[[_showMoreVisibility(collapsable, collapsed, hiddenChildren)]]">
+				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" on-click="_expandCollapse"></d2l-labs-multi-select-list-item>
+			</div>
 	</template>
 </dom-module>`;
 
@@ -216,23 +220,23 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 	_getVisibileEffectiveChildren() {
 		const children = this.getEffectiveChildren();
-		const auxButton = this.collapsable ? [this.shadowRoot.querySelector('.aux-button d2l-labs-multi-select-list-item')] : [];
+		const auxButton = this.collapsable ? getComposedChildren(this.shadowRoot.querySelector('.aux-button')) : [];
 		const hiddenChildren = this.collapsed ? this.hiddenChildren : 0;
 		const vChildren = children.slice(0, children.length - hiddenChildren).concat(auxButton);
 		return vChildren;
+	}
+	_showMoreVisibility(collapsable, collapsed, hiddenChildren) {
+		return collapsable && collapsed && hiddenChildren > 0 ? 'aux-button' : 'hide';
+	}
+	_hideVisibility(collapsable, collapsed) {
+		return collapsable && !collapsed ? '' : 'hide';
 	}
 	_debounceChildren() {
 		this._debounceJob = Debouncer.debounce(this._debounceJob,
 			microTask, () => this._updateChildren());
 	}
-	_displayAux(children) {
-		return children > 0 ? 'aux-button' : 'hide-aux';
-	}
 	_expandCollapse() {
 		this.collapsed = !this.collapsed;
-	}
-	_expandCollapseText(hiddenChildren, collapsed) {
-		return collapsed ? this.localize('hiddenChildren', 'num', hiddenChildren) : this.localize('hide');
 	}
 	_updateChildren() {
 		if (!this.collapsable) {
