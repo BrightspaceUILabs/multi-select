@@ -13,8 +13,8 @@ D2L.PolymerBehaviors.D2LMultiSelect.LocalizeBehaviorImpl = {
 				return {
 					'ar': {
 						'delete': 'حذف',
-						'hide': 'Hide',
-						'hiddenChildren': '+ {num} more',
+						'hide': 'إخفاء',
+						'hiddenChildren': '+ {num} أكثر',
 					},
 					'en': {
 						'delete': 'Delete',
@@ -23,53 +23,53 @@ D2L.PolymerBehaviors.D2LMultiSelect.LocalizeBehaviorImpl = {
 					},
 					'es': {
 						'delete': 'Eliminar',
-						'hide': 'Hide',
-						'hiddenChildren': '+ {num} more',
+						'hide': 'Ocultar',
+						'hiddenChildren': '+ {num} más',
 					},
 					'fr': {
 						'delete': 'Supprimer',
-						'hide': 'Hide',
-						'hiddenChildren': '+ {num} more',
+						'hide': 'Masquer',
+						'hiddenChildren': '+ {num} plus',
 					},
 					'ja': {
 						'delete': '削除',
-						'hide': 'Hide',
-						'hiddenChildren': '+ {num} more',
+						'hide': '表示しない',
+						'hiddenChildren': '+ {num} 増やす',
 					},
 					'ko': {
 						'delete': '삭제',
-						'hide': 'Hide',
-						'hiddenChildren': '+ {num} more',
+						'hide': '숨기기',
+						'hiddenChildren': '+ {num} 더 많이',
 					},
 					'nl': {
 						'delete': 'Verwijderen',
-						'hide': 'Hide',
-						'hiddenChildren': '+ {num} more',
+						'hide': 'Verbergen',
+						'hiddenChildren': '+ {num} meer',
 					},
 					'pt': {
 						'delete': 'Excluir',
-						'hide': 'Hide',
-						'hiddenChildren': '+ {num} more',
+						'hide': 'Ocultar',
+						'hiddenChildren': '+ {num} mais',
 					},
 					'sv': {
 						'delete': 'Ta bort',
-						'hide': 'Hide',
-						'hiddenChildren': '+ {num} more',
+						'hide': 'Dölj',
+						'hiddenChildren': '+ {num} mer',
 					},
 					'tr': {
 						'delete': 'Sil',
-						'hide': 'Hide',
-						'hiddenChildren': '+ {num} more',
+						'hide': 'Gizle',
+						'hiddenChildren': '+ {num} daha',
 					},
 					'zh': {
 						'delete': '删除',
-						'hide': 'Hide',
-						'hiddenChildren': '+ {num} more',
+						'hide': '隐藏',
+						'hiddenChildren': '+ {num} 更多',
 					},
 					'zh-tw': {
 						'delete': '刪除',
-						'hide': 'Hide',
-						'hiddenChildren': '+ {num} more',
+						'hide': '隱藏',
+						'hiddenChildren': '+ {num} 其他',
 					}
 				};
 			}
