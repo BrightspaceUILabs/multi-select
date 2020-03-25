@@ -65,6 +65,19 @@
 					</d2l-labs-multi-select-list>
 				</template>
 			</d2l-demo-snippet>
+			<h3>d2l-labs-multi-select-list collapsed</h3>
+			<d2l-demo-snippet>
+				<template>
+					<d2l-labs-multi-select-list collapsable autoremove>
+						<d2l-labs-multi-select-list-item deletable="" text="0"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="1"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="2"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="3"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="4"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="5"></d2l-labs-multi-select-list-item>
+					</d2l-labs-multi-select-list>
+				</template>
+			</d2l-demo-snippet>
 			<h3>Show delete icon on hover/focus only</h3>
 			<d2l-demo-snippet>
 				<template>
@@ -74,7 +87,6 @@
 				</template>
 			</d2l-demo-snippet>
 			<script>
-				
 				var runAfterLoadeded = function() {
 					const slottedDemo = document.getElementById('slotted-input-demo');
 					const button = document.getElementById('slotted-input-demo-button');
@@ -99,7 +111,7 @@
 						}
 					});
 				};
-				
+
 				runAfterLoadeded();
 			</script>
 		</d2l-demo-page>
