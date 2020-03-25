@@ -101,7 +101,7 @@ Also the following css variables are exposed to clients and can be use to overri
 </d2l-labs-multi-select-list>
 ```
 
-You can opt for a condensed view by adding the `collapsed` attribute, which limits the element to the first line of items and provides a button for viewing the remaining items.
+You can opt for a condensed view by adding the `collapsable` attribute, which limits the element to the first line of items and provides a button for viewing the remaining items.
 
 ### Events
 
