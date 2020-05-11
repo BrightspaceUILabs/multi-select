@@ -173,6 +173,8 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this.removeEventListener('d2l-labs-multi-select-list-item-deleted', this._onListItemDeleted);
 		this.removeEventListener('focus', this._onListItemFocus, true);
 		this.removeEventListener('keydown', this._onKeyDown);
+		if (this.observer) this.observer.disconnect();
+		if (this._nodeObserver) this._nodeObserver.disconnect();
 	}
 
 	_onListItemFocus(event) {
