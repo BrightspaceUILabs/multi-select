@@ -129,12 +129,9 @@ class D2LMultiSelectList extends mixinBehaviors(
 	constructor() {
 		super();
 		this._onListItemDeleted = this._onListItemDeleted.bind(this);
-		this.observer = new ResizeObserver(this._debounceChildren.bind(this));
-		this.observer.observe(this);
-		this._nodeObserver = new FlattenedNodesObserver(this, () => {
-			this._debounceChildren();
-		});
+		this._debounceChildren = this._debounceChildren.bind(this);
 	}
+
 	connectedCallback() {
 		super.connectedCallback();
 		// Set up for d2l-focusable-arrowkeys-behavior
@@ -145,6 +142,10 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this.arrowKeyFocusablesProvider = function() {
 			return Promise.resolve(this._getVisibileEffectiveChildren());
 		};
+
+		this.observer = new ResizeObserver(this._debounceChildren);
+		this.observer.observe(this);
+		this._nodeObserver = new FlattenedNodesObserver(this, this._debounceChildren);
 
 		this.setAttribute('role', 'grid');
 		afterNextRender(this, function() {
@@ -172,6 +173,8 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this.removeEventListener('d2l-labs-multi-select-list-item-deleted', this._onListItemDeleted);
 		this.removeEventListener('focus', this._onListItemFocus, true);
 		this.removeEventListener('keydown', this._onKeyDown);
+		if (this.observer) this.observer.disconnect();
+		if (this._nodeObserver) this._nodeObserver.disconnect();
 	}
 
 	_onListItemFocus(event) {
