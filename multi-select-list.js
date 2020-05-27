@@ -50,7 +50,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			<div role="row" collapse$=[[_collapsed]]>
 				<slot></slot>
 				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
-					<d2l-button-subtle text="[[localize('hide')]]" on-click="_expandCollapse" ></d2l-button-subtle>
+					<d2l-button-subtle text="[[localize('hide')]]" class="hide-button" on-click="_expandCollapse" ></d2l-button-subtle>
 					<slot name="aux-button"></slot>
 				</div>
 
@@ -179,7 +179,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 	_onListItemFocus(event) {
 		this._currentlyFocusedElement.tabIndex = -1;
-		this._currentlyFocusedElement = event.target;
+		this._currentlyFocusedElement = event.composedPath()[0];
 		this._currentlyFocusedElement.tabIndex = 0;
 	}
 
@@ -225,8 +225,9 @@ class D2LMultiSelectList extends mixinBehaviors(
 	_getVisibileEffectiveChildren() {
 		const children = this.getEffectiveChildren();
 		const auxButton = this.collapsable ? getComposedChildren(this.shadowRoot.querySelector('.aux-button')) : [];
+		const hideButton = (this.collapsable && !this._collapsed) ? [this.shadowRoot.querySelector('.hide-button')] : [];
 		const hiddenChildren = this._collapsed ? this.hiddenChildren : 0;
-		const vChildren = children.slice(0, children.length - hiddenChildren).concat(auxButton);
+		const vChildren = children.slice(0, children.length - hiddenChildren).concat(auxButton || []).concat(hideButton || []);
 		return vChildren;
 	}
 	_showMoreVisibility(collapsable, _collapsed, hiddenChildren) {
@@ -241,6 +242,9 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 	_expandCollapse() {
 		this._collapsed = !this._collapsed;
+		afterNextRender(this, () => {
+			this.__focusLast(this._getVisibileEffectiveChildren());
+		})
 	}
 	_updateChildren() {
 		if (!this.collapsable) {
@@ -256,6 +260,13 @@ class D2LMultiSelectList extends mixinBehaviors(
 			if (childrenWidthTotal > widthOfListItems) {
 				newHiddenChildren = children.length - i;
 				break;
+			}
+		}
+		if (this.hiddenChildren < newHiddenChildren) {
+			const focusedIndex = children.indexOf(this._currentlyFocusedElement) 
+			const hiddenIndex = children.length - newHiddenChildren;
+			if (this._collapsed && focusedIndex >= hiddenIndex) {
+				this.__focusLast(this._getVisibileEffectiveChildren());
 			}
 		}
 		this.hiddenChildren = newHiddenChildren;
