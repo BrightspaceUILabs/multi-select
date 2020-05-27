@@ -244,7 +244,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this._collapsed = !this._collapsed;
 		afterNextRender(this, () => {
 			this.__focusLast(this._getVisibileEffectiveChildren());
-		})
+		});
 	}
 	_updateChildren() {
 		if (!this.collapsable) {
@@ -263,7 +263,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 			}
 		}
 		if (this.hiddenChildren < newHiddenChildren) {
-			const focusedIndex = children.indexOf(this._currentlyFocusedElement) 
+			const focusedIndex = children.indexOf(this._currentlyFocusedElement);
 			const hiddenIndex = children.length - newHiddenChildren;
 			if (this._collapsed && focusedIndex >= hiddenIndex) {
 				this.__focusLast(this._getVisibileEffectiveChildren());
