@@ -83,7 +83,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 			*/
 			_keyCodes: {
 				type: Object,
-				value: { BACKSPACE: 8, DELETE: 46, SPACE: 32 }
+				value: { BACKSPACE: 8, DELETE: 46, ENTER: 13, SPACE: 32 }
 			},
 			/**
 			* Tracks the currently focused item for managing tabindex
@@ -161,7 +161,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 			this.addEventListener('d2l-labs-multi-select-list-item-deleted', this._onListItemDeleted);
 			this.addEventListener('focus', this._onListItemFocus, true);
-			this.addEventListener('keydown', this._onKeyDown);
+			this.addEventListener('keyup', this._onKeyUp);
 		}.bind(this));
 		if (this.collapsable) {
 			this._expandCollapse();
@@ -172,7 +172,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		super.disconnectedCallback();
 		this.removeEventListener('d2l-labs-multi-select-list-item-deleted', this._onListItemDeleted);
 		this.removeEventListener('focus', this._onListItemFocus, true);
-		this.removeEventListener('keydown', this._onKeyDown);
+		this.removeEventListener('keyup', this._onKeyUp);
 		if (this.observer) this.observer.disconnect();
 		if (this._nodeObserver) this._nodeObserver.disconnect();
 	}
@@ -196,8 +196,8 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 	}
 
-	_onKeyDown(event) {
-		const { BACKSPACE, DELETE, SPACE } = this._keyCodes;
+	_onKeyUp(event) {
+		const { BACKSPACE, DELETE, ENTER, SPACE } = this._keyCodes;
 		const { keyCode } = event;
 		const rootTarget = event.composedPath()[0];
 		const itemIndex = this._getVisibileEffectiveChildren().indexOf(rootTarget);
@@ -216,7 +216,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 			}
 			rootTarget._onDeleteItem();
 		}
-		if (keyCode === SPACE && itemIndex !== -1) {
+		if ((keyCode === SPACE || keyCode === ENTER) && itemIndex !== -1) {
 			event.preventDefault();
 			event.stopPropagation();
 			this._expandCollapse();
@@ -262,12 +262,17 @@ class D2LMultiSelectList extends mixinBehaviors(
 				break;
 			}
 		}
-		if (this.hiddenChildren < newHiddenChildren) {
+		// if the active element gets collapsed, focus the last element
+		if (newHiddenChildren > this.hiddenChildren) {
 			const focusedIndex = children.indexOf(this._currentlyFocusedElement);
 			const hiddenIndex = children.length - newHiddenChildren;
 			if (this._collapsed && focusedIndex >= hiddenIndex) {
 				this.__focusLast(this._getVisibileEffectiveChildren());
 			}
+		} else if (newHiddenChildren === 0) {
+			afterNextRender(this, () => {
+				this.__focusLast(this._getVisibileEffectiveChildren());
+			})
 		}
 		this.hiddenChildren = newHiddenChildren;
 	}
