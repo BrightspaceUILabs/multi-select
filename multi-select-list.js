@@ -224,10 +224,10 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 	_getVisibileEffectiveChildren() {
 		const children = this.getEffectiveChildren();
-		const auxButton = this.collapsable ? getComposedChildren(this.shadowRoot.querySelector('.aux-button')) : [];
-		const hideButton = (this.collapsable && !this._collapsed) ? [this.shadowRoot.querySelector('.hide-button')] : [];
+		const auxButton = (this.collapsable && getComposedChildren(this.shadowRoot.querySelector('.aux-button'))) || [];
+		const hideButton = (this.collapsable && !this._collapsed && [this.shadowRoot.querySelector('.hide-button')]) || [];
 		const hiddenChildren = this._collapsed ? this.hiddenChildren : 0;
-		const vChildren = children.slice(0, children.length - hiddenChildren).concat(auxButton || []).concat(hideButton || []);
+		const vChildren = children.slice(0, children.length - hiddenChildren).concat(auxButton).concat(hideButton);
 		return vChildren;
 	}
 	_showMoreVisibility(collapsable, _collapsed, hiddenChildren) {
@@ -272,7 +272,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		} else if (newHiddenChildren === 0) {
 			afterNextRender(this, () => {
 				this.__focusLast(this._getVisibileEffectiveChildren());
-			})
+			});
 		}
 		this.hiddenChildren = newHiddenChildren;
 	}
