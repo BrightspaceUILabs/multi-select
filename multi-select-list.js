@@ -268,9 +268,11 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 	_expandCollapse() {
 		this._collapsed = !this._collapsed;
-		afterNextRender(this, () => {
-			this.__focusLast(this._getVisibileEffectiveChildren());
-		});
+		if (isComposedAncestor(this, getComposedActiveElement())) {
+			afterNextRender(this, () => {
+				this.__focusLast(this._getVisibileEffectiveChildren());
+			});
+		}
 	}
 	_updateChildren() {
 		if (!this.collapsable) {
