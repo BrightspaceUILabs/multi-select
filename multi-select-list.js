@@ -4,7 +4,8 @@ import { microTask } from '@polymer/polymer/lib/utils/async.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import { getComposedChildren } from '@brightspace-ui/core/helpers/dom';
+import { getComposedChildren, isComposedAncestor } from '@brightspace-ui/core/helpers/dom';
+import { getComposedActiveElement } from '@brightspace-ui/core/helpers/focus';
 import '@brightspace-ui/core/components/button/button-subtle.js';
 
 import 'd2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js';
@@ -210,7 +211,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		if (itemIndex !== -1 && (keyCode === SPACE || keyCode === ENTER)) {
 			event.preventDefault();
 			event.stopPropagation();
-				if (keyCode === SPACE) {
+			if (keyCode === SPACE) {
 				this.__keydownFocusedElement = rootTarget;
 			} else {
 				this._expandCollapse();
@@ -287,17 +288,20 @@ class D2LMultiSelectList extends mixinBehaviors(
 				break;
 			}
 		}
-		// if the active element gets collapsed, focus the last element
-		if (newHiddenChildren > this.hiddenChildren) {
+
+		if (isComposedAncestor(this, getComposedActiveElement())) {
+			// if the active element gets collapsed, focus the last element
 			const focusedIndex = children.indexOf(this._currentlyFocusedElement);
-			const hiddenIndex = children.length - newHiddenChildren;
-			if (this._collapsed && focusedIndex >= hiddenIndex) {
-				this.__focusLast(this._getVisibileEffectiveChildren());
+			if (newHiddenChildren > this.hiddenChildren) {
+				const hiddenIndex = children.length - newHiddenChildren;
+				if (this._collapsed && focusedIndex >= hiddenIndex) {
+					this.__focusLast(this._getVisibileEffectiveChildren());
+				}
+			} else if (newHiddenChildren < this.hiddenChildren && focusedIndex === -1 && newHiddenChildren === 0) {
+				afterNextRender(this, () => {
+					this.__focusLast(this._getVisibileEffectiveChildren());
+				});
 			}
-		} else if (newHiddenChildren === 0) {
-			afterNextRender(this, () => {
-				this.__focusLast(this._getVisibileEffectiveChildren());
-			});
 		}
 		this.hiddenChildren = newHiddenChildren;
 	}
