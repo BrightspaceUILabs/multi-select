@@ -161,7 +161,9 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 			this.addEventListener('d2l-labs-multi-select-list-item-deleted', this._onListItemDeleted);
 			this.addEventListener('focus', this._onListItemFocus, true);
+			this.addEventListener('keydown', this._onKeyDown);
 			this.addEventListener('keyup', this._onKeyUp);
+			this.addEventListener('keydown', this._onKeyDown);
 		}.bind(this));
 		if (this.collapsable) {
 			this._expandCollapse();
@@ -175,6 +177,10 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this.removeEventListener('keyup', this._onKeyUp);
 		if (this.observer) this.observer.disconnect();
 		if (this._nodeObserver) this._nodeObserver.disconnect();
+	}
+
+	_onFocusChange() {
+		this.__keydownFocusedElement = null;
 	}
 
 	_onListItemFocus(event) {
@@ -196,8 +202,24 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 	}
 
+	_onKeyDown(event) {
+		const { SPACE, ENTER } = this._keyCodes;
+		const { keyCode } = event;
+		const rootTarget = event.composedPath()[0];
+		const itemIndex = this._getVisibileEffectiveChildren().indexOf(rootTarget);
+		if (itemIndex !== -1 && (keyCode === SPACE || keyCode === ENTER)) {
+			event.preventDefault();
+			event.stopPropagation();
+				if (keyCode === SPACE) {
+				this.__keydownFocusedElement = rootTarget;
+			} else {
+				this._expandCollapse();
+			}
+		}
+	}
+
 	_onKeyUp(event) {
-		const { BACKSPACE, DELETE, ENTER, SPACE } = this._keyCodes;
+		const { BACKSPACE, DELETE, SPACE } = this._keyCodes;
 		const { keyCode } = event;
 		const rootTarget = event.composedPath()[0];
 		const itemIndex = this._getVisibileEffectiveChildren().indexOf(rootTarget);
@@ -216,11 +238,14 @@ class D2LMultiSelectList extends mixinBehaviors(
 			}
 			rootTarget._onDeleteItem();
 		}
-		if ((keyCode === SPACE || keyCode === ENTER) && itemIndex !== -1) {
-			event.preventDefault();
-			event.stopPropagation();
-			this._expandCollapse();
+		if (keyCode === SPACE && itemIndex !== -1) {
+			if (this.__keydownFocusedElement === this._currentlyFocusedElement) {
+				event.preventDefault();
+				event.stopPropagation();
+				this._expandCollapse();
+			}
 		}
+		this.__keydownFocusedElement = null;
 	}
 	_getVisibileEffectiveChildren() {
 		const children = this.getEffectiveChildren();
