@@ -282,12 +282,24 @@ class D2LMultiSelectList extends mixinBehaviors(
 				break;
 			}
 		}
+		const focusedIndex = children.indexOf(this._currentlyFocusedElement);
+		const hiddenIndex = children.length - newHiddenChildren;
+		this._handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren)
+		
+		this.hiddenChildren = newHiddenChildren;
+	}
 
+	/**
+	 * _handleFocusChangeOnResize()
+	 * 
+	 * if focused element gets hidden
+	 * 		focus the 'show more' button
+	 * else if 'show more' button is focused and it dissapears (no more collapsed elements)
+	 * 		focus the last element in the list
+	 */
+	_handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren) {
 		if (isComposedAncestor(this, getComposedActiveElement())) {
-			// if the active element gets collapsed, focus the last element
-			const focusedIndex = children.indexOf(this._currentlyFocusedElement);
 			if (newHiddenChildren > this.hiddenChildren) {
-				const hiddenIndex = children.length - newHiddenChildren;
 				if (this._collapsed && focusedIndex >= hiddenIndex) {
 					this.__focusLast(this._getVisibileEffectiveChildren());
 				}
@@ -297,7 +309,6 @@ class D2LMultiSelectList extends mixinBehaviors(
 				});
 			}
 		}
-		this.hiddenChildren = newHiddenChildren;
 	}
 	addItem(item) {
 		if (this._currentlyFocusedElement === null) {
