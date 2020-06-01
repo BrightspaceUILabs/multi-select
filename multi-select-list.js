@@ -283,14 +283,14 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 		const focusedIndex = children.indexOf(this._currentlyFocusedElement);
 		const hiddenIndex = children.length - newHiddenChildren;
-		this._handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren)
-		
+		this._handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren);
+
 		this.hiddenChildren = newHiddenChildren;
 	}
 
 	/**
 	 * _handleFocusChangeOnResize()
-	 * 
+	 *
 	 * if focused element gets hidden
 	 * 		focus the 'show more' button
 	 * else if 'show more' button is focused and it dissapears (no more collapsed elements)
