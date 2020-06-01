@@ -65,7 +65,7 @@
 						});
 
 						function testDeleteAndFocus(itemToDelete, expectedFocusItem, keyCode, done) {
-							MockInteractions.keyUpOn(itemToDelete, keyCode);
+							MockInteractions.keyDownOn(itemToDelete, keyCode);
 
 							afterNextRender(listFixture, function() {
 								expect(document.getElementById(itemToDelete.id)).to.be.null;
