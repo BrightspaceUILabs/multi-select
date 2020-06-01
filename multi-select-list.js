@@ -51,13 +51,13 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			<div role="row" collapse$=[[_collapsed]]>
 				<slot></slot>
 				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
-					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="false"></d2l-button-subtle>
+					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
 					<slot name="aux-button"></slot>
 				</div>
 
 			</div>
 			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
-				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="true"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false"></d2l-labs-multi-select-list-item>
 			</div>
 	</template>
 </dom-module>`;
@@ -259,6 +259,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 	_expandCollapse() {
 		this._collapsed = !this._collapsed;
+		console.log(this._collapsed)
 		if (isComposedAncestor(this, getComposedActiveElement())) {
 			afterNextRender(this, () => {
 				this.__focusLast(this._getVisibileEffectiveChildren());
