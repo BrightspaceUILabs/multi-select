@@ -12,7 +12,6 @@ import 'd2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js';
 import 'd2l-resize-aware/resize-observer-polyfill.js';
 
 import './localize-behavior.js';
-import { root } from '@polymer/polymer/lib/utils/path';
 
 const $_documentContainer = document.createElement('template');
 $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
