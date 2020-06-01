@@ -58,7 +58,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 
 			</div>
 			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
-				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onKeyUp" aria-expanded="true"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="true"></d2l-labs-multi-select-list-item>
 			</div>
 	</template>
 </dom-module>`;
@@ -199,7 +199,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 
 	_onKeyDown(event) {
-		const { BACKSPACE, DELETE, ENTER } = this._keyCodes;
+		const { BACKSPACE, DELETE } = this._keyCodes;
 		const { keyCode } = event;
 		const rootTarget = event.composedPath()[0];
 		const itemIndex = this._getVisibileEffectiveChildren().indexOf(rootTarget);
@@ -218,15 +218,19 @@ class D2LMultiSelectList extends mixinBehaviors(
 			}
 			rootTarget._onDeleteItem();
 		}
+	}
+	_onShowButtonKeyDown(event) {
+		const { ENTER } = this._keyCodes;
+		const { keyCode } = event;
 
-		if (keyCode === ENTER && rootTarget.classList.contains('show-button')) {
+		if (keyCode === ENTER) {
 			event.preventDefault();
 			event.stopPropagation();
 			this._expandCollapse();
 		}
 	}
 
-	_onKeyUp(event) {
+	_onShowButtonKeyUp(event) {
 		const { SPACE } = this._keyCodes;
 		const { keyCode } = event;
 
