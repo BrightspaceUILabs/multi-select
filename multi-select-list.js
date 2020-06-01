@@ -12,6 +12,7 @@ import 'd2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js';
 import 'd2l-resize-aware/resize-observer-polyfill.js';
 
 import './localize-behavior.js';
+import { root } from '@polymer/polymer/lib/utils/path';
 
 const $_documentContainer = document.createElement('template');
 $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
@@ -51,13 +52,13 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			<div role="row" collapse$=[[_collapsed]]>
 				<slot></slot>
 				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
-					<d2l-button-subtle text="[[localize('hide')]]" class="hide-button" on-click="_expandCollapse" ></d2l-button-subtle>
+					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="false"></d2l-button-subtle>
 					<slot name="aux-button"></slot>
 				</div>
 
 			</div>
 			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
-				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" on-click="_expandCollapse"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onKeyUp" aria-expanded="true"></d2l-labs-multi-select-list-item>
 			</div>
 	</template>
 </dom-module>`;
@@ -163,8 +164,6 @@ class D2LMultiSelectList extends mixinBehaviors(
 			this.addEventListener('d2l-labs-multi-select-list-item-deleted', this._onListItemDeleted);
 			this.addEventListener('focus', this._onListItemFocus, true);
 			this.addEventListener('keydown', this._onKeyDown);
-			this.addEventListener('keyup', this._onKeyUp);
-			this.addEventListener('keydown', this._onKeyDown);
 		}.bind(this));
 		if (this.collapsable) {
 			this._expandCollapse();
@@ -175,13 +174,9 @@ class D2LMultiSelectList extends mixinBehaviors(
 		super.disconnectedCallback();
 		this.removeEventListener('d2l-labs-multi-select-list-item-deleted', this._onListItemDeleted);
 		this.removeEventListener('focus', this._onListItemFocus, true);
-		this.removeEventListener('keyup', this._onKeyUp);
+		this.removeEventListener('keydown', this._onKeyDown);
 		if (this.observer) this.observer.disconnect();
 		if (this._nodeObserver) this._nodeObserver.disconnect();
-	}
-
-	_onFocusChange() {
-		this.__keydownFocusedElement = null;
 	}
 
 	_onListItemFocus(event) {
@@ -204,23 +199,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 
 	_onKeyDown(event) {
-		const { SPACE, ENTER } = this._keyCodes;
-		const { keyCode } = event;
-		const rootTarget = event.composedPath()[0];
-		const itemIndex = this._getVisibileEffectiveChildren().indexOf(rootTarget);
-		if (itemIndex !== -1 && (keyCode === SPACE || keyCode === ENTER)) {
-			event.preventDefault();
-			event.stopPropagation();
-			if (keyCode === SPACE) {
-				this.__keydownFocusedElement = rootTarget;
-			} else {
-				this._expandCollapse();
-			}
-		}
-	}
-
-	_onKeyUp(event) {
-		const { BACKSPACE, DELETE, SPACE } = this._keyCodes;
+		const { BACKSPACE, DELETE, ENTER } = this._keyCodes;
 		const { keyCode } = event;
 		const rootTarget = event.composedPath()[0];
 		const itemIndex = this._getVisibileEffectiveChildren().indexOf(rootTarget);
@@ -239,14 +218,23 @@ class D2LMultiSelectList extends mixinBehaviors(
 			}
 			rootTarget._onDeleteItem();
 		}
-		if (keyCode === SPACE && itemIndex !== -1) {
-			if (this.__keydownFocusedElement === this._currentlyFocusedElement) {
-				event.preventDefault();
-				event.stopPropagation();
-				this._expandCollapse();
-			}
+
+		if (keyCode === ENTER && rootTarget.classList.contains('show-button')) {
+			event.preventDefault();
+			event.stopPropagation();
+			this._expandCollapse();
 		}
-		this.__keydownFocusedElement = null;
+	}
+
+	_onKeyUp(event) {
+		const { SPACE } = this._keyCodes;
+		const { keyCode } = event;
+
+		if (keyCode === SPACE) {
+			event.preventDefault();
+			event.stopPropagation();
+			this._expandCollapse();
+		}
 	}
 	_getVisibileEffectiveChildren() {
 		const children = this.getEffectiveChildren();
