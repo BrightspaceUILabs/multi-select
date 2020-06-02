@@ -121,27 +121,28 @@
 						});
 					});
 				});
+
 				describe('collapsable', function() {
 					let showButton, hideButton;
 					beforeEach(function(done) {
 						listFixture = fixture('collapsable');
-						showButton = listFixture.shadowRoot.querySelector('.show-button')
-						hideButton = listFixture.shadowRoot.querySelector('.hide-button')
+						showButton = listFixture.shadowRoot.querySelector('.show-button');
+						hideButton = listFixture.shadowRoot.querySelector('.hide-button');
 						afterNextRender(listFixture, done);
 					});
 
 					it('should render only items that fit', function() {
 						// note: this is related to the max-width being set by the fixture
-						expect(listFixture.hiddenChildren).to.equal(6)
+						expect(listFixture.hiddenChildren).to.equal(6);
 					});
 
-					it('should expand/collapse the list when show/hide buttons are clicked', function () {						
+					it('should expand/collapse the list when show/hide buttons are clicked', function() {
 						expect(listFixture._collapsed).to.be.true;
-						
-						MockInteractions.tap(showButton)		
+
+						MockInteractions.tap(showButton);
 						expect(listFixture._collapsed).to.be.false;
-						
-						MockInteractions.tap(hideButton)
+
+						MockInteractions.tap(hideButton);
 						expect(listFixture._collapsed).to.be.true;
 					});
 
@@ -149,19 +150,19 @@
 						it('should expand/collapse list when enter is pressed on show/hide toggle', function() {
 							expect(listFixture._collapsed).to.be.true;
 
-							MockInteractions.keyDownOn(showButton, _keyCodes.ENTER);												
+							MockInteractions.keyDownOn(showButton, _keyCodes.ENTER);
 							expect(listFixture._collapsed).to.be.false;
 
-							MockInteractions.tap(hideButton)
+							MockInteractions.tap(hideButton);
 							expect(listFixture._collapsed).to.be.true;
 						});
 
 						it('should expand/collapse list when space is pressed on show/hide toggle', function() {
 							expect(listFixture._collapsed).to.be.true;
-							
+
 							MockInteractions.keyUpOn(showButton, _keyCodes.SPACE);
 							expect(listFixture._collapsed).to.be.false;
-							
+
 							MockInteractions.tap(hideButton);
 							expect(listFixture._collapsed).to.be.true;
 						});

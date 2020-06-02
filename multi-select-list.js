@@ -259,7 +259,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 	_expandCollapse() {
 		this._collapsed = !this._collapsed;
-		console.log(this._collapsed)
+
 		if (isComposedAncestor(this, getComposedActiveElement())) {
 			afterNextRender(this, () => {
 				this.__focusLast(this._getVisibileEffectiveChildren());
