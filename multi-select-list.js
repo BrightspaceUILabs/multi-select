@@ -292,10 +292,17 @@ class D2LMultiSelectList extends mixinBehaviors(
 	/**
 	 * _handleFocusChangeOnResize()
 	 *
+	 * Handle element focusing when the parent is resized
+	 * 
 	 * if focused element gets hidden
 	 * 		focus the 'show more' button
 	 * else if 'show more' button is focused and it dissapears (no more collapsed elements)
 	 * 		focus the last element in the list
+	 * 
+	 * @param {number} focusedIndex - Index of the currently focused element
+	 * @param {number} hiddenIndex - First index of list children where hiding begins
+	 * @param {number} newHiddenChildren - The number of new hidden children after the resize
+	 * 
 	 */
 	_handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren) {
 		if (isComposedAncestor(this, getComposedActiveElement())) {
