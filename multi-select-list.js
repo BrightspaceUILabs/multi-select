@@ -4,7 +4,8 @@ import { microTask } from '@polymer/polymer/lib/utils/async.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import { getComposedChildren } from '@brightspace-ui/core/helpers/dom';
+import { getComposedChildren, isComposedAncestor } from '@brightspace-ui/core/helpers/dom';
+import { getComposedActiveElement } from '@brightspace-ui/core/helpers/focus';
 import '@brightspace-ui/core/components/button/button-subtle.js';
 
 import 'd2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js';
@@ -50,13 +51,13 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			<div role="row" collapse$=[[_collapsed]]>
 				<slot></slot>
 				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
-					<d2l-button-subtle text="[[localize('hide')]]" on-click="_expandCollapse" ></d2l-button-subtle>
+					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
 					<slot name="aux-button"></slot>
 				</div>
 
 			</div>
 			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
-				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" on-click="_expandCollapse"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false"></d2l-labs-multi-select-list-item>
 			</div>
 	</template>
 </dom-module>`;
@@ -83,7 +84,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 			*/
 			_keyCodes: {
 				type: Object,
-				value: { BACKSPACE: 8, DELETE: 46, SPACE: 32 }
+				value: { BACKSPACE: 8, DELETE: 46, ENTER: 13, SPACE: 32 }
 			},
 			/**
 			* Tracks the currently focused item for managing tabindex
@@ -179,7 +180,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 	_onListItemFocus(event) {
 		this._currentlyFocusedElement.tabIndex = -1;
-		this._currentlyFocusedElement = event.target;
+		this._currentlyFocusedElement = event.composedPath()[0];
 		this._currentlyFocusedElement.tabIndex = 0;
 	}
 
@@ -197,7 +198,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 
 	_onKeyDown(event) {
-		const { BACKSPACE, DELETE, SPACE } = this._keyCodes;
+		const { BACKSPACE, DELETE } = this._keyCodes;
 		const { keyCode } = event;
 		const rootTarget = event.composedPath()[0];
 		const itemIndex = this._getVisibileEffectiveChildren().indexOf(rootTarget);
@@ -216,7 +217,23 @@ class D2LMultiSelectList extends mixinBehaviors(
 			}
 			rootTarget._onDeleteItem();
 		}
-		if (keyCode === SPACE && itemIndex !== -1) {
+	}
+	_onShowButtonKeyDown(event) {
+		const { ENTER } = this._keyCodes;
+		const { keyCode } = event;
+
+		if (keyCode === ENTER) {
+			event.preventDefault();
+			event.stopPropagation();
+			this._expandCollapse();
+		}
+	}
+
+	_onShowButtonKeyUp(event) {
+		const { SPACE } = this._keyCodes;
+		const { keyCode } = event;
+
+		if (keyCode === SPACE) {
 			event.preventDefault();
 			event.stopPropagation();
 			this._expandCollapse();
@@ -224,9 +241,10 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 	_getVisibileEffectiveChildren() {
 		const children = this.getEffectiveChildren();
-		const auxButton = this.collapsable ? getComposedChildren(this.shadowRoot.querySelector('.aux-button')) : [];
+		const auxButton = (this.collapsable && getComposedChildren(this.shadowRoot.querySelector('.aux-button'))) || [];
+		const hideButton = (this.collapsable && !this._collapsed && [this.shadowRoot.querySelector('.hide-button')]) || [];
 		const hiddenChildren = this._collapsed ? this.hiddenChildren : 0;
-		const vChildren = children.slice(0, children.length - hiddenChildren).concat(auxButton);
+		const vChildren = children.slice(0, children.length - hiddenChildren).concat(auxButton).concat(hideButton);
 		return vChildren;
 	}
 	_showMoreVisibility(collapsable, _collapsed, hiddenChildren) {
@@ -241,6 +259,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 	_expandCollapse() {
 		this._collapsed = !this._collapsed;
+		this._focusLastVisibleElement();
 	}
 	_updateChildren() {
 		if (!this.collapsable) {
@@ -258,7 +277,48 @@ class D2LMultiSelectList extends mixinBehaviors(
 				break;
 			}
 		}
+		const focusedIndex = children.indexOf(this._currentlyFocusedElement);
+		const hiddenIndex = children.length - newHiddenChildren;
+		this._handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren);
+
 		this.hiddenChildren = newHiddenChildren;
+	}
+
+	/**
+	 * _handleFocusChangeOnResize()
+	 *
+	 * Handle element focusing when the parent is resized
+	 *
+	 * if focused element gets hidden
+	 * 		focus the 'show more' button
+	 * else if 'show more' button is focused and it disappears (no more collapsed elements)
+	 * 		focus the last element in the list
+	 *
+	 * @param {number} focusedIndex - Index of the currently focused element
+	 * @param {number} hiddenIndex - First index of list children where hiding begins
+	 * @param {number} newHiddenChildren - The number of new hidden children after the resize
+	 *
+	 */
+	_handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren) {
+		const focusedElementHidden = newHiddenChildren > this.hiddenChildren && this._collapsed && focusedIndex >= hiddenIndex;
+		const focusedShowMoreButtonHidden = newHiddenChildren < this.hiddenChildren && focusedIndex === -1 && newHiddenChildren === 0;
+
+		if (focusedElementHidden || focusedShowMoreButtonHidden) {
+			this._focusLastVisibleElement();
+		}
+	}
+	/**
+	 * _focusLastVisibleElement()
+	 *
+	 * If the component has focus on the page, focus the last visible element
+	 *
+	 */
+	_focusLastVisibleElement() {
+		if (isComposedAncestor(this, getComposedActiveElement())) {
+			afterNextRender(this, () => {
+				this.__focusLast(this._getVisibileEffectiveChildren());
+			});
+		}
 	}
 	addItem(item) {
 		if (this._currentlyFocusedElement === null) {
