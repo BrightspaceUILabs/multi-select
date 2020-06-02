@@ -296,7 +296,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	 *
 	 * if focused element gets hidden
 	 * 		focus the 'show more' button
-	 * else if 'show more' button is focused and it dissapears (no more collapsed elements)
+	 * else if 'show more' button is focused and it disappears (no more collapsed elements)
 	 * 		focus the last element in the list
 	 *
 	 * @param {number} focusedIndex - Index of the currently focused element
