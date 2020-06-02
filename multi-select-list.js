@@ -302,7 +302,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	_handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren) {
 		const focusedElementHidden = newHiddenChildren > this.hiddenChildren && this._collapsed && focusedIndex >= hiddenIndex;
 		const focusedShowMoreButtonHidden = newHiddenChildren < this.hiddenChildren && focusedIndex === -1 && newHiddenChildren === 0;
-		
+
 		if (focusedElementHidden || focusedShowMoreButtonHidden) {
 			this._focusLastVisibleElement();
 		}
@@ -310,7 +310,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	/**
 	 * _focusLastVisibleElement()
 	 *
-	 * If the component has focus on the page, focus the last visible element 
+	 * If the component has focus on the page, focus the last visible element
 	 *
 	 */
 	_focusLastVisibleElement() {
