@@ -259,12 +259,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 	_expandCollapse() {
 		this._collapsed = !this._collapsed;
-
-		if (isComposedAncestor(this, getComposedActiveElement())) {
-			afterNextRender(this, () => {
-				this.__focusLast(this._getVisibileEffectiveChildren());
-			});
-		}
+		this._focusLastVisibleElement();
 	}
 	_updateChildren() {
 		if (!this.collapsable) {
@@ -305,18 +300,24 @@ class D2LMultiSelectList extends mixinBehaviors(
 	 *
 	 */
 	_handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren) {
+		const focusedElementHidden = newHiddenChildren > this.hiddenChildren && this._collapsed && focusedIndex >= hiddenIndex;
+		const focusedShowMoreButtonHidden = newHiddenChildren < this.hiddenChildren && focusedIndex === -1 && newHiddenChildren === 0;
+		
+		if (focusedElementHidden || focusedShowMoreButtonHidden) {
+			this._focusLastVisibleElement();
+		}
+	}
+	/**
+	 * _focusLastVisibleElement()
+	 *
+	 * If the component has focus on the page, focus the last visible element 
+	 *
+	 */
+	_focusLastVisibleElement() {
 		if (isComposedAncestor(this, getComposedActiveElement())) {
-			if (newHiddenChildren > this.hiddenChildren) {
-				if (this._collapsed && focusedIndex >= hiddenIndex) {
-					afterNextRender(this, () => {
-						this.__focusLast(this._getVisibileEffectiveChildren());
-					});
-				}
-			} else if (newHiddenChildren < this.hiddenChildren && focusedIndex === -1 && newHiddenChildren === 0) {
-				afterNextRender(this, () => {
-					this.__focusLast(this._getVisibileEffectiveChildren());
-				});
-			}
+			afterNextRender(this, () => {
+				this.__focusLast(this._getVisibileEffectiveChildren());
+			});
 		}
 	}
 	addItem(item) {
