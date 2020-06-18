@@ -219,13 +219,15 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 	}
 	_onShowButtonKeyDown(event) {
-		const { ENTER } = this._keyCodes;
+		const { ENTER, SPACE } = this._keyCodes;
 		const { keyCode } = event;
 
 		if (keyCode === ENTER) {
 			event.preventDefault();
 			event.stopPropagation();
 			this._expandCollapse();
+		} else if (keyCode === SPACE) {
+			event.preventDefault();
 		}
 	}
 
