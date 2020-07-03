@@ -15,7 +15,6 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-l
 				cursor: pointer;
 				display: inline-block;
 				outline: none;
-				position: relative;
 				--d2l-labs-multi-select-list-item-padding: 0.25rem 0.75rem 0.2rem;
 				--d2l-labs-multi-select-list-item-padding-rtl: 0.25rem 0.75rem 0.2rem;
 				--d2l-labs-multi-select-list-item-padding-deletable: 0.25rem 0.4rem 0.2rem 0.75rem;
