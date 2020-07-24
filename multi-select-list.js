@@ -148,7 +148,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this.observer.observe(this);
 		this._nodeObserver = new FlattenedNodesObserver(this, this._debounceChildren);
 
-		this.setAttribute('role', 'grid');
+		this.setAttribute('role', 'list');
 		afterNextRender(this, function() {
 			const listItems = this.getEffectiveChildren();
 			// Set tabindex to allow component to be focusable, and set role on list items
@@ -156,7 +156,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 				listItems[0].tabIndex = 0;
 				this._currentlyFocusedElement = listItems[0];
 				listItems.forEach(function(listItem) {
-					listItem.setAttribute('role', 'gridcell');
+					listItem.setAttribute('role', 'listitem');
 				});
 			}
 
