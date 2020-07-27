@@ -50,7 +50,7 @@ class D2LMultiSelectInput extends PolymerElement {
 		const item = document.createElement('d2l-labs-multi-select-list-item');
 		item.setAttribute('text',  text);
 		item.setAttribute('deletable', true);
-		item.setAttribute('role', 'gridcell');
+		item.setAttribute('role', 'listitem');
 
 		// Context is passed to add the element to the light dom of the calling element
 		ctx.appendChild(item);
