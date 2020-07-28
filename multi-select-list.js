@@ -25,7 +25,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			:host([_collapsed]) {
 				flex-direction: row;
 			}
-			div[role="row"] {
+			div[role="list"] {
 				display: flex;
 				flex-wrap: wrap;
 				flex: 1;
@@ -36,7 +36,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				overflow: hidden;
 			}
 
-			div[role="row"] > ::slotted(d2l-labs-multi-select-list-item) {
+			div[role="list"] > ::slotted(d2l-labs-multi-select-list-item) {
 				padding: 0.15rem;
 				display: block;
 			}
@@ -48,7 +48,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				display: none;
 			}
 		</style>
-			<div role="row" collapse$=[[_collapsed]]>
+			<div role="list" collapse$=[[_collapsed]]>
 				<slot></slot>
 				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
 					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
@@ -148,7 +148,6 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this.observer.observe(this);
 		this._nodeObserver = new FlattenedNodesObserver(this, this._debounceChildren);
 
-		this.setAttribute('role', 'list');
 		afterNextRender(this, function() {
 			const listItems = this.getEffectiveChildren();
 			// Set tabindex to allow component to be focusable, and set role on list items
@@ -269,7 +268,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 		let childrenWidthTotal = 0;
 		const children = this.getEffectiveChildren();
-		const widthOfListItems = this.shadowRoot.querySelector('div[role="row"]').getBoundingClientRect().width;
+		const widthOfListItems = this.shadowRoot.querySelector('div[role="list"]').getBoundingClientRect().width;
 		let newHiddenChildren = 0;
 		for (let i = 0; i < children.length; i++) {
 			const listItem = children[i];
