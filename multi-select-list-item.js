@@ -233,6 +233,7 @@ class D2LMultiSelectItem extends mixinBehaviors(
 	connectedCallback() {
 		super.connectedCallback();
 		// Set tabindex to allow focusable behaviour from the list
+		this.setAttribute('role', 'listitem');
 		this.tabIndex = -1;
 	}
 
