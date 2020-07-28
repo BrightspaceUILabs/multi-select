@@ -17,8 +17,8 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-l
 				outline: none;
 				--d2l-labs-multi-select-list-item-padding: 0.25rem 0.75rem 0.2rem;
 				--d2l-labs-multi-select-list-item-padding-rtl: 0.25rem 0.75rem 0.2rem;
-				--d2l-labs-multi-select-list-item-padding-deletable: 0.25rem 0.4rem 0.2rem 0.75rem;
-				--d2l-labs-multi-select-list-item-padding-deletable-rtl: 0.25rem 0.75rem 0.2rem 0.4rem;
+				--d2l-labs-multi-select-list-item-padding-deletable: 0.25rem 0.4rem 0.2rem 1.25rem;
+				--d2l-labs-multi-select-list-item-padding-deletable-rtl: 0.25rem 1.25rem 0.2rem 0.4rem;
 				--d2l-labs-multi-select-list-item-font: {
 					@apply --d2l-body-compact-text;
 				};
@@ -105,7 +105,7 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-l
 				--d2l-icon-width: 0.5rem;
 				color: var(--d2l-color-galena);
 				cursor: pointer;
-				padding: 0.2rem;
+				padding: 0.2rem 0.85rem;
 				margin-left: 0.15rem;
 				vertical-align: middle;
 			}
