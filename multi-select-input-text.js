@@ -25,6 +25,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-input-tex
 				aria-label$="[[ariaLabel]]"
 				aria-labelledby$="[[ariaLabelledby]]"
 				autofocus$="[[autofocus]]"
+				novalidate
 				on-input="_onInput"
 				on-keypress="_onKeyPress"
 				placeholder$="[[placeholder]]"
