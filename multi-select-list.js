@@ -43,6 +43,9 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				display: inline-block;
 				padding: 0.15rem;
 			}
+			.clear-filters {
+				display: inline-block'
+			}
 			.hide {
 				display: none;
 			}
@@ -52,12 +55,17 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
 					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
 				</div>
+				<div class$="[[_hideClearFiltersVisibility(collapsable, _collapsed, showClearFilters)]]">
+					<d2l-button-subtle text="[[localize('clearFilters')]]" on-click="clearFiltersClicked"></d2l-button-subtle>
+				</div>
 			</div>
 			<slot name="aux-button"></slot>
 			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
 				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false"></d2l-labs-multi-select-list-item>
 			</div>
-			<d2l-button-subtle id="d2l-clear-filters-button" text="Clear Filters"></d2l-button-subtle>
+			<div class$="[[_clearFiltersVisibility(collapsable, _collapsed, showClearFilters)]]">
+				<d2l-button-subtle text="[[localize('clearFilters')]]" on-click="clearFiltersClicked"></d2l-button-subtle>
+			</div>
 	</template>
 </dom-module>`;
 
@@ -135,6 +143,13 @@ class D2LMultiSelectList extends mixinBehaviors(
 			 */
 			shrinkwrapMaximumSize: {
 				type: String,
+				value: ""
+			},
+			/**
+			 * Whether or not to display a clear filters button
+			 */
+			showClearFilters: {
+				type: Boolean,
 				value: false
 			}
 		};
@@ -144,6 +159,10 @@ class D2LMultiSelectList extends mixinBehaviors(
 		super();
 		this._onListItemDeleted = this._onListItemDeleted.bind(this);
 		this._debounceChildren = this._debounceChildren.bind(this);
+	}
+
+	clearFiltersClicked() {
+		this.dispatchEvent(new CustomEvent('d2l-multi-select-list-clear-filters-clicked', {}));
 	}
 
 	connectedCallback() {
@@ -266,8 +285,14 @@ class D2LMultiSelectList extends mixinBehaviors(
 	_showMoreVisibility(collapsable, _collapsed, hiddenChildren) {
 		return collapsable && _collapsed && hiddenChildren > 0 ? 'aux-button' : 'hide';
 	}
+	_clearFiltersVisibility(collapsable, _collapsed, showClearFilters) {
+		return showClearFilters && collapsable && _collapsed ? 'clear-filters' : 'hide';
+	}
 	_hideVisibility(collapsable, _collapsed) {
 		return collapsable && !_collapsed ? '' : 'hide';
+	}
+	_hideClearFiltersVisibility(collapsable, _collapsed, showClearFilters) {
+		return showClearFilters && collapsable && !_collapsed ? '' : 'hide';
 	}
 	_debounceChildren() {
 		this._debounceJob = Debouncer.debounce(this._debounceJob,
@@ -331,7 +356,6 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 
 	_resetWidth(width) {
-		console.log(`width = ${width}`);
 		var d = this.shadowRoot.querySelectorAll('.list-item-container');
 		for(let i = 0; i < d.length; i++) {
 			d[i].style.width = width || "";

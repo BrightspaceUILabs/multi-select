@@ -20,6 +20,7 @@ D2L.PolymerBehaviors.D2LMultiSelect.LocalizeBehaviorImpl = {
 						'delete': 'Delete',
 						'hide': 'Hide',
 						'hiddenChildren': '+ {num} more',
+						'clearFilters': 'Clear Filters'
 					},
 					'es': {
 						'delete': 'Eliminar',
