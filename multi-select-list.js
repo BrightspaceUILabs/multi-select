@@ -28,7 +28,6 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			.list-item-container {
 				display: flex;
 				flex-wrap: wrap;
-				flex: 1;
 			}
 
 			div[collapse] {
@@ -52,13 +51,13 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				<slot></slot>
 				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
 					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
-					<slot name="aux-button"></slot>
 				</div>
-
 			</div>
+			<slot name="aux-button"></slot>
 			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
 				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false"></d2l-labs-multi-select-list-item>
 			</div>
+			<d2l-button-subtle id="d2l-clear-filters-button" text="Clear Filters"></d2l-button-subtle>
 	</template>
 </dom-module>`;
 
@@ -123,6 +122,20 @@ class D2LMultiSelectList extends mixinBehaviors(
 			hiddenChildren: {
 				type: Number,
 				value: 0
+			},
+			/**
+			 * Toggles shrinkwrapping mode
+			 */
+			shrinkwrap: {
+				type: Boolean,
+				value: false
+			},
+			/**
+			 * The maximum width to allow when shrinkwrapping
+			 */
+			shrinkwrapMaximumSize: {
+				type: String,
+				value: false
 			}
 		};
 	}
@@ -268,23 +281,61 @@ class D2LMultiSelectList extends mixinBehaviors(
 		if (!this.collapsable) {
 			return;
 		}
+
+		if (this.shrinkwrap) {
+			this._resetWidth(this.shrinkwrapMaximumSize);
+		}
+
 		let childrenWidthTotal = 0;
 		const children = this.getEffectiveChildren();
 		const widthOfListItems = this.shadowRoot.querySelector('.list-item-container').getBoundingClientRect().width;
 		let newHiddenChildren = 0;
+		let widthSet = false;
+
 		for (let i = 0; i < children.length; i++) {
 			const listItem = children[i];
 			childrenWidthTotal += listItem.getBoundingClientRect().width;
 			if (childrenWidthTotal > widthOfListItems) {
+				if (this.shrinkwrap) {
+					let desiredWidth = 0;
+					for (let j = 0; j < i; j++) {
+						desiredWidth += children[j].getBoundingClientRect().width; //margins
+					}
+					this._updateWidth(desiredWidth);
+					widthSet = true;
+				}
+
 				newHiddenChildren = children.length - i;
 				break;
 			}
 		}
+
+		if (!widthSet && this.shrinkwrap) {
+			this._updateWidth(childrenWidthTotal);
+		}
+
 		const focusedIndex = children.indexOf(this._currentlyFocusedElement);
 		const hiddenIndex = children.length - newHiddenChildren;
 		this._handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren);
 
 		this.hiddenChildren = newHiddenChildren;
+	}
+
+	_updateWidth(width) {
+		if (width > 0) {
+			var d = this.shadowRoot.querySelectorAll('.list-item-container');
+			for(let i = 0; i < d.length; i++) {
+				d[i].style.width = (width + 1) + 'px';
+			}
+		}
+	}
+
+	_resetWidth(width) {
+		console.log(`width = ${width}`);
+		var d = this.shadowRoot.querySelectorAll('.list-item-container');
+		for(let i = 0; i < d.length; i++) {
+			d[i].style.width = width || "";
+		}
 	}
 
 	/**
