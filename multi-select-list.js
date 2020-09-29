@@ -28,7 +28,6 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			.list-item-container {
 				display: flex;
 				flex-wrap: wrap;
-				flex: 1;
 			}
 
 			div[collapse] {
@@ -47,17 +46,26 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			.hide {
 				display: none;
 			}
+			d2l-button-subtle {
+				height: 30px;
+				margin-top: -2px;
+			}
 		</style>
 			<div class="list-item-container" collapse$=[[_collapsed]]>
 				<slot></slot>
 				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
 					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
-					<slot name="aux-button"></slot>
 				</div>
-
+				<div class$="[[_hideClearListVisibility(collapsable, _collapsed, showClearList)]]">
+					<d2l-button-subtle text="[[_getClearListText()]]" on-click="clearListClicked"></d2l-button-subtle>
+				</div>
 			</div>
+			<slot name="aux-button"></slot>
 			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
 				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false"></d2l-labs-multi-select-list-item>
+			</div>
+			<div class$="[[_clearListVisibility(collapsable, _collapsed, showClearList)]]">
+				<d2l-button-subtle text="[[_getClearListText()]]" on-click="clearListClicked"></d2l-button-subtle>
 			</div>
 	</template>
 </dom-module>`;
@@ -123,6 +131,27 @@ class D2LMultiSelectList extends mixinBehaviors(
 			hiddenChildren: {
 				type: Number,
 				value: 0
+			},
+			/**
+			 * Toggles shrinkwrapping mode
+			 */
+			shrinkwrap: {
+				type: Boolean,
+				value: false
+			},
+			/**
+			 * Whether or not to display a clear list button
+			 */
+			showClearList: {
+				type: Boolean,
+				value: false
+			},
+			/**
+			 * Text to show for clear list button
+			 */
+			clearListButtonText: {
+				type: String,
+				value: ''
 			}
 		};
 	}
@@ -131,6 +160,14 @@ class D2LMultiSelectList extends mixinBehaviors(
 		super();
 		this._onListItemDeleted = this._onListItemDeleted.bind(this);
 		this._debounceChildren = this._debounceChildren.bind(this);
+	}
+
+	_getClearListText() {
+		return this.clearListButtonText || this.localize('clearList');
+	}
+
+	clearListClicked() {
+		this.dispatchEvent(new CustomEvent('d2l-multi-select-list-clear-list-clicked', {}));
 	}
 
 	connectedCallback() {
@@ -253,8 +290,14 @@ class D2LMultiSelectList extends mixinBehaviors(
 	_showMoreVisibility(collapsable, _collapsed, hiddenChildren) {
 		return collapsable && _collapsed && hiddenChildren > 0 ? 'aux-button' : 'hide';
 	}
+	_clearListVisibility(collapsable, _collapsed, showClearList) {
+		return showClearList && collapsable && _collapsed ? '' : 'hide';
+	}
 	_hideVisibility(collapsable, _collapsed) {
 		return collapsable && !_collapsed ? '' : 'hide';
+	}
+	_hideClearListVisibility(collapsable, _collapsed, showClearList) {
+		return showClearList && collapsable && !_collapsed ? '' : 'hide';
 	}
 	_debounceChildren() {
 		this._debounceJob = Debouncer.debounce(this._debounceJob,
@@ -268,18 +311,32 @@ class D2LMultiSelectList extends mixinBehaviors(
 		if (!this.collapsable) {
 			return;
 		}
+
+		const container = this.shadowRoot.querySelector('.list-item-container');
+
+		if (this.shrinkwrap) {
+			container.style['max-width'] = 'unset';
+		}
+
 		let childrenWidthTotal = 0;
 		const children = this.getEffectiveChildren();
-		const widthOfListItems = this.shadowRoot.querySelector('.list-item-container').getBoundingClientRect().width;
+		const widthOfListItems = container.getBoundingClientRect().width;
 		let newHiddenChildren = 0;
+
 		for (let i = 0; i < children.length; i++) {
 			const listItem = children[i];
-			childrenWidthTotal += listItem.getBoundingClientRect().width;
-			if (childrenWidthTotal > widthOfListItems) {
+			const childWidth = listItem.getBoundingClientRect().width;
+			if (childrenWidthTotal + childWidth > widthOfListItems) {
 				newHiddenChildren = children.length - i;
 				break;
 			}
+			childrenWidthTotal += childWidth;
 		}
+
+		if (this.shrinkwrap) {
+			container.style['max-width'] = `${childrenWidthTotal}px`;
+		}
+
 		const focusedIndex = children.indexOf(this._currentlyFocusedElement);
 		const hiddenIndex = children.length - newHiddenChildren;
 		this._handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren);
