@@ -68,10 +68,10 @@ button.addEventListener('click', () => {
 ```
 
 #### `shrinkwrap` property on `d2l-labs-multi-select-list`
-boolean - If this is excluded, all shrinkwrapping functionality is disabled.
+(boolean) - If this is excluded, all shrinkwrapping functionality is disabled.
 
 #### `shrinkwrap-maximum-size` property on `d2l-labs-multi-select-list`
-string - Shrinkwrapping works by creating the maximum size flexbox, and then determining how many filter buttons can fit within the space, and then shrinking the flexbox to match that. This parameter specifies the size to start shrinking from (if excluded, algorithm will try its best). This parameter is a CSS width string (ex: 450px or 75%)
+(string) - Shrinkwrapping works by creating the maximum size flexbox, and then determining how many filter buttons can fit within the space, and then shrinking the flexbox to match that. This parameter specifies the size to start shrinking from (if excluded, algorithm will try its best). This parameter is a CSS width string (ex: 450px or 75%)
 
 #### `show-clear-list` property on `d2l-labs-multi-select-list`
 (boolean) - If this is true, then the "clear list" button appears. Clicking this dispatches the event `d2l-multi-select-list-clear-list-clicked` which must be handled by the parent to perform proper list clearing.

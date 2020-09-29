@@ -170,7 +170,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	}
 
 	_getClearListText() {
-		return this.clearListButtonText || localize('clearList');
+		return this.clearListButtonText || this.localize('clearList');
 	}
 
 	clearListClicked() {
