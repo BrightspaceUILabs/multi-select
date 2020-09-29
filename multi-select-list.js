@@ -46,7 +46,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			.hide {
 				display: none;
 			}
-			.subtle-button-baseline {
+			d2l-button-subtle {
 				height: 30px;
 				margin-top: -2px;
 			}
@@ -54,18 +54,18 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			<div class="list-item-container" collapse$=[[_collapsed]]>
 				<slot></slot>
 				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
-					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button subtle-button-baseline" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
+					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
 				</div>
 				<div class$="[[_hideClearListVisibility(collapsable, _collapsed, showClearList)]]">
-					<d2l-button-subtle text="[[_getClearListText()]]" on-click="clearListClicked" class="subtle-button-baseline"></d2l-button-subtle>
+					<d2l-button-subtle text="[[_getClearListText()]]" on-click="clearListClicked"></d2l-button-subtle>
 				</div>
 			</div>
 			<slot name="aux-button"></slot>
 			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
-				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false" class="subtle-button-baseline"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false"></d2l-labs-multi-select-list-item>
 			</div>
 			<div class$="[[_clearListVisibility(collapsable, _collapsed, showClearList)]]">
-				<d2l-button-subtle text="[[_getClearListText()]]" on-click="clearListClicked" class="subtle-button-baseline"></d2l-button-subtle>
+				<d2l-button-subtle text="[[_getClearListText()]]" on-click="clearListClicked"></d2l-button-subtle>
 			</div>
 	</template>
 </dom-module>`;
