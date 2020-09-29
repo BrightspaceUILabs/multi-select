@@ -44,27 +44,32 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				padding: 0.15rem;
 			}
 			.clear-filters {
-				display: inline-block'
+				display: inline-block;
+				padding: 0.15rem;
 			}
 			.hide {
 				display: none;
+			}
+			.subtle-button-baseline {
+				height: 30px;
+				margin-top: -2px;
 			}
 		</style>
 			<div class="list-item-container" collapse$=[[_collapsed]]>
 				<slot></slot>
 				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
-					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
+					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button subtle-button-baseline" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
 				</div>
 				<div class$="[[_hideClearFiltersVisibility(collapsable, _collapsed, showClearFilters)]]">
-					<d2l-button-subtle text="[[localize('clearFilters')]]" on-click="clearFiltersClicked"></d2l-button-subtle>
+					<d2l-button-subtle text="[[localize('clearFilters')]]" on-click="clearFiltersClicked" class="subtle-button-baseline"></d2l-button-subtle>
 				</div>
 			</div>
 			<slot name="aux-button"></slot>
 			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
-				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false" class="subtle-button-baseline"></d2l-labs-multi-select-list-item>
 			</div>
 			<div class$="[[_clearFiltersVisibility(collapsable, _collapsed, showClearFilters)]]">
-				<d2l-button-subtle text="[[localize('clearFilters')]]" on-click="clearFiltersClicked"></d2l-button-subtle>
+				<d2l-button-subtle text="[[localize('clearFilters')]]" on-click="clearFiltersClicked" class="subtle-button-baseline"></d2l-button-subtle>
 			</div>
 	</template>
 </dom-module>`;
@@ -348,17 +353,17 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 	_updateWidth(width) {
 		if (width > 0) {
-			var d = this.shadowRoot.querySelectorAll('.list-item-container');
-			for(let i = 0; i < d.length; i++) {
-				d[i].style.width = (width + 1) + 'px';
+			const d = this.shadowRoot.querySelector('.list-item-container');
+			if (d) {
+				d.style.width = (width + 1) + 'px';
 			}
 		}
 	}
 
 	_resetWidth(width) {
-		var d = this.shadowRoot.querySelectorAll('.list-item-container');
-		for(let i = 0; i < d.length; i++) {
-			d[i].style.width = width || "";
+		const d = this.shadowRoot.querySelector('.list-item-container');
+		if (d) {
+			d.style.width = width || "";
 		}
 	}
 
