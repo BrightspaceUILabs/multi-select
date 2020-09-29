@@ -148,7 +148,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 			 */
 			shrinkwrapMaximumSize: {
 				type: String,
-				value: ""
+				value: ''
 			},
 			/**
 			 * Whether or not to display a clear filters button
@@ -363,7 +363,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	_resetWidth(width) {
 		const d = this.shadowRoot.querySelector('.list-item-container');
 		if (d) {
-			d.style.width = width || "";
+			d.style.width = width || '';
 		}
 	}
 
