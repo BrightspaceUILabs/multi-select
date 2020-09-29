@@ -140,13 +140,6 @@ class D2LMultiSelectList extends mixinBehaviors(
 				value: false
 			},
 			/**
-			 * The maximum width to allow when shrinkwrapping
-			 */
-			shrinkwrapMaximumSize: {
-				type: String,
-				value: ''
-			},
-			/**
 			 * Whether or not to display a clear list button
 			 */
 			showClearList: {
@@ -320,7 +313,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 
 		if (this.shrinkwrap) {
-			this._resetWidth(this.shrinkwrapMaximumSize);
+			this.shadowRoot.querySelector('.list-item-container').style['max-width'] = 'unset';
 		}
 
 		let childrenWidthTotal = 0;
@@ -336,9 +329,9 @@ class D2LMultiSelectList extends mixinBehaviors(
 				if (this.shrinkwrap) {
 					let desiredWidth = 0;
 					for (let j = 0; j < i; j++) {
-						desiredWidth += children[j].getBoundingClientRect().width; //margins
+						desiredWidth += children[j].getBoundingClientRect().width;
 					}
-					this._updateWidth(desiredWidth);
+					this.shadowRoot.querySelector('.list-item-container').style['max-width'] = `${desiredWidth}px`;
 					widthSet = true;
 				}
 
@@ -348,7 +341,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 
 		if (!widthSet && this.shrinkwrap) {
-			this._updateWidth(childrenWidthTotal);
+			this.shadowRoot.querySelector('.list-item-container').style['max-width'] = `${childrenWidthTotal}px`;
 		}
 
 		const focusedIndex = children.indexOf(this._currentlyFocusedElement);
@@ -356,16 +349,6 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this._handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren);
 
 		this.hiddenChildren = newHiddenChildren;
-	}
-
-	_updateWidth(width) {
-		if (width > 0) {
-			this.shadowRoot.querySelector('.list-item-container').style.width = (width + 1) + 'px';
-		}
-	}
-
-	_resetWidth(width) {
-		this.shadowRoot.querySelector('.list-item-container').style.width = width || 'auto';
 	}
 
 	/**
