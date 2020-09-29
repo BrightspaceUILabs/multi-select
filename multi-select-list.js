@@ -312,13 +312,15 @@ class D2LMultiSelectList extends mixinBehaviors(
 			return;
 		}
 
+		const container = this.shadowRoot.querySelector('.list-item-container');
+
 		if (this.shrinkwrap) {
-			this.shadowRoot.querySelector('.list-item-container').style['max-width'] = 'unset';
+			container.style['max-width'] = 'unset';
 		}
 
 		let childrenWidthTotal = 0;
 		const children = this.getEffectiveChildren();
-		const widthOfListItems = this.shadowRoot.querySelector('.list-item-container').getBoundingClientRect().width;
+		const widthOfListItems = container.getBoundingClientRect().width;
 		let newHiddenChildren = 0;
 
 		for (let i = 0; i < children.length; i++) {
@@ -332,7 +334,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 
 		if (this.shrinkwrap) {
-			this.shadowRoot.querySelector('.list-item-container').style['max-width'] = `${childrenWidthTotal}px`;
+			container.style['max-width'] = `${childrenWidthTotal}px`;
 		}
 
 		const focusedIndex = children.indexOf(this._currentlyFocusedElement);

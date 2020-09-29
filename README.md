@@ -67,15 +67,6 @@ button.addEventListener('click', () => {
 })
 ```
 
-#### `shrinkwrap` property on `d2l-labs-multi-select-list`
-(boolean) - If this is excluded, all shrinkwrapping functionality is disabled.
-
-#### `show-clear-list` property on `d2l-labs-multi-select-list`
-(boolean) - If this is true, then the "clear list" button appears. Clicking this dispatches the event `d2l-multi-select-list-clear-list-clicked` which must be handled by the parent to perform proper list clearing.
-
-#### `clear-list-button-text` property on `d2l-labs-multi-select-list`
-(string) - Sets the text to display in the clear list button.  Defaults to the `clearList` langterm.
-
 ### Components
 
 #### `d2l-labs-multi-select-list-item`
@@ -111,6 +102,15 @@ Also the following css variables are exposed to clients and can be use to overri
 ```
 
 You can opt for a condensed view by adding the `collapsable` attribute, which limits the element to the first line of items and provides a button for viewing the remaining items.
+
+#### `shrinkwrap` property on `d2l-labs-multi-select-list`
+(boolean) - If this is excluded, all shrinkwrapping functionality is disabled.
+
+#### `show-clear-list` property on `d2l-labs-multi-select-list`
+(boolean) - If this is true, then the "clear list" button appears. Clicking this dispatches the event `d2l-multi-select-list-clear-list-clicked` which must be handled by the parent to perform proper list clearing.
+
+#### `clear-list-button-text` property on `d2l-labs-multi-select-list`
+(string) - Sets the text to display in the clear list button.  Defaults to the `clearList` langterm.
 
 ### Events
 
