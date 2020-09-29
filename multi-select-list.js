@@ -360,18 +360,12 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 	_updateWidth(width) {
 		if (width > 0) {
-			const d = this.shadowRoot.querySelector('.list-item-container');
-			if (d) {
-				d.style.width = (width + 1) + 'px';
-			}
+			this.shadowRoot.querySelector('.list-item-container').style.width = (width + 1) + 'px';
 		}
 	}
 
 	_resetWidth(width) {
-		const d = this.shadowRoot.querySelector('.list-item-container');
-		if (d) {
-			d.style.width = width || '';
-		}
+		this.shadowRoot.querySelector('.list-item-container').style.width = width || 'auto';
 	}
 
 	/**
