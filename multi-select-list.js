@@ -43,10 +43,6 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				display: inline-block;
 				padding: 0.15rem;
 			}
-			.clear-filters {
-				display: inline-block;
-				padding: 0.15rem;
-			}
 			.hide {
 				display: none;
 			}
@@ -60,16 +56,16 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
 					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button subtle-button-baseline" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
 				</div>
-				<div class$="[[_hideClearFiltersVisibility(collapsable, _collapsed, showClearFilters)]]">
-					<d2l-button-subtle text="[[localize('clearFilters')]]" on-click="clearFiltersClicked" class="subtle-button-baseline"></d2l-button-subtle>
+				<div class$="[[_hideClearListVisibility(collapsable, _collapsed, showClearList)]]">
+					<d2l-button-subtle text="[[_getClearListText()]]" on-click="clearListClicked" class="subtle-button-baseline"></d2l-button-subtle>
 				</div>
 			</div>
 			<slot name="aux-button"></slot>
 			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
 				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false" class="subtle-button-baseline"></d2l-labs-multi-select-list-item>
 			</div>
-			<div class$="[[_clearFiltersVisibility(collapsable, _collapsed, showClearFilters)]]">
-				<d2l-button-subtle text="[[localize('clearFilters')]]" on-click="clearFiltersClicked" class="subtle-button-baseline"></d2l-button-subtle>
+			<div class$="[[_clearListVisibility(collapsable, _collapsed, showClearList)]]">
+				<d2l-button-subtle text="[[_getClearListText()]]" on-click="clearListClicked" class="subtle-button-baseline"></d2l-button-subtle>
 			</div>
 	</template>
 </dom-module>`;
@@ -151,11 +147,18 @@ class D2LMultiSelectList extends mixinBehaviors(
 				value: ''
 			},
 			/**
-			 * Whether or not to display a clear filters button
+			 * Whether or not to display a clear list button
 			 */
-			showClearFilters: {
+			showClearList: {
 				type: Boolean,
 				value: false
+			},
+			/**
+			 * Text to show for clear list button
+			 */
+			clearListButtonText: {
+				type: String,
+				value: ''
 			}
 		};
 	}
@@ -166,8 +169,12 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this._debounceChildren = this._debounceChildren.bind(this);
 	}
 
-	clearFiltersClicked() {
-		this.dispatchEvent(new CustomEvent('d2l-multi-select-list-clear-filters-clicked', {}));
+	_getClearListText() {
+		return this.clearListButtonText || localize('clearList');
+	}
+
+	clearListClicked() {
+		this.dispatchEvent(new CustomEvent('d2l-multi-select-list-clear-list-clicked', {}));
 	}
 
 	connectedCallback() {
@@ -290,14 +297,14 @@ class D2LMultiSelectList extends mixinBehaviors(
 	_showMoreVisibility(collapsable, _collapsed, hiddenChildren) {
 		return collapsable && _collapsed && hiddenChildren > 0 ? 'aux-button' : 'hide';
 	}
-	_clearFiltersVisibility(collapsable, _collapsed, showClearFilters) {
-		return showClearFilters && collapsable && _collapsed ? 'clear-filters' : 'hide';
+	_clearListVisibility(collapsable, _collapsed, showClearList) {
+		return showClearList && collapsable && _collapsed ? '' : 'hide';
 	}
 	_hideVisibility(collapsable, _collapsed) {
 		return collapsable && !_collapsed ? '' : 'hide';
 	}
-	_hideClearFiltersVisibility(collapsable, _collapsed, showClearFilters) {
-		return showClearFilters && collapsable && !_collapsed ? '' : 'hide';
+	_hideClearListVisibility(collapsable, _collapsed, showClearList) {
+		return showClearList && collapsable && !_collapsed ? '' : 'hide';
 	}
 	_debounceChildren() {
 		this._debounceJob = Debouncer.debounce(this._debounceJob,

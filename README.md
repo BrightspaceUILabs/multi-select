@@ -67,6 +67,18 @@ button.addEventListener('click', () => {
 })
 ```
 
+#### `shrinkwrap` property on `d2l-labs-multi-select-list`
+boolean - If this is excluded, all shrinkwrapping functionality is disabled.
+
+#### `shrinkwrap-maximum-size` property on `d2l-labs-multi-select-list`
+string - Shrinkwrapping works by creating the maximum size flexbox, and then determining how many filter buttons can fit within the space, and then shrinking the flexbox to match that. This parameter specifies the size to start shrinking from (if excluded, algorithm will try its best). This parameter is a CSS width string (ex: 450px or 75%)
+
+#### `show-clear-list` property on `d2l-labs-multi-select-list`
+(boolean) - If this is true, then the "clear list" button appears. Clicking this dispatches the event `d2l-multi-select-list-clear-list-clicked` which must be handled by the parent to perform proper list clearing.
+
+#### `clear-list-button-text` property on `d2l-labs-multi-select-list`
+(boolean) - Sets the text to display in the clear list button.  Defaults to the `clearList` langterm.
+
 ### Components
 
 #### `d2l-labs-multi-select-list-item`
@@ -108,6 +120,8 @@ You can opt for a condensed view by adding the `collapsable` attribute, which li
 - `d2l-labs-multi-select-list-item-deleted`: fired on item deletion
 
 - `d2l-labs-multi-select-list-item-added`: fired on item added to the `d2l-labs-multi-select-list`
+
+- `d2l-multi-select-list-clear-list-clicked`: fired when the clear list button is clicked
 
 ## Developing, Testing and Contributing
 
