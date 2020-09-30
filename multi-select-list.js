@@ -315,7 +315,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		const container = this.shadowRoot.querySelector('.list-item-container');
 
 		if (this.shrinkwrap) {
-			container.style['max-width'] = 'unset';
+			container.style.maxWidth = 'unset';
 		}
 
 		let childrenWidthTotal = 0;
@@ -334,7 +334,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 
 		if (this.shrinkwrap) {
-			container.style['max-width'] = `${childrenWidthTotal}px`;
+			container.style.maxWidth = `${childrenWidthTotal}px`;
 		}
 
 		const focusedIndex = children.indexOf(this._currentlyFocusedElement);
