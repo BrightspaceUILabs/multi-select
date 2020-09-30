@@ -315,6 +315,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		const container = this.shadowRoot.querySelector('.list-item-container');
 
 		if (this.shrinkwrap) {
+			console.log('debug debug debug debug');
 			container.style.maxWidth = 'unset';
 		}
 
