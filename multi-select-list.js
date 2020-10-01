@@ -56,12 +56,12 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				<slot></slot>
 				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
 					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
+					<slot name="aux-button"></slot>
 				</div>
 				<div class$="[[_hideClearListVisibility(collapsable, _collapsed, showClearList)]]">
 					<d2l-button-subtle text="[[_getClearListText()]]" on-click="clearListClicked"></d2l-button-subtle>
 				</div>
 			</div>
-			<slot name="aux-button"></slot>
 			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
 				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false"></d2l-labs-multi-select-list-item>
 			</div>
