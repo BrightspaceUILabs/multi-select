@@ -158,6 +158,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 	constructor() {
 		super();
+		this.firstRender = true;
 		this._onListItemDeleted = this._onListItemDeleted.bind(this);
 		this._debounceChildren = this._debounceChildren.bind(this);
 	}
@@ -314,13 +315,13 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 		const container = this.shadowRoot.querySelector('.list-item-container');
 
-		if (this.shrinkwrap) {
+		if (this.shrinkwrap && !this.firstRender) {
 			container.style.maxWidth = 'unset';
 		}
 
 		let childrenWidthTotal = 0;
 		const children = this.getEffectiveChildren();
-		const widthOfListItems = 1000;//container.getBoundingClientRect().width;
+		const widthOfListItems = container.getBoundingClientRect().width;
 		let newHiddenChildren = 0;
 
 		for (let i = 0; i < children.length; i++) {
@@ -342,6 +343,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this._handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren);
 
 		this.hiddenChildren = newHiddenChildren;
+		this.firstRender = false;
 	}
 
 	/**
