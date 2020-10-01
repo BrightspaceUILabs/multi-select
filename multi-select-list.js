@@ -158,7 +158,6 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 	constructor() {
 		super();
-		this.firstRender = true;
 		this._onListItemDeleted = this._onListItemDeleted.bind(this);
 		this._debounceChildren = this._debounceChildren.bind(this);
 	}
@@ -315,7 +314,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 		const container = this.shadowRoot.querySelector('.list-item-container');
 
-		if (this.shrinkwrap && !this.firstRender) {
+		if (this.shrinkwrap) {
 			container.style.maxWidth = 'unset';
 		}
 
@@ -335,7 +334,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 
 		if (this.shrinkwrap) {
-			container.style.maxWidth = `${childrenWidthTotal}px`;
+			// container.style.maxWidth = `${childrenWidthTotal}px`;
 		}
 
 		const focusedIndex = children.indexOf(this._currentlyFocusedElement);
@@ -343,7 +342,6 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this._handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren);
 
 		this.hiddenChildren = newHiddenChildren;
-		this.firstRender = false;
 	}
 
 	/**
