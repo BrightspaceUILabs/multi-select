@@ -334,6 +334,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 
 		if (this.shrinkwrap) {
+			//This is a hack required to make it work with Safari
 			setTimeout(() => container.style.maxWidth = `${childrenWidthTotal}px`, 0);
 		}
 
