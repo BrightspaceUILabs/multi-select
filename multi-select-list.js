@@ -334,7 +334,8 @@ class D2LMultiSelectList extends mixinBehaviors(
 		}
 
 		if (this.shrinkwrap) {
-			container.style.maxWidth = `${childrenWidthTotal}px`;
+			// Wrapping in a setTimeout is a hack required to make it work with Safari
+			setTimeout(() => container.style.maxWidth = `${childrenWidthTotal}px`, 0);
 		}
 
 		const focusedIndex = children.indexOf(this._currentlyFocusedElement);
