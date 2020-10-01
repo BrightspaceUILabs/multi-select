@@ -315,12 +315,12 @@ class D2LMultiSelectList extends mixinBehaviors(
 		const container = this.shadowRoot.querySelector('.list-item-container');
 
 		if (this.shrinkwrap) {
-			// container.style.maxWidth = '1000px';
+			container.style.maxWidth = 'unset';
 		}
 
 		let childrenWidthTotal = 0;
 		const children = this.getEffectiveChildren();
-		const widthOfListItems = container.getBoundingClientRect().width;
+		const widthOfListItems = 1000;//container.getBoundingClientRect().width;
 		let newHiddenChildren = 0;
 
 		for (let i = 0; i < children.length; i++) {
