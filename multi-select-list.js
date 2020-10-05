@@ -36,18 +36,17 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			}
 
 			.list-item-container > ::slotted(d2l-labs-multi-select-list-item) {
-				padding: 0.35rem 0.15rem;
+				padding: 0.15rem;
 				display: block;
 			}
 			.aux-button {
 				display: inline-block;
-				padding: 0.35rem 0.15rem;
+				padding: 0.15rem;
 			}
 			.hide {
 				display: none;
 			}
 			d2l-button-subtle {
-				height: 30px;
 				margin-left: 0.15rem;
 				margin-right: 0.15rem;
 			}
@@ -317,6 +316,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 		if (this.shrinkwrap) {
 			container.style.maxWidth = 'unset';
+			container.style.minWidth = 'unset';
 		}
 
 		let childrenWidthTotal = 0;
@@ -336,7 +336,10 @@ class D2LMultiSelectList extends mixinBehaviors(
 
 		if (this.shrinkwrap) {
 			// Wrapping in a setTimeout is a hack required to make it work with Safari
-			setTimeout(() => container.style.maxWidth = `${childrenWidthTotal}px`, 0);
+			setTimeout(() => {
+				container.style.maxWidth = `${childrenWidthTotal}px`
+				container.style.minWidth = `${childrenWidthTotal}px`
+			}, 0);
 		}
 
 		const focusedIndex = children.indexOf(this._currentlyFocusedElement);
