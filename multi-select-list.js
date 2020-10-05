@@ -40,6 +40,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				display: block;
 			}
 			.aux-button {
+				height: 30px;
 				display: inline-block;
 				padding: 0.15rem;
 			}
@@ -337,8 +338,8 @@ class D2LMultiSelectList extends mixinBehaviors(
 		if (this.shrinkwrap) {
 			// Wrapping in a setTimeout is a hack required to make it work with Safari
 			setTimeout(() => {
-				container.style.maxWidth = `${childrenWidthTotal}px`
-				container.style.minWidth = `${childrenWidthTotal}px`
+				container.style.maxWidth = `${childrenWidthTotal}px`;
+				container.style.minWidth = `${childrenWidthTotal}px`;
 			}, 0);
 		}
 
