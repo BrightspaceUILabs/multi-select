@@ -29,6 +29,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				display: flex;
 				flex-wrap: wrap;
 				flex: 1;
+				border: 1px solid black;
 			}
 
 			div[collapse] {
