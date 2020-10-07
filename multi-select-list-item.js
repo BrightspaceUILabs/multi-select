@@ -8,7 +8,7 @@ import './localize-behavior.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 
 const $_documentContainer = document.createElement('template');
-$_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-list-item">
+$_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list-item">
 	<template strip-whitespace="">
 		<style>
 			:host {
@@ -17,8 +17,8 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-l
 				outline: none;
 				--d2l-labs-multi-select-list-item-padding: 0.25rem 0.75rem 0.2rem;
 				--d2l-labs-multi-select-list-item-padding-rtl: 0.25rem 0.75rem 0.2rem;
-				--d2l-labs-multi-select-list-item-padding-deletable: 0.25rem 0.4rem 0.2rem 0.75rem;
-				--d2l-labs-multi-select-list-item-padding-deletable-rtl: 0.25rem 0.75rem 0.2rem 0.4rem;
+				--d2l-labs-multi-select-list-item-padding-deletable: 0.25rem 0 0.2rem 0.6rem;
+				--d2l-labs-multi-select-list-item-padding-deletable-rtl: 0.25rem 0.6rem 0.2rem 0;
 				--d2l-labs-multi-select-list-item-font: {
 					@apply --d2l-body-compact-text;
 				};
@@ -27,6 +27,11 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-l
 			:host([_fallback-css]) {
 				min-width: 125px;
 			}
+
+			.d2l-labs-multi-select-list-item-text-wrapper {
+				padding: var(--d2l-labs-multi-select-list-item-padding);
+			}
+
 			.d2l-labs-multi-select-list-item-wrapper {
 				@apply --d2l-labs-multi-select-list-item-font;
 				-moz-user-select: none;
@@ -41,14 +46,14 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-l
 				display: flex;
 				line-height: normal;
 				outline: none;
-				padding: var(--d2l-labs-multi-select-list-item-padding);
+
 			}
 
-			:host([dir='rtl']) .d2l-labs-multi-select-list-item-wrapper {
+			:host([dir='rtl']) .d2l-labs-multi-select-list-item-text-wrapper {
 				padding: var(--d2l-labs-multi-select-list-item-padding-rtl);
 			}
 
-			:host([deletable]) .d2l-labs-multi-select-list-item-wrapper {
+			:host([deletable]) .d2l-labs-multi-select-list-item-text-wrapper {
 				padding: var(--d2l-labs-multi-select-list-item-padding-deletable);
 			}
 
@@ -72,7 +77,7 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-l
 				background-color: var(--d2l-color-celestine);
 			}
 
-			:host([dir='rtl'][deletable]) .d2l-labs-multi-select-list-item-wrapper {
+			:host([dir='rtl'][deletable]) .d2l-labs-multi-select-list-item-text-wrapper {
 				padding: var(--d2l-labs-multi-select-list-item-padding-deletable-rtl);
 			}
 
@@ -105,8 +110,7 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-l
 				--d2l-icon-width: 0.5rem;
 				color: var(--d2l-color-galena);
 				cursor: pointer;
-				padding: 0.2rem;
-				margin-left: 0.15rem;
+				padding: 0.4rem 0.85rem;
 				vertical-align: middle;
 			}
 
@@ -137,8 +141,10 @@ $_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-labs-multi-select-l
 		</style>
 
 		<div class="d2l-labs-multi-select-list-item-wrapper" id="tag" on-click="_onClick">
-			<div class="d2l-labs-multi-select-list-item-text" aria-hidden="true">[[_getVisibleText(text,shortText,maxChars)]]</div>
-			<d2l-offscreen>[[_getScreenReaderText(text,shortText)]]</d2l-offscreen>
+			<div class="d2l-labs-multi-select-list-item-text-wrapper">
+				<div class="d2l-labs-multi-select-list-item-text" aria-hidden="true">[[_getVisibleText(text,shortText,maxChars)]]</div>
+				<d2l-offscreen>[[_getScreenReaderText(text,shortText)]]</d2l-offscreen>
+			</div>
 			<d2l-icon class="d2l-labs-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" hidden="[[!deletable]]" on-click="_onDeleteItem"></d2l-icon>
 		</div>
 		<template is="dom-if" if="[[_hasTooltip(text,shortText,maxChars)]]">
