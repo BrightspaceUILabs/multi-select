@@ -12,6 +12,162 @@ import 'd2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js';
 import 'd2l-resize-aware/resize-observer-polyfill.js';
 
 import './localize-behavior.js';
+import { LitElement, css, html } from 'lit-element';
+import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin';
+
+export class MultiSelectList extends RtlMixin(LitElement) {
+	static get properties() {
+		return {
+			temp: { type: String, reflect: true },
+			children: { type: Array, attribute: false},
+			...super.properties,
+		};
+	}
+
+	static get styles() {
+		return css`
+			:host {
+				display: flex;
+				width: 100%;
+				flex-direction: column;
+			}
+			:host([_collapsed]) {
+				flex-direction: row;
+			}
+			.list-item-container {
+				display: flex;
+				border: 1px black solid;
+				flex-wrap: wrap;
+				/* flex: 1; */
+			}
+
+			div[collapse] {
+				max-height: 1.94rem;
+				overflow: hidden;
+			}
+
+			.list-item-container > ::slotted(d2l-labs-multi-select-list-item) {
+				padding: 0.15rem;
+				display: block;
+			}
+
+			.aux-button {
+				display: inline-block;
+				padding: 0.15rem;
+			}
+			.temp {
+				padding: 0.15rem;
+				display: block;
+			}
+			.hide {
+				display: none;
+			}
+		`;
+	}
+
+	handleSlotchange(e) {
+		// console.log('slot change');
+		// let childNodes = e.target.assignedNodes({flatten: true});
+		// childNodes = childNodes.filter(a => a.localName === 'd2l-labs-multi-select-list-item');
+		// console.log(childNodes);
+		// this.slots = childNodes;
+		// if (!this.children || this.slots.length !== this.children.length) {
+		// 	console.log('changed size!');
+		// 	this.children = this.slots.map(a => ({ element: a }));
+		// 	this.setWidths();
+		// }
+		this.checkWidths();
+	}
+
+	connectedCallback() {
+		this.slots = Array.from(this.childNodes).filter(a => a.localName === 'd2l-labs-multi-select-list-item');
+		this.children = this.slots.map(a => ({ element: a }));
+		super.connectedCallback();
+		window.addEventListener('resize', this._handleResize.bind(this));
+	}
+
+	disconnectedCallback() {
+		window.removeEventListener('resize', this._handleResize);
+		super.disconnectedCallback();
+	  }
+
+	_handleResize() {
+		this.checkWidths();
+	}
+
+	updated(changedProperties) {
+		// this.slots = Array.from(this.childNodes).filter(a => a.localName === 'd2l-labs-multi-select-list-item');
+		// if (!this.children || this.slots.length !== this.children.length) {
+		// 	console.log('changed size!');
+		// 	this.children = this.slots.map(a => ({ element: a }));
+		// }
+		// this.printWidths();
+	}
+
+	get mainBoxWidth() { return this.shadowRoot.getElementById('main-container').getBoundingClientRect().width; }
+	get childWidths() { return this.slots.map(a => a.getBoundingClientRect().width); }
+
+	printWidths() {
+		const box = this.mainBoxWidth;
+		console.log(box);
+		console.log(this.childWidths);
+	}
+
+	setWidths() {
+		this.children.forEach((item, index) => {
+			const a = this.slots[index];
+			delete(a.style.display);
+			item.width = a.getBoundingClientRect().width;
+		})
+	}
+
+	checkWidths() {
+		let currentWidth = 0;
+		let modified = false;
+		const maxWidth = this.mainBoxWidth - 10;
+		this.children.forEach((item, index) => {
+			const a = this.slots[index];
+			let newWidth = a.getBoundingClientRect().width;
+			if (newWidth !== 0) {
+				item.width = newWidth;
+			}
+			newWidth = item.width;
+			currentWidth = currentWidth + newWidth;
+			if (currentWidth > maxWidth) {
+				if (!a.style.display) {
+					a.style.display = 'none';
+					modified = true;
+				}
+			} else {
+				if (a.style.display) {
+					a.style.display = '';
+					modified = true;
+				}
+			}
+		})
+
+		if (modified) {
+			this.update();
+		}
+	}
+
+	childItemDeleted(e) {
+		this.slots = this.slots.filter(a => a !== e.target);
+		this.children = this.children.filter(a => a.element !== e.target);
+		e.target.deleteItem();
+		this.update();
+	}
+
+	render() {
+		return html`
+			<div class="list-item-container" id="main-container" @d2l-labs-multi-select-list-item-deleted=${ (e) => this.childItemDeleted(e) }>
+				<slot @slotchange=${this.handleSlotchange}></slot>
+			</div>
+		`;
+	}
+}
+
+customElements.define('multi-select-list-lit', MultiSelectList);
 
 const $_documentContainer = document.createElement('template');
 $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">

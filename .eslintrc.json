@@ -1,4 +1,5 @@
 {
+  "parser": "babel-eslint",
   "extends": "brightspace/polymer-3-config",
   "env": {
 		"es6": true
