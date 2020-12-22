@@ -18,9 +18,14 @@ import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin';
 export class MultiSelectList extends RtlMixin(LitElement) {
 	static get properties() {
 		return {
-			temp: { type: String, reflect: true },
 			children: { type: Array, attribute: false},
-			...super.properties,
+			_keyCodes: { type: Object, attribute: false },
+			_currentlyFocusedElement: { type: Object, attribute: false },
+			autoremove: { type: Boolean },
+			collapsible: { type: Boolean },
+			_collapsed: { type: Boolean, attribute: false, reflect: true },
+			hiddenChildren: { type: Number, reflect: true },
+			_showCollapseButton: { type: Boolean, reflect: true }
 		};
 	}
 
@@ -38,7 +43,7 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 				display: flex;
 				border: 1px black solid;
 				flex-wrap: wrap;
-				/* flex: 1; */
+				flex: 1;
 			}
 
 			div[collapse] {
@@ -55,15 +60,32 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 				display: inline-block;
 				padding: 0.15rem;
 			}
-			.temp {
-				padding: 0.15rem;
-				display: block;
-			}
+
 			.hide {
 				display: none;
 			}
 		`;
 	}
+
+	constructor() {
+		super();
+		this.children = [];
+		this._keyCodes = { BACKSPACE: 8, DELETE: 46, ENTER: 13, SPACE: 32 };
+		this._currentlyFocusedElement = undefined;
+		this.autoremove = false;
+		this.collapsible = true;
+		this._collapsed = true;
+		this._showCollapseButton = false;
+		this.hiddenChildren = 0;
+	}
+
+	// /** @type {Array<Object>} */ children = [];
+	// /** @type {object} */ _keyCodes = { BACKSPACE: 8, DELETE: 46, ENTER: 13, SPACE: 32 };
+	// /** @type {object | undefined} */ _currentlyFocusedElement = undefined;
+	// /** @type {boolean} */ autoremove = false;
+	// /** @type {boolean} */ collapsible = false;
+	// /** @type {boolean} */ _collapsed = false;
+	// /** @type {Number} */ hiddenChildren = 0;
 
 	handleSlotchange(e) {
 		// console.log('slot change');
@@ -80,22 +102,23 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 	}
 
 	connectedCallback() {
-		this.slots = Array.from(this.childNodes).filter(a => a.localName === 'd2l-labs-multi-select-list-item');
-		this.children = this.slots.map(a => ({ element: a }));
+		const slots = Array.from(this.childNodes).filter(a => a.localName === 'd2l-labs-multi-select-list-item');
+		this.children = slots.map(a => ({ element: a }));
 		super.connectedCallback();
 		window.addEventListener('resize', this._handleResize.bind(this));
 	}
 
 	disconnectedCallback() {
-		window.removeEventListener('resize', this._handleResize);
+		window.removeEventListener('resize', this._handleResize.bind(this));
 		super.disconnectedCallback();
-	  }
+	}
 
 	_handleResize() {
 		this.checkWidths();
 	}
 
 	updated(changedProperties) {
+		console.log(this.hiddenChildren);
 		// this.slots = Array.from(this.childNodes).filter(a => a.localName === 'd2l-labs-multi-select-list-item');
 		// if (!this.children || this.slots.length !== this.children.length) {
 		// 	console.log('changed size!');
@@ -105,7 +128,9 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 	}
 
 	get mainBoxWidth() { return this.shadowRoot.getElementById('main-container').getBoundingClientRect().width; }
-	get childWidths() { return this.slots.map(a => a.getBoundingClientRect().width); }
+	get childWidths() { return this.children.map(a => a.element.getBoundingClientRect().width); }
+	get showMoreWidth() { return this.shadowRoot.getElementById('show-more-button').getBoundingClientRect().width; }
+	get showLessWidth() { return this.shadowRoot.getElementById('show-less-button').getBoundingClientRect().width; }
 
 	printWidths() {
 		const box = this.mainBoxWidth;
@@ -113,55 +138,88 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 		console.log(this.childWidths);
 	}
 
-	setWidths() {
-		this.children.forEach((item, index) => {
-			const a = this.slots[index];
-			delete(a.style.display);
-			item.width = a.getBoundingClientRect().width;
-		})
+	_setElementVisibility(element, visible) {
+		if (visible) {
+			if (element.style.display) {
+				element.style.display = '';
+			}
+		} else {
+			if (!element.style.display) {
+				element.style.display = 'none';
+			}
+		}
 	}
 
 	checkWidths() {
 		let currentWidth = 0;
-		let modified = false;
 		const maxWidth = this.mainBoxWidth - 10;
-		this.children.forEach((item, index) => {
-			const a = this.slots[index];
-			let newWidth = a.getBoundingClientRect().width;
+		let hiddenChildren = 0;
+		let showCollapse = false;
+		this.children.forEach((child, index) => {
+			let newWidth = child.element.getBoundingClientRect().width;
 			if (newWidth !== 0) {
-				item.width = newWidth;
+				child.width = newWidth;
 			}
-			newWidth = item.width;
+			newWidth = child.width;
 			currentWidth = currentWidth + newWidth;
 			if (currentWidth > maxWidth) {
-				if (!a.style.display) {
-					a.style.display = 'none';
-					modified = true;
-				}
-			} else {
-				if (a.style.display) {
-					a.style.display = '';
-					modified = true;
-				}
+				showCollapse = true;
 			}
-		})
+			const isHidden = currentWidth > maxWidth && this._collapsed;
+			console.log(isHidden);
+			if (isHidden) {
+				if (hiddenChildren === 0) {
+					console.log('hello', this.showMoreWidth);
+					console.log(this.shadowRoot.getElementById('show-more-button').getBoundingClientRect());
+					currentWidth += this.showMoreWidth;
 
-		if (modified) {
-			this.update();
-		}
+					// Check if the previous one should also be hidden
+					const tempWidth = currentWidth - newWidth;
+					if (tempWidth > maxWidth && index > 0) {
+						this._setElementVisibility(this.children[index - 1].element, false);
+					}
+				}
+				hiddenChildren++;
+			}
+			this._setElementVisibility(child.element, !isHidden);
+		});
+
+		this.hiddenChildren = hiddenChildren;
+		this._showCollapseButton = showCollapse;
 	}
 
 	childItemDeleted(e) {
-		this.slots = this.slots.filter(a => a !== e.target);
 		this.children = this.children.filter(a => a.element !== e.target);
 		e.target.deleteItem();
 		this.update();
+	}
+
+	showMoreClicked() {
+		this._collapsed = false;
+		this.checkWidths();
+	}
+
+	showLessClicked() {
+		this._collapsed = true;
+		this.checkWidths();
+	}
+
+	showMoreVisible() {
+		return !!this.hiddenChildren;
+	}
+
+	showLessVisible() {
+		return !this._collapsed && this._showCollapseButton;
 	}
 
 	render() {
 		return html`
 			<div class="list-item-container" id="main-container" @d2l-labs-multi-select-list-item-deleted=${ (e) => this.childItemDeleted(e) }>
 				<slot @slotchange=${this.handleSlotchange}></slot>
+				<div class="aux-button">
+					<d2l-labs-multi-select-list-item id="show-more-button" text="Show More" role="button" class="${ this.showMoreVisible() ? '' : 'hide' }" @click=${ () => this.showMoreClicked() }></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item id="show-less-button" text="Show Less" role="button" class="${ this.showLessVisible() ? '' : 'hide' }" @click=${ () => this.showLessClicked() }></d2l-labs-multi-select-list-item>
+				</div>
 			</div>
 		`;
 	}
