@@ -43,9 +43,9 @@ export class MultiSelectList extends RtlMixin(LocalizeStaticMixin(LitElement)) {
 			}
 			.list-item-container {
 				display: flex;
-				border: 1px black solid;
 				flex-wrap: wrap;
 				flex: 1;
+				overflow: hidden;
 			}
 
 			div[collapse] {
@@ -160,11 +160,22 @@ export class MultiSelectList extends RtlMixin(LocalizeStaticMixin(LitElement)) {
 	}
 
 	connectedCallback() {
-		const slots = Array.from(this.childNodes).filter(a => a.localName === 'd2l-labs-multi-select-list-item');
-		this.children = slots.map(a => ({ element: a }));
 		super.connectedCallback();
+		this.refreshChildren();
 		window.addEventListener('resize', this._handleResize.bind(this));
 		this.setAttribute('role', 'list');
+	}
+
+	refreshChildren() {
+		const slots = Array.from(this.childNodes).filter(a => a.localName === 'slot');
+		let items = [];
+		slots.forEach(slot => {
+			let nodes = slot.assignedNodes({ flatten: true });
+			nodes = Array.from(nodes).filter(a => a.localName === 'd2l-labs-multi-select-list-item');
+			items = [...items, ...nodes];
+		});
+		items = [...items, ...Array.from(this.childNodes).filter(a => a.localName === 'd2l-labs-multi-select-list-item')];
+		this.children = items.map(a => ({ element: a }));
 	}
 
 	disconnectedCallback() {
@@ -215,24 +226,26 @@ export class MultiSelectList extends RtlMixin(LocalizeStaticMixin(LitElement)) {
 			}
 			newWidth = child.width;
 			currentWidth = currentWidth + newWidth;
-			if (currentWidth > maxWidth) {
-				showCollapse = true;
-			}
-			const isHidden = currentWidth > maxWidth && this._collapsed;
+			const isHidden = currentWidth >= maxWidth && this._collapsed && index > 0;
 			if (isHidden) {
 				if (hiddenChildren === 0) {
 					currentWidth += this.showMoreWidth;
 
-					// Check if the previous one should also be hidden
+					// Check if the previous one should also be hidden (but don't hide all the items)
 					const tempWidth = currentWidth - newWidth;
-					if (tempWidth > maxWidth && index > 0) {
+					if (tempWidth > maxWidth && index > 1) {
 						this._setElementVisibility(this.children[index - 1].element, false);
+						hiddenChildren++;
 					}
 				}
 				hiddenChildren++;
 			}
 			this._setElementVisibility(child.element, !isHidden);
 		});
+
+		if (currentWidth > maxWidth + 10) {
+			showCollapse = true;
+		}
 
 		this.hiddenChildren = hiddenChildren;
 		this._showCollapseButton = showCollapse;
@@ -260,6 +273,19 @@ export class MultiSelectList extends RtlMixin(LocalizeStaticMixin(LitElement)) {
 		return !this._collapsed && this._showCollapseButton;
 	}
 
+	addItem(item) {
+		if (this._currentlyFocusedElement === null) {
+			this._currentlyFocusedElement = item;
+		}
+		// this.getEffectiveChildren()[0].tabIndex = 0;
+		this.dispatchEvent(new CustomEvent(
+			'd2l-labs-multi-select-list-item-added',
+			{ bubbles: true, composed: true, detail: { value: item.text } }
+		));
+		this.children.push({ element: item, width: 0 });
+		this.update();
+	}
+
 	render() {
 		return html`
 			<div class="list-item-container" id="main-container" @d2l-labs-multi-select-list-item-deleted=${ (e) => this.childItemDeleted(e) }>
@@ -273,10 +299,10 @@ export class MultiSelectList extends RtlMixin(LocalizeStaticMixin(LitElement)) {
 	}
 }
 
-customElements.define('multi-select-list-lit', MultiSelectList);
+customElements.define('d2l-labs-multi-select-list', MultiSelectList);
 
 const $_documentContainer = document.createElement('template');
-$_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
+$_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list-old">
 	<template strip-whitespace>
 		<style>
 			:host {
@@ -338,7 +364,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 	],
 	PolymerElement
 ) {
-	static get is() { return 'd2l-labs-multi-select-list'; }
+	static get is() { return 'd2l-labs-multi-select-list-old'; }
 	static get properties() {
 		return {
 			/**
