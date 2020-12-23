@@ -14,8 +14,9 @@ import 'd2l-resize-aware/resize-observer-polyfill.js';
 import './localize-behavior.js';
 import { LitElement, css, html } from 'lit-element';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin';
+import { LocalizeStaticMixin } from '@brightspace-ui/core/mixins/localize-static-mixin.js';
 
-export class MultiSelectList extends RtlMixin(LitElement) {
+export class MultiSelectList extends RtlMixin(LocalizeStaticMixin(LitElement)) {
 	static get properties() {
 		return {
 			children: { type: Array, attribute: false},
@@ -25,7 +26,8 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 			collapsible: { type: Boolean },
 			_collapsed: { type: Boolean, attribute: false, reflect: true },
 			hiddenChildren: { type: Number, reflect: true },
-			_showCollapseButton: { type: Boolean, reflect: true }
+			_showCollapseButton: { type: Boolean, reflect: true },
+			bufferedShowMoreWidth: { type: Number, reflect: true }
 		};
 	}
 
@@ -67,6 +69,71 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 		`;
 	}
 
+	static get resources() {
+		return {
+			'ar': {
+				'delete': 'حذف',
+				'hide': 'إخفاء',
+				'hiddenChildren': '+ {num} أكثر',
+			},
+			'en': {
+				'delete': 'Delete',
+				'hide': 'Hide',
+				'hiddenChildren': '+ {num} more',
+			},
+			'es': {
+				'delete': 'Eliminar',
+				'hide': 'Ocultar',
+				'hiddenChildren': '+ {num} más',
+			},
+			'fr': {
+				'delete': 'Supprimer',
+				'hide': 'Masquer',
+				'hiddenChildren': '+ {num} plus',
+			},
+			'ja': {
+				'delete': '削除',
+				'hide': '表示しない',
+				'hiddenChildren': '+ {num} 増やす',
+			},
+			'ko': {
+				'delete': '삭제',
+				'hide': '숨기기',
+				'hiddenChildren': '+ {num} 더 많이',
+			},
+			'nl': {
+				'delete': 'Verwijderen',
+				'hide': 'Verbergen',
+				'hiddenChildren': '+ {num} meer',
+			},
+			'pt': {
+				'delete': 'Excluir',
+				'hide': 'Ocultar',
+				'hiddenChildren': '+ {num} mais',
+			},
+			'sv': {
+				'delete': 'Ta bort',
+				'hide': 'Dölj',
+				'hiddenChildren': '+ {num} mer',
+			},
+			'tr': {
+				'delete': 'Sil',
+				'hide': 'Gizle',
+				'hiddenChildren': '+ {num} daha',
+			},
+			'zh': {
+				'delete': '删除',
+				'hide': '隐藏',
+				'hiddenChildren': '+ {num} 更多',
+			},
+			'zh-tw': {
+				'delete': '刪除',
+				'hide': '隱藏',
+				'hiddenChildren': '+ {num} 其他',
+			}
+		};
+	}
+
 	constructor() {
 		super();
 		this.children = [];
@@ -77,6 +144,7 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 		this._collapsed = true;
 		this._showCollapseButton = false;
 		this.hiddenChildren = 0;
+		this.bufferedShowMoreWidth = 0;
 	}
 
 	// /** @type {Array<Object>} */ children = [];
@@ -87,17 +155,7 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 	// /** @type {boolean} */ _collapsed = false;
 	// /** @type {Number} */ hiddenChildren = 0;
 
-	handleSlotchange(e) {
-		// console.log('slot change');
-		// let childNodes = e.target.assignedNodes({flatten: true});
-		// childNodes = childNodes.filter(a => a.localName === 'd2l-labs-multi-select-list-item');
-		// console.log(childNodes);
-		// this.slots = childNodes;
-		// if (!this.children || this.slots.length !== this.children.length) {
-		// 	console.log('changed size!');
-		// 	this.children = this.slots.map(a => ({ element: a }));
-		// 	this.setWidths();
-		// }
+	handleSlotchange() {
 		this.checkWidths();
 	}
 
@@ -106,6 +164,7 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 		this.children = slots.map(a => ({ element: a }));
 		super.connectedCallback();
 		window.addEventListener('resize', this._handleResize.bind(this));
+		this.setAttribute('role', 'list');
 	}
 
 	disconnectedCallback() {
@@ -117,26 +176,20 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 		this.checkWidths();
 	}
 
-	updated(changedProperties) {
-		console.log(this.hiddenChildren);
-		// this.slots = Array.from(this.childNodes).filter(a => a.localName === 'd2l-labs-multi-select-list-item');
-		// if (!this.children || this.slots.length !== this.children.length) {
-		// 	console.log('changed size!');
-		// 	this.children = this.slots.map(a => ({ element: a }));
-		// }
-		// this.printWidths();
+	updated() {
+		this.checkWidths();
 	}
 
 	get mainBoxWidth() { return this.shadowRoot.getElementById('main-container').getBoundingClientRect().width; }
 	get childWidths() { return this.children.map(a => a.element.getBoundingClientRect().width); }
-	get showMoreWidth() { return this.shadowRoot.getElementById('show-more-button').getBoundingClientRect().width; }
-	get showLessWidth() { return this.shadowRoot.getElementById('show-less-button').getBoundingClientRect().width; }
-
-	printWidths() {
-		const box = this.mainBoxWidth;
-		console.log(box);
-		console.log(this.childWidths);
+	get showMoreWidth() {
+		const value = this.shadowRoot.getElementById('show-more-button').getBoundingClientRect().width;
+		if (value > 0 && this.bufferedShowMoreWidth !== value) {
+			this.bufferedShowMoreWidth = value;
+		}
+		return this.bufferedShowMoreWidth;
 	}
+	get showLessWidth() { return this.shadowRoot.getElementById('show-less-button').getBoundingClientRect().width; }
 
 	_setElementVisibility(element, visible) {
 		if (visible) {
@@ -166,11 +219,8 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 				showCollapse = true;
 			}
 			const isHidden = currentWidth > maxWidth && this._collapsed;
-			console.log(isHidden);
 			if (isHidden) {
 				if (hiddenChildren === 0) {
-					console.log('hello', this.showMoreWidth);
-					console.log(this.shadowRoot.getElementById('show-more-button').getBoundingClientRect());
 					currentWidth += this.showMoreWidth;
 
 					// Check if the previous one should also be hidden
@@ -196,12 +246,10 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 
 	showMoreClicked() {
 		this._collapsed = false;
-		this.checkWidths();
 	}
 
 	showLessClicked() {
 		this._collapsed = true;
-		this.checkWidths();
 	}
 
 	showMoreVisible() {
@@ -217,8 +265,8 @@ export class MultiSelectList extends RtlMixin(LitElement) {
 			<div class="list-item-container" id="main-container" @d2l-labs-multi-select-list-item-deleted=${ (e) => this.childItemDeleted(e) }>
 				<slot @slotchange=${this.handleSlotchange}></slot>
 				<div class="aux-button">
-					<d2l-labs-multi-select-list-item id="show-more-button" text="Show More" role="button" class="${ this.showMoreVisible() ? '' : 'hide' }" @click=${ () => this.showMoreClicked() }></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item id="show-less-button" text="Show Less" role="button" class="${ this.showLessVisible() ? '' : 'hide' }" @click=${ () => this.showLessClicked() }></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item id="show-more-button" text="${ this.localize('hiddenChildren', 'num', this.hiddenChildren) }" role="button" class="${ this.showMoreVisible() ? '' : 'hide' }" @click=${ () => this.showMoreClicked() }></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item id="show-less-button" text="${ this.localize('hide') }" role="button" class="${ this.showLessVisible() ? '' : 'hide' }" @click=${ () => this.showLessClicked() }></d2l-labs-multi-select-list-item>
 				</div>
 			</div>
 		`;
