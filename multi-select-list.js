@@ -15,8 +15,19 @@ import './localize-behavior.js';
 import { LitElement, css, html } from 'lit-element';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin';
 import { LocalizeStaticMixin } from '@brightspace-ui/core/mixins/localize-static-mixin.js';
+import { ArrowKeysMixin } from '@brightspace-ui/core/mixins/arrow-keys-mixin';
+import { root } from '@polymer/polymer/lib/utils/path';
 
-export class MultiSelectList extends RtlMixin(LocalizeStaticMixin(LitElement)) {
+const keyCodes = Object.freeze({
+	END: 35,
+	HOME: 36,
+	LEFT: 37,
+	UP: 38,
+	RIGHT: 39,
+	DOWN: 40,
+});
+
+export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin(LitElement))) {
 	static get properties() {
 		return {
 			children: { type: Array, attribute: false},
@@ -163,6 +174,96 @@ export class MultiSelectList extends RtlMixin(LocalizeStaticMixin(LitElement)) {
 		super.connectedCallback();
 		this.refreshChildren();
 		window.addEventListener('resize', this._handleResize.bind(this));
+		this.addEventListener('keydown', this._onKeyDown.bind(this));
+		this.addEventListener('focusout', this._onFocusOut);
+	}
+
+	_onKeyDown(event) {
+		const { BACKSPACE, DELETE, ENTER, SPACE } = this._keyCodes;
+		const { keyCode } = event;
+		const rootTarget = event.composedPath()[0];
+		const visibleButtons = this.visibleButtons;
+		const itemIndex = visibleButtons.indexOf(rootTarget);
+		if ((keyCode === BACKSPACE || keyCode === DELETE) && itemIndex !== -1 && rootTarget !== this.showMoreButton && rootTarget !== this.showLessButton) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			if (keyCode === BACKSPACE) {
+				if (itemIndex === 0) {
+					this._focusNext(rootTarget);
+				} else {
+					this._focusPrevious(rootTarget);
+				}
+			} else {
+				if ((this.showLessVisible() || this.showMoreVisible()) && itemIndex === visibleButtons.length - 2) {
+					const nextElement = this.children.find(a => !a.visible);
+					this._focusElement(nextElement.element);
+				} else if (itemIndex === visibleButtons.length - 1) {
+					this._focusPrevious(rootTarget);
+				} else {
+					this._focusNext(rootTarget);
+				}
+			}
+			if (this.children.filter(a => a.visible).map(a => a.element).includes(rootTarget)) {
+				this.childItemDeleted(event);
+			}
+		} else if ((keyCode === ENTER || keyCode === SPACE) && itemIndex !== -1) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			if (rootTarget === this.showMoreButton) {
+				console.log('clicked more');
+				this.showMoreClicked();
+				this._focusElement(this.showLessButton);
+			}
+			else if (rootTarget === this.showLessButton) {
+				console.log('clicked less');
+				this.showLessClicked();
+				this._focusElement(this.showMoreButton);
+			}
+		} else {
+			this._handleArrowKeys(event);
+		}
+	}
+
+	// Unfortunately, the target of the event is the list for the show more/less buttons, so I need to override how the mixin works
+	_handleArrowKeys(e) {
+		const target = e.composedPath()[0];
+		if (this.arrowKeysDirection.indexOf('left') >= 0 && e.keyCode === keyCodes.LEFT) {
+			if (getComputedStyle(this).direction === 'rtl') {
+				this._focusNext(target);
+			} else {
+				this._focusPrevious(target);
+			}
+		} else if (this.arrowKeysDirection.indexOf('right') >= 0 && e.keyCode === keyCodes.RIGHT) {
+			if (getComputedStyle(this).direction === 'rtl') {
+				this._focusPrevious(target);
+			} else {
+				this._focusNext(target);
+			}
+		} else if (this.arrowKeysDirection.indexOf('up') >= 0 && e.keyCode === keyCodes.UP) {
+			this._focusPrevious(target);
+		} else if (this.arrowKeysDirection.indexOf('down') >= 0 && e.keyCode === keyCodes.DOWN) {
+			this._focusNext(target);
+		} else if (e.keyCode === keyCodes.HOME) {
+			this._focusFirst();
+		} else if (e.keyCode === keyCodes.END) {
+			this._focusLast();
+		} else {
+			return;
+		}
+		e.preventDefault();
+	}
+
+	_myHandleArrowKeys(e) {
+		if (e.target === this) {
+			return;
+		}
+		this._handleArrowKeys(e);
+	}
+
+	firstUpdated(changedProperties) {
+		super.firstUpdated(changedProperties);
 		this.setAttribute('role', 'list');
 	}
 
@@ -175,11 +276,13 @@ export class MultiSelectList extends RtlMixin(LocalizeStaticMixin(LitElement)) {
 			items = [...items, ...nodes];
 		});
 		items = [...items, ...Array.from(this.childNodes).filter(a => a.localName === 'd2l-labs-multi-select-list-item')];
-		this.children = items.map(a => ({ element: a }));
+		this.children = items.map(a => ({ element: a, visible: true }));
 	}
 
 	disconnectedCallback() {
 		window.removeEventListener('resize', this._handleResize.bind(this));
+		this.removeEventListener('keydown', this._onKeyDown.bind(this));
+		this.removeEventListener('focusout', this._onFocusOut);
 		super.disconnectedCallback();
 	}
 
@@ -188,21 +291,38 @@ export class MultiSelectList extends RtlMixin(LocalizeStaticMixin(LitElement)) {
 	}
 
 	updated() {
+		this.arrowKeysFocusablesProvider = () => Promise.resolve(this.visibleButtons);
 		this.checkWidths();
 	}
 
+	get visibleButtons() {
+		const items = [...this.children.filter(a => a.visible).map(a => a.element)];
+		if (this.showMoreVisible()) {
+			items.push(this.showMoreButton);
+		}
+		if (this.showLessVisible()) {
+			items.push(this.showLessButton);
+		}
+		return items;
+	}
 	get mainBoxWidth() { return this.shadowRoot.getElementById('main-container').getBoundingClientRect().width; }
 	get childWidths() { return this.children.map(a => a.element.getBoundingClientRect().width); }
 	get showMoreWidth() {
-		const value = this.shadowRoot.getElementById('show-more-button').getBoundingClientRect().width;
+		const value = this.showMoreButton.getBoundingClientRect().width;
 		if (value > 0 && this.bufferedShowMoreWidth !== value) {
 			this.bufferedShowMoreWidth = value;
 		}
 		return this.bufferedShowMoreWidth;
 	}
-	get showLessWidth() { return this.shadowRoot.getElementById('show-less-button').getBoundingClientRect().width; }
 
-	_setElementVisibility(element, visible) {
+	get showMoreButton() { return this.shadowRoot.getElementById('show-more-button'); }
+	get showLessButton() { return this.shadowRoot.getElementById('show-less-button'); }
+
+	_setElementVisibility(child, visible) {
+		const element = child.element;
+		if (child.visible !== visible) {
+			child.visible = visible;
+		}
 		if (visible) {
 			if (element.style.display) {
 				element.style.display = '';
@@ -234,13 +354,13 @@ export class MultiSelectList extends RtlMixin(LocalizeStaticMixin(LitElement)) {
 					// Check if the previous one should also be hidden (but don't hide all the items)
 					const tempWidth = currentWidth - newWidth;
 					if (tempWidth > maxWidth && index > 1) {
-						this._setElementVisibility(this.children[index - 1].element, false);
+						this._setElementVisibility(this.children[index - 1], false);
 						hiddenChildren++;
 					}
 				}
 				hiddenChildren++;
 			}
-			this._setElementVisibility(child.element, !isHidden);
+			this._setElementVisibility(child, !isHidden);
 		});
 
 		if (currentWidth > maxWidth + 10) {
@@ -271,6 +391,23 @@ export class MultiSelectList extends RtlMixin(LocalizeStaticMixin(LitElement)) {
 
 	showLessVisible() {
 		return !this._collapsed && this._showCollapseButton;
+	}
+
+	_focusElement(item) {
+		afterNextRender(this, () => {
+			item.focus();
+		});
+	}
+
+	_focusLastVisibleElement() {
+		for (let i = 0; i < this.children.length; i++) {
+			if (!this.children[i].element.style.display) {
+				afterNextRender(this, () => {
+					this.children[i - 1].element.focus();
+				});
+				break;
+			}
+		}
 	}
 
 	addItem(item) {
