@@ -16,7 +16,7 @@ import { LitElement, css, html } from 'lit-element';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin';
 import { LocalizeStaticMixin } from '@brightspace-ui/core/mixins/localize-static-mixin.js';
 import { ArrowKeysMixin } from '@brightspace-ui/core/mixins/arrow-keys-mixin';
-import { root } from '@polymer/polymer/lib/utils/path';
+import { announce } from '@brightspace-ui/core/helpers/announce.js';
 
 const keyCodes = Object.freeze({
 	END: 35,
@@ -89,8 +89,11 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 			},
 			'en': {
 				'delete': 'Delete',
+				'removedItem': 'Removed Item {item}',
 				'hide': 'Hide',
 				'hiddenChildren': '+ {num} more',
+				'expanded': 'Expanded List',
+				'collapsed': 'Collapsed List'
 			},
 			'es': {
 				'delete': 'Eliminar',
@@ -212,12 +215,10 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 			event.stopPropagation();
 
 			if (rootTarget === this.showMoreButton) {
-				console.log('clicked more');
 				this.showMoreClicked();
 				this._focusElement(this.showLessButton);
 			}
 			else if (rootTarget === this.showLessButton) {
-				console.log('clicked less');
 				this.showLessClicked();
 				this._focusElement(this.showMoreButton);
 			}
@@ -235,24 +236,29 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 			} else {
 				this._focusPrevious(target);
 			}
+			e.preventDefault();
 		} else if (this.arrowKeysDirection.indexOf('right') >= 0 && e.keyCode === keyCodes.RIGHT) {
 			if (getComputedStyle(this).direction === 'rtl') {
 				this._focusPrevious(target);
 			} else {
 				this._focusNext(target);
 			}
+			e.preventDefault();
 		} else if (this.arrowKeysDirection.indexOf('up') >= 0 && e.keyCode === keyCodes.UP) {
 			this._focusPrevious(target);
+			e.preventDefault();
 		} else if (this.arrowKeysDirection.indexOf('down') >= 0 && e.keyCode === keyCodes.DOWN) {
 			this._focusNext(target);
+			e.preventDefault();
 		} else if (e.keyCode === keyCodes.HOME) {
 			this._focusFirst();
+			e.preventDefault();
 		} else if (e.keyCode === keyCodes.END) {
 			this._focusLast();
+			e.preventDefault();
 		} else {
 			return;
 		}
-		e.preventDefault();
 	}
 
 	_myHandleArrowKeys(e) {
@@ -328,6 +334,9 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 				element.style.display = '';
 			}
 		} else {
+			if (child.element === document.activeElement) {
+				this._focusLastVisibleChild();
+			}
 			if (!element.style.display) {
 				element.style.display = 'none';
 			}
@@ -374,15 +383,18 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 	childItemDeleted(e) {
 		this.children = this.children.filter(a => a.element !== e.target);
 		e.target.deleteItem();
+		announce(this.localize('removedItem', 'item', e.target.text));
 		this.update();
 	}
 
 	showMoreClicked() {
 		this._collapsed = false;
+		announce(this.localize('expanded'));
 	}
 
 	showLessClicked() {
 		this._collapsed = true;
+		announce(this.localize('collapsed'));
 	}
 
 	showMoreVisible() {
@@ -399,12 +411,10 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 		});
 	}
 
-	_focusLastVisibleElement() {
-		for (let i = 0; i < this.children.length; i++) {
-			if (!this.children[i].element.style.display) {
-				afterNextRender(this, () => {
-					this.children[i - 1].element.focus();
-				});
+	_focusLastVisibleChild() {
+		for (let i = this.children.length - 1; i >= 0; i--) {
+			if (this.children[i].visible) {
+				this._focusElement(this.children[i].element);
 				break;
 			}
 		}
@@ -414,7 +424,6 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 		if (this._currentlyFocusedElement === null) {
 			this._currentlyFocusedElement = item;
 		}
-		// this.getEffectiveChildren()[0].tabIndex = 0;
 		this.dispatchEvent(new CustomEvent(
 			'd2l-labs-multi-select-list-item-added',
 			{ bubbles: true, composed: true, detail: { value: item.text } }
@@ -424,8 +433,9 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 	}
 
 	render() {
+		this.visibleButtons[0].tabIndex = 0;
 		return html`
-			<div class="list-item-container" id="main-container" @d2l-labs-multi-select-list-item-deleted=${ (e) => this.childItemDeleted(e) }>
+			<div class="list-item-container" id="main-container" @d2l-labs-multi-select-list-item-deleted=${ (e) => this.childItemDeleted(e)}>
 				<slot @slotchange=${this.handleSlotchange}></slot>
 				<div class="aux-button">
 					<d2l-labs-multi-select-list-item id="show-more-button" text="${ this.localize('hiddenChildren', 'num', this.hiddenChildren) }" role="button" class="${ this.showMoreVisible() ? '' : 'hide' }" @click=${ () => this.showMoreClicked() }></d2l-labs-multi-select-list-item>
