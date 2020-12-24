@@ -132,7 +132,7 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 		this.children = [];
 		this._currentlyFocusedElement = undefined;
 		this.autoremove = false;
-		this.collapsable = true;
+		this.collapsable = false;
 		this._collapsed = true;
 		this._showCollapseButton = false;
 		this.hiddenChildren = 0;
