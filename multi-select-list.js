@@ -190,9 +190,7 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 	}
 
 	handleSlotChange() {
-		console.log('slot change');
 		this.initializeChildren();
-		console.log(this.children);
 		this.checkWidths();
 	}
 
