@@ -13,9 +13,9 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 			children: { type: Array, attribute: false},
 			_currentlyFocusedElement: { type: Object, attribute: false },
 			autoremove: { type: Boolean },
-			collapsible: { type: Boolean },
+			collapsable: { type: Boolean },
 			_collapsed: { type: Boolean, attribute: false, reflect: true },
-			hiddenChildren: { type: Number, reflect: true },
+			hiddenChildren: { type: Number, attribute: false, reflect: true },
 			_showCollapseButton: { type: Boolean, reflect: true },
 			bufferedShowMoreWidth: { type: Number, reflect: true }
 		};
@@ -132,7 +132,7 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 		this.children = [];
 		this._currentlyFocusedElement = undefined;
 		this.autoremove = false;
-		this.collapsible = true;
+		this.collapsable = true;
 		this._collapsed = true;
 		this._showCollapseButton = false;
 		this.hiddenChildren = 0;
@@ -164,10 +164,6 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 	get showMoreVisible() { return !!this.hiddenChildren; }
 	get showLessVisible() { return !this._collapsed && this._showCollapseButton; }
 
-	handleSlotchange() {
-		this.checkWidths();
-	}
-
 	connectedCallback() {
 		super.connectedCallback();
 		this.initializeChildren();
@@ -190,6 +186,13 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 
 	updated() {
 		this.arrowKeysFocusablesProvider = () => Promise.resolve(this.visibleButtons);
+		this.checkWidths();
+	}
+
+	handleSlotChange() {
+		console.log('slot change');
+		this.initializeChildren();
+		console.log(this.children);
 		this.checkWidths();
 	}
 
@@ -229,6 +232,9 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 	}
 
 	checkWidths() {
+		if (!this.collapsable) {
+			return;
+		}
 		let currentWidth = 0;
 		const maxWidth = this.mainBoxWidth - 10;
 		let hiddenChildren = 0;
@@ -265,13 +271,6 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 		this._showCollapseButton = showCollapse;
 	}
 
-	childItemDeleted(e) {
-		this.children = this.children.filter(a => a.element !== e.target);
-		e.target.deleteItem();
-		announce(this.localize('removedItem', 'item', e.target.text));
-		this.update();
-	}
-
 	showMoreClicked() {
 		this._collapsed = false;
 		announce(this.localize('expanded'));
@@ -295,6 +294,13 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 				break;
 			}
 		}
+	}
+
+	childItemDeleted(e) {
+		// this.children = this.children.filter(a => a.element !== e.target);
+		e.target.deleteItem();
+		announce(this.localize('removedItem', 'item', e.target.text));
+		this.update();
 	}
 
 	addItem(item) {
@@ -398,7 +404,7 @@ export class MultiSelectList extends RtlMixin(ArrowKeysMixin(LocalizeStaticMixin
 		this.visibleButtons[0].tabIndex = 0;
 		return html`
 			<div class="list-item-container" id="main-container" @d2l-labs-multi-select-list-item-deleted=${ (e) => this.childItemDeleted(e)}>
-				<slot @slotchange=${this.handleSlotchange}></slot>
+				<slot @slotchange=${this.handleSlotChange}></slot>
 				<div class="aux-button">
 					<d2l-labs-multi-select-list-item id="show-more-button" text="${ this.localize('hiddenChildren', 'num', this.hiddenChildren) }" role="button" class="${ this.showMoreVisible ? '' : 'hide' }" @click=${ () => this.showMoreClicked() }></d2l-labs-multi-select-list-item>
 					<d2l-labs-multi-select-list-item id="show-less-button" text="${ this.localize('hide') }" role="button" class="${ this.showLessVisible ? '' : 'hide' }" @click=${ () => this.showLessClicked() }></d2l-labs-multi-select-list-item>
