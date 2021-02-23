@@ -60,7 +60,6 @@
 						let item = document.getElementById('item0');
 						expect(item).to.not.be.null;
 
-						console.info(item);
 						const itemShadowRoot = item.shadowRoot;
 						const deleteIcon = itemShadowRoot.querySelector('d2l-icon');
 						MockInteractions.tap(deleteIcon);

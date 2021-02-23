@@ -243,8 +243,12 @@ class D2LMultiSelectItem extends mixinBehaviors(
 		this.tabIndex = -1;
 	}
 
-	_hasTooltip(text, shortText, maxChars) {
-		return shortText || text.length > maxChars;
+	deleteItem() {
+		this.parentNode.removeChild(this);
+	}
+
+	_getScreenReaderText(text, shortText) {
+		return shortText || text;
 	}
 
 	_getVisibleText(text, shortText, maxChars) {
@@ -259,8 +263,8 @@ class D2LMultiSelectItem extends mixinBehaviors(
 		return text.substring(0, maxChars) + '...';
 	}
 
-	_getScreenReaderText(text, shortText) {
-		return shortText || text;
+	_hasTooltip(text, shortText, maxChars) {
+		return shortText || text.length > maxChars;
 	}
 
 	_onClick() {
@@ -274,10 +278,6 @@ class D2LMultiSelectItem extends mixinBehaviors(
 			'd2l-labs-multi-select-list-item-deleted',
 			{ bubbles: true, composed: true, detail: { value: this.text, handleFocus } }
 		));
-	}
-
-	deleteItem() {
-		this.parentNode.removeChild(this);
 	}
 }
 customElements.define(D2LMultiSelectItem.is, D2LMultiSelectItem);
