@@ -48,17 +48,17 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				display: none;
 			}
 		</style>
-			<div class="list-item-container" collapse$=[[_collapsed]]>
-				<slot id="item-slot" on-slotchange="_onSlotChange"></slot>
-				<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
-					<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
-					<slot name="aux-button"></slot>
-				</div>
+		<div class="list-item-container" collapse$=[[_collapsed]]>
+			<slot id="item-slot" on-slotchange="_onSlotChange"></slot>
+			<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
+				<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
+				<slot name="aux-button"></slot>
+			</div>
 
-			</div>
-			<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
-				<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false"></d2l-labs-multi-select-list-item>
-			</div>
+		</div>
+		<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
+			<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false"></d2l-labs-multi-select-list-item>
+		</div>
 	</template>
 </dom-module>`;
 
