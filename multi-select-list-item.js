@@ -145,7 +145,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list-item
 				<div class="d2l-labs-multi-select-list-item-text" aria-hidden="true">[[_getVisibleText(text,shortText,maxChars)]]</div>
 				<d2l-offscreen>[[_getScreenReaderText(text,shortText)]]</d2l-offscreen>
 			</div>
-			<d2l-icon class="d2l-labs-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" hidden="[[!deletable]]" on-click="_onDeleteItem"></d2l-icon>
+			<d2l-icon aria-hidden="true" class="d2l-labs-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" hidden="[[!deletable]]" on-click="_onDeleteItem"></d2l-icon>
 		</div>
 		<template is="dom-if" if="[[_hasTooltip(text,shortText,maxChars)]]">
 			<d2l-tooltip position="[[tooltipPosition]]">[[text]]</d2l-tooltip>
