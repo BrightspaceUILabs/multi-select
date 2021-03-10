@@ -28,6 +28,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 			.list-item-container {
 				display: flex;
 				flex-wrap: wrap;
+				align-items: center;
 				flex: 1;
 			}
 
