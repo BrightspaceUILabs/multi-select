@@ -22,9 +22,11 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				width: 100%;
 				flex-direction: column;
 			}
+
 			:host([_collapsed]) {
 				flex-direction: row;
 			}
+
 			.list-item-container {
 				display: flex;
 				flex-wrap: wrap;
