@@ -48,7 +48,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				display: none;
 			}
 		</style>
-		<div class="list-item-container" aria-label$="[[description]]" role="list" collapse$=[[_collapsed]]>
+		<div class="list-item-container" role="list" aria-label$="[[description]]" collapse$=[[_collapsed]]>
 			<slot on-slotchange="_onSlotChange"></slot>
 			<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
 				<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
