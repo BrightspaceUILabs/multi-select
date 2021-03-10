@@ -48,13 +48,12 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list">
 				display: none;
 			}
 		</style>
-		<div class="list-item-container" collapse$=[[_collapsed]]>
-			<slot id="item-slot" on-slotchange="_onSlotChange"></slot>
+		<div class="list-item-container" role="list" collapse$=[[_collapsed]]>
+			<slot role="presentation" on-slotchange="_onSlotChange"></slot>
 			<div class$="[[_hideVisibility(collapsable, _collapsed)]]">
 				<d2l-button-subtle text="[[localize('hide')]]" role="button" class="hide-button" on-click="_expandCollapse" aria-expanded="true"></d2l-button-subtle>
 				<slot name="aux-button"></slot>
 			</div>
-
 		</div>
 		<div class$="[[_showMoreVisibility(collapsable, _collapsed, hiddenChildren)]]">
 			<d2l-labs-multi-select-list-item text="[[localize('hiddenChildren', 'num', hiddenChildren)]]" role="button" class="show-button" on-click="_expandCollapse" on-keyup="_onShowButtonKeyUp" on-keydown="_onShowButtonKeyDown" aria-expanded="false"></d2l-labs-multi-select-list-item>
@@ -168,7 +167,7 @@ class D2LMultiSelectList extends mixinBehaviors(
 		this.observer.observe(this);
 		this._nodeObserver = new FlattenedNodesObserver(this, this._debounceChildren);
 
-		this.setAttribute('role', 'list');
+		this.setAttribute('role', 'application');
 
 		afterNextRender(this, function() {
 			this.addEventListener('d2l-labs-multi-select-list-item-deleted', this._onListItemDeleted);
