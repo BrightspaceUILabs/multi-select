@@ -164,7 +164,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		return html`
 		<div class="list-item-container" role="list" aria-label="${this.description}" ?collapse=${this._collapsed}>
 			<slot @slotchange="${this._onSlotChange}"></slot>
-			<div class="${this._hideVisibility(this.collapsable, this._collapsed)}">
+			<div class="${this._hideVisibility(this.collapsable, this._collapsed, this.hiddenChildren)}">
 				<d2l-button-subtle text="${this.localize('hide')}" role="button" class="hide-button" @click="${this._expandCollapse}" aria-expanded="true"></d2l-button-subtle>
 				<slot name="aux-button"></slot>
 			</div>
@@ -209,7 +209,8 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		const vChildren = children.slice(0, children.length - hiddenChildren).concat(auxButton).concat(hideButton);
 		return vChildren;
 	}
-/**
+
+	/**
 	 * _handleFocusChangeOnResize()
 	 *
 	 * Handle element focusing when the parent is resized
@@ -233,8 +234,8 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		}
 	}
 
-	_hideVisibility(collapsable, _collapsed) {
-		return collapsable && !_collapsed ? '' : 'hide';
+	_hideVisibility(collapsable, _collapsed, hiddenChildren) {
+		return collapsable && !_collapsed && hiddenChildren > 0 ? '' : 'hide';
 	}
 
 	_onKeyDown(event) {
