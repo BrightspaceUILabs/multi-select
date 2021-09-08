@@ -1,9 +1,8 @@
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import '@brightspace-ui/core/components/colors/colors.js';
-import 'd2l-typography/d2l-typography-shared-styles.js';
 import '@brightspace-ui/core/components/icons/icon.js';
 import '@brightspace-ui/core/components/offscreen/offscreen.js';
-import 'd2l-tooltip/d2l-tooltip.js';
+import '@brightspace-ui/core/components/tooltip/tooltip.js';
 import { Localizer } from './localization.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
@@ -49,6 +48,11 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 				value: false
 			},
 
+			role: {
+				type: String,
+				reflect: true
+			},
+
 			/**
 			* Whether to show delete button on hover or focus only.
 			*/
@@ -61,9 +65,17 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			/**
 			* The tooltip position
 			*/
+			tabIndex: {
+				type: String,
+				reflect: true
+			},
+
+			/**
+			* The tooltip position
+			*/
 			tooltipPosition: {
 				type: String,
-				attribute: "tooltip-position"
+				attribute: 'tooltip-position'
 			},
 
 			/**
@@ -77,14 +89,6 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 				reflectToAttribute: true
 			}
 		};
-	}
-
-	constructor() {
-		super();
-		this.setAttribute("tabIndex", "0");
-		this.setAttribute("role", "listItem");
-		this.maxChars = 40;
-		this.tooltipPosition = 'top';
 	}
 
 	static get styles() {
@@ -212,6 +216,14 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			z-index: 0;
 		}
 		`];
+	}
+
+	constructor() {
+		super();
+		this.tabIndex = 0;
+		this.role = 'listItem';
+		this.maxChars = 40;
+		this.tooltipPosition = 'top';
 	}
 
 	deleteItem() {

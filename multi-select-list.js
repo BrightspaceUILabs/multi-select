@@ -8,10 +8,7 @@ import { Localizer } from './localization.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import '@brightspace-ui/core/components/button/button-subtle.js';
 
-import 'd2l-polymer-behaviors/d2l-focusable-arrowkeys-behavior.js';
-import 'd2l-resize-aware/resize-observer-polyfill.js';
-
-const keyCodes = { BACKSPACE: 8, DELETE: 46, ENTER: 13, SPACE: 32 }
+const keyCodes = { BACKSPACE: 8, TAB: 9, DELETE: 46, ENTER: 13, SPACE: 32, 	LEFT: 37, RIGHT: 39, UP: 38, DOWN: 40 };
 
 class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 	static get properties() {
@@ -108,21 +105,20 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		`;
 	}
 
-	addItem(item) {
-		if (this._currentlyFocusedElement === null) {
-			this._currentlyFocusedElement = item;
-		}
-		this._children[0].tabIndex = 0;
-		this.dispatchEvent(new CustomEvent(
-			'd2l-labs-multi-select-list-item-added',
-			{ bubbles: true, composed: true, detail: { value: item.text } }
-		));
-	}
-
 	constructor() {
 		super();
 		this._debounceChildren = this._debounceChildren.bind(this);
 		this._children = [];
+	}
+
+	addItem(item) {
+		if (this._currentlyFocusedElement === null) {
+			this._currentlyFocusedElement = item;
+		}
+		this.dispatchEvent(new CustomEvent(
+			'd2l-labs-multi-select-list-item-added',
+			{ bubbles: true, composed: true, detail: { value: item.text } }
+		));
 	}
 
 	connectedCallback() {
@@ -195,10 +191,16 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 			await this.updateComplete;
 			const children = this._getVisibleEffectiveChildren();
 
-			if(children.length > 0) {
-				children[children.length - 1].focus();
+			if (children.length > 0) {
+				this._focusVisibleChildElement(children.length - 1);
 			}
 		}
+	}
+
+	_focusVisibleChildElement(index) {
+		const children = this._getVisibleEffectiveChildren();
+		this._currentlyFocusedElement = index;
+		children[index].focus();
 	}
 
 	_getVisibleEffectiveChildren() {
@@ -239,27 +241,58 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	_onKeyDown(event) {
-		const { BACKSPACE, DELETE } = keyCodes;
-		const { keyCode } = event;
 		const rootTarget = event.composedPath()[0];
 		const children = this._getVisibleEffectiveChildren();
 		const itemIndex = children.indexOf(rootTarget);
-		if ((keyCode === BACKSPACE || keyCode === DELETE) && itemIndex !== -1) {
-			event.preventDefault();
-			event.stopPropagation();
 
-			if (keyCode === BACKSPACE) {
-				itemIndex === 0
-					? children[itemIndex + 1].focus()
-					: children[itemIndex - 1].focus()
-			} else {
-				if(children.length > 1) {
-					itemIndex === this._getVisibleEffectiveChildren().length - 1
-					? children[itemIndex - 1].focus()
-					: children[itemIndex + 1].focus()
-				}
+		if (itemIndex !== -1) {
+			switch (event.keyCode) {
+				case keyCodes.BACKSPACE:
+					event.preventDefault();
+					event.stopPropagation();
+					itemIndex === 0 ? this._focusVisibleChildElement(itemIndex + 1) : this._focusVisibleChildElement(itemIndex - 1);
+					rootTarget._onDeleteItem();
+					break;
+				case keyCodes.DELETE:
+					event.preventDefault();
+					event.stopPropagation();
+					if (children.length > 1) {
+						itemIndex === children.length - 1
+							? this._focusVisibleChildElement(itemIndex - 1)
+							: this._focusVisibleChildElement(itemIndex + 1);
+					}
+					rootTarget._onDeleteItem();
+					break;
+				case keyCodes.LEFT:
+				case keyCodes.UP:
+					if (itemIndex > 0) {
+						this._focusVisibleChildElement(itemIndex - 1);
+						event.preventDefault();
+						event.stopPropagation();
+					}
+					break;
+
+				case keyCodes.RIGHT:
+				case keyCodes.DOWN:
+					if (itemIndex < children.length - 1) {
+						this._focusVisibleChildElement(itemIndex + 1);
+						event.preventDefault();
+						event.stopPropagation();
+					}
+					break;
+				case keyCodes.TAB:
+					if (event.shiftKey && this._collapsed && itemIndex === children.length - 1) {
+						this._focusVisibleChildElement(itemIndex - 1);
+						event.preventDefault();
+						event.stopPropagation();
+					}
+					else if (!event.shiftKey && this._collapsed && itemIndex === children.length - 2) {
+						this._focusVisibleChildElement(itemIndex + 1);
+						event.preventDefault();
+						event.stopPropagation();
+					}
+					break;
 			}
-			rootTarget._onDeleteItem();
 		}
 	}
 
@@ -270,10 +303,10 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 			const children = this._getVisibleEffectiveChildren();
 			const itemIndex = children.indexOf(rootTarget);
 
-			if(children.length > 1) {
+			if (children.length > 1) {
 				itemIndex === this._getVisibleEffectiveChildren().length - 1
-				? children[itemIndex - 1].focus()
-				: children[itemIndex + 1].focus();
+					? this._focusVisibleChildElement(itemIndex - 1)
+					: this._focusVisibleChildElement(itemIndex + 1);
 			}
 		}
 		if (this.autoremove) {
@@ -326,15 +359,8 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		await this.updateComplete;
 		const listItems = this._children;
 
-		// Set tabindex to allow component to be focusable, and set role on list items
 		if (listItems.length) {
-			listItems[0].tabIndex = 0;
-
 			this._currentlyFocusedElement = listItems[0];
-
-			listItems.forEach(function(listItem) {
-				listItem.setAttribute('role', 'listitem');
-			});
 		}
 	}
 
@@ -368,6 +394,3 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 	}
 }
 customElements.define('d2l-labs-multi-select-list', MultiSelectList);
-
-
-
