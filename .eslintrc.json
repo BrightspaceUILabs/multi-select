@@ -1,6 +1,13 @@
 {
-  "extends": "brightspace/polymer-3-config",
-  "env": {
-		"es6": true
+  "extends": "brightspace/lit-config",
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false
+  },
+  "globals": {
+    "Prism": false
+  },
+  "rules": {
+    "object-curly-spacing": "off"
   }
 }
