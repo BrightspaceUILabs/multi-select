@@ -16,33 +16,37 @@
     "multi-select-list.js"
   ],
   "scripts": {
-    "lint": "npm run lint:eslint && npm run lint:lit && polymer lint",
+    "lint": "npm run lint:eslint && npm run lint:lit && npm run lint:style",
     "lint:eslint": "eslint . --ext .js,.html",
-    "lint:lit": "lit-analyzer  \"{components,demo,features,test}/**/*.js\" --strict --rules.no-unknown-tag-name off --rules.no-incompatible-type-binding off --rules.no-unknown-attribute off --rules.no-unknown-property off",
+    "lint:lit": "lit-analyzer  \"{demo,test}/**/*.js\" --strict --rules.no-unknown-tag-name off --rules.no-incompatible-type-binding off --rules.no-unknown-attribute off --rules.no-unknown-property off",
     "lint:style": "stylelint \"**/*.js\"",
     "start": "es-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test:polymer:local": "polymer test --skip-plugin sauce",
     "test:polymer:sauce": "polymer test --skip-plugin local",
-    "test": "npm run lint && npm run test:polymer:local",
-    "serve": "polymer serve"
+    "test": "npm run lint && npm run test:headless",
+    "test:headless": "karma start",
+    "test:sauce": "karma start karma.sauce.conf.js"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
   "version": "4.1.6",
   "devDependencies": {
+    "@brightspace-ui/stylelint-config": "^0.0.3",
     "@babel/core": "^7",
     "@babel/eslint-parser": "^7",
-    "@polymer/iron-test-helpers": "^3",
+    "@open-wc/testing": "^2.5.33",
+    "@open-wc/testing-karma": "^3",
     "@webcomponents/webcomponentsjs": "^2",
     "eslint": "^7",
     "eslint-config-brightspace": "^0.13",
     "eslint-plugin-html": "^6",
     "eslint-plugin-lit": "1.4.1",
     "eslint-plugin-sort-class-members": "^1",
-    "@open-wc/testing": "^2.5.33",
-    "@open-wc/testing-karma": "^3",
+    "karma-sauce-launcher": "^4",
+    "lit-analyzer": "^1",
     "polymer-cli": "^1",
-    "sinon": "^9.2.1"
+    "sinon": "^9.2.1",
+    "stylelint": "^13"
   },
   "dependencies": {
     "@brightspace-ui/core": "^1",
