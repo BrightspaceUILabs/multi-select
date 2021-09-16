@@ -103,7 +103,7 @@
 				</template>
 			</d2l-demo-snippet>
 			<script>
-				var runAfterLoadeded = function() {
+				const runAfterLoadeded = function() {
 					const slottedDemo = document.getElementById('slotted-input-demo');
 					const button = document.getElementById('slotted-input-demo-button');
 					const input = document.getElementById('slotted-input-demo-input');
@@ -113,14 +113,14 @@
 						return;
 					}
 
-					input.addEventListener('keydown', function(event) {
+					input.addEventListener('keydown', (event) => {
 						if (event.keyCode === 13 && input.value) {
 							slottedDemo.addItem(input.value);
 							input.value = '';
 						}
 					});
 
-					button.addEventListener('click', function() {
+					button.addEventListener('click', () => {
 						if (input.value) {
 							slottedDemo.addItem(input.value);
 							input.value = '';

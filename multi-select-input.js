@@ -1,5 +1,5 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import './multi-select-list.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 const $_documentContainer = document.createElement('template');
 $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-input">
@@ -27,8 +27,6 @@ document.head.appendChild($_documentContainer.content);
  * @demo demo/index.hmtl
  */
 class D2LMultiSelectInput extends PolymerElement {
-	static get is() { return 'd2l-labs-multi-select-input'; }
-
 	static get properties() {
 		return {
 			/**
@@ -41,10 +39,7 @@ class D2LMultiSelectInput extends PolymerElement {
 			}
 		};
 	}
-
-	constructor() {
-		super();
-	}
+	static get is() { return 'd2l-labs-multi-select-input'; }
 
 	addItem(text, ctx = this) {
 		const item = document.createElement('d2l-labs-multi-select-list-item');

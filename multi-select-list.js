@@ -1,12 +1,12 @@
+import '@brightspace-ui/core/components/button/button-subtle.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { microTask } from '@polymer/polymer/lib/utils/async.js';
+import { getComposedChildren, isComposedAncestor } from '@brightspace-ui/core/helpers/dom';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { getComposedChildren, isComposedAncestor } from '@brightspace-ui/core/helpers/dom';
 import { getComposedActiveElement } from '@brightspace-ui/core/helpers/focus';
 import { Localizer } from './localization.js';
+import { microTask } from '@polymer/polymer/lib/utils/async.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
-import '@brightspace-ui/core/components/button/button-subtle.js';
 
 const keyCodes = { BACKSPACE: 8, TAB: 9, DELETE: 46, ENTER: 13, SPACE: 32, 	LEFT: 37, RIGHT: 39, UP: 38, DOWN: 40 };
 
@@ -71,19 +71,19 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		return css`
 			:host {
 				display: flex;
-				width: 100%;
 				flex-direction: column;
+				width: 100%;
 			}
 
 			:host([_collapsed]) {
 				flex-direction: row;
 			}
 
-			.list-item-container {
-				display: flex;
-				flex-wrap: wrap;
+			.d2l-list-item-container {
 				align-items: center;
+				display: flex;
 				flex: 1;
+				flex-wrap: wrap;
 			}
 
 			div[collapse] {
@@ -91,15 +91,15 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 				overflow: hidden;
 			}
 
-			.list-item-container > ::slotted(d2l-labs-multi-select-list-item) {
-				padding: 0.15rem;
+			.d2l-list-item-container > ::slotted(d2l-labs-multi-select-list-item) {
 				display: block;
+				padding: 0.15rem;
 			}
-			.aux-button {
+			.d2l-aux-button {
 				display: inline-block;
 				padding: 0.15rem;
 			}
-			.hide {
+			.d2l-hide {
 				display: none;
 			}
 		`;
@@ -109,16 +109,6 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		super();
 		this._debounceChildren = this._debounceChildren.bind(this);
 		this._children = [];
-	}
-
-	addItem(item) {
-		if (this._currentlyFocusedElement === null) {
-			this._currentlyFocusedElement = item;
-		}
-		this.dispatchEvent(new CustomEvent(
-			'd2l-labs-multi-select-list-item-added',
-			{ bubbles: true, composed: true, detail: { value: item.text } }
-		));
 	}
 
 	connectedCallback() {
@@ -158,17 +148,27 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 
 	render() {
 		return html`
-		<div class="list-item-container" role="list" aria-label="${this.description}" ?collapse=${this._collapsed}>
+		<div class="d2l-list-item-container" role="list" aria-label="${this.description}" ?collapse=${this._collapsed}>
 			<slot @slotchange="${this._onSlotChange}"></slot>
 			<div class="${this._hideVisibility(this.collapsable, this._collapsed, this.hiddenChildren)}">
-				<d2l-button-subtle text="${this.localize('hide')}" role="button" class="hide-button" @click="${this._expandCollapse}" aria-expanded="true"></d2l-button-subtle>
+				<d2l-button-subtle text="${this.localize('hide')}" role="button" class="d2l-hide-button" @click="${this._expandCollapse}" aria-expanded="true"></d2l-button-subtle>
 				<slot name="aux-button"></slot>
 			</div>
 		</div>
 		<div class="${this._showMoreVisibility(this.collapsable, this._collapsed, this.hiddenChildren)}">
-			<d2l-labs-multi-select-list-item text="${this.localize('hiddenChildren', 'num', this.hiddenChildren)}" role="button" class="show-button" @click="${this._expandCollapse}" @keyup="${this._onShowButtonKeyUp}" @keydown="${this._onShowButtonKeyDown}" aria-expanded="false"></d2l-labs-multi-select-list-item>
+			<d2l-labs-multi-select-list-item text="${this.localize('hiddenChildren', 'num', this.hiddenChildren)}" role="button" class="d2l-show-button" @click="${this._expandCollapse}" @keyup="${this._onShowButtonKeyUp}" @keydown="${this._onShowButtonKeyDown}" aria-expanded="false"></d2l-labs-multi-select-list-item>
 		</div>
 		`;
+	}
+
+	addItem(item) {
+		if (this._currentlyFocusedElement === null) {
+			this._currentlyFocusedElement = item;
+		}
+		this.dispatchEvent(new CustomEvent(
+			'd2l-labs-multi-select-list-item-added',
+			{ bubbles: true, composed: true, detail: { value: item.text } }
+		));
 	}
 
 	_debounceChildren() {
@@ -205,8 +205,8 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 
 	_getVisibleEffectiveChildren() {
 		const children = this._children;
-		const auxButton = (this.collapsable && getComposedChildren(this.shadowRoot.querySelector('.aux-button'))) || [];
-		const hideButton = (this.collapsable && !this._collapsed && [this.shadowRoot.querySelector('.hide-button')]) || [];
+		const auxButton = (this.collapsable && getComposedChildren(this.shadowRoot.querySelector('.d2l-aux-button'))) || [];
+		const hideButton = (this.collapsable && !this._collapsed && [this.shadowRoot.querySelector('.d2l-hide-button')]) || [];
 		const hiddenChildren = this._collapsed ? this.hiddenChildren : 0;
 		const vChildren = children.slice(0, children.length - hiddenChildren).concat(auxButton).concat(hideButton);
 		return vChildren;
@@ -237,7 +237,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	_hideVisibility(collapsable, _collapsed, hiddenChildren) {
-		return collapsable && !_collapsed && hiddenChildren > 0 ? '' : 'hide';
+		return collapsable && !_collapsed && hiddenChildren > 0 ? '' : 'd2l-hide';
 	}
 
 	_onKeyDown(event) {
@@ -250,7 +250,9 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 				case keyCodes.BACKSPACE:
 					event.preventDefault();
 					event.stopPropagation();
-					itemIndex === 0 ? this._focusVisibleChildElement(itemIndex + 1) : this._focusVisibleChildElement(itemIndex - 1);
+					if (children.length > 1) {
+						itemIndex === 0 ? this._focusVisibleChildElement(itemIndex + 1) : this._focusVisibleChildElement(itemIndex - 1);
+					}
 					rootTarget._onDeleteItem();
 					break;
 				case keyCodes.DELETE:
@@ -314,30 +316,6 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		}
 	}
 
-	_onShowButtonKeyDown(event) {
-		const { ENTER, SPACE } = keyCodes;
-		const { keyCode } = event;
-
-		if (keyCode === ENTER) {
-			event.preventDefault();
-			event.stopPropagation();
-			this._expandCollapse();
-		} else if (keyCode === SPACE) {
-			event.preventDefault();
-		}
-	}
-
-	_onShowButtonKeyUp(event) {
-		const { SPACE } = keyCodes;
-		const { keyCode } = event;
-
-		if (keyCode === SPACE) {
-			event.preventDefault();
-			event.stopPropagation();
-			this._expandCollapse();
-		}
-	}
-
 	async _onSlotChange(event) {
 		if (!event || !event.target) {
 			return;
@@ -361,11 +339,14 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 
 		if (listItems.length) {
 			this._currentlyFocusedElement = listItems[0];
+			listItems.forEach(function(listItem) {
+				listItem.setAttribute('role', 'listitem');
+			});
 		}
 	}
 
 	_showMoreVisibility(collapsable, _collapsed, hiddenChildren) {
-		return collapsable && _collapsed && hiddenChildren > 0 ? 'aux-button' : 'hide';
+		return collapsable && _collapsed && hiddenChildren > 0 ? 'd2l-aux-button' : 'd2l-hide';
 	}
 
 	async _updateChildren() {
@@ -375,7 +356,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		}
 		let childrenWidthTotal = 0;
 		const children = this._children;
-		const listItemContainer = this.shadowRoot.querySelector('.list-item-container');
+		const listItemContainer = this.shadowRoot.querySelector('.d2l-list-item-container');
 		const widthOfListItems = listItemContainer.getBoundingClientRect().width;
 		let newHiddenChildren = 0;
 		for (let i = 0; i < children.length; i++) {

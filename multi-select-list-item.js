@@ -1,11 +1,11 @@
-import { css, html, LitElement } from 'lit-element/lit-element.js';
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/icons/icon.js';
 import '@brightspace-ui/core/components/offscreen/offscreen.js';
 import '@brightspace-ui/core/components/tooltip/tooltip.js';
+import { css, html, LitElement } from 'lit-element/lit-element.js';
+import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { Localizer } from './localization.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
-import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
 
 class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 	static get properties() {
@@ -94,14 +94,14 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 	static get styles() {
 		return [bodyCompactStyles, css`
 		:host {
-			cursor: pointer;
-			display: inline-block;
-			outline: none;
 			--d2l-labs-multi-select-list-item-padding: 0.25rem 0.75rem 0.2rem;
 			--d2l-labs-multi-select-list-item-padding-rtl: 0.25rem 0.75rem 0.2rem;
 			--d2l-labs-multi-select-list-item-padding-deletable: 0.25rem 0 0.2rem 0.6rem;
 			--d2l-labs-multi-select-list-item-padding-deletable-rtl: 0.25rem 0.6rem 0.2rem 0;
 
+			cursor: pointer;
+			display: inline-block;
+			outline: none;
 			width: max-content;
 		}
 		:host([_fallback-css]) {
@@ -113,10 +113,6 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 		}
 
 		.d2l-labs-multi-select-list-item-wrapper {
-			-moz-user-select: none;
-			-ms-user-select: none;
-			-webkit-user-select: none;
-
 			align-items: baseline;
 			background-color: var(--d2l-color-sylvite);
 			border: 1px solid var(--d2l-color-gypsum);
@@ -126,6 +122,9 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			line-height: normal;
 			outline: none;
 
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-webkit-user-select: none;
 		}
 
 		:host([dir='rtl']) .d2l-labs-multi-select-list-item-text-wrapper {
@@ -137,8 +136,8 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 		}
 
 		:host([deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
-			visibility: hidden;
 			margin-left: -0.7rem;
+			visibility: hidden;
 		}
 
 		:host([dir='rtl'][deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
@@ -147,13 +146,13 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 		}
 
 		:host(:hover[deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
-			visibility: unset;
 			background-color: var(--d2l-color-gypsum);
+			visibility: unset;
 		}
 
 		:host(:focus[deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
-			visibility: unset;
 			background-color: var(--d2l-color-celestine);
+			visibility: unset;
 		}
 
 		:host([dir='rtl'][deletable]) .d2l-labs-multi-select-list-item-text-wrapper {
@@ -176,7 +175,7 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 		}
 
 		:host(:focus) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
-			color: #c6dbef; // this color is the same as #ffffff with opacity of 0.75
+			color: #c6dbef;
 		}
 
 		:host(:focus) .d2l-labs-multi-select-list-item-wrapper d2l-icon:hover {
@@ -204,8 +203,8 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 
 		d2l-tooltip {
 			@apply --d2l-body-small-text;
-			width: max-content;
 			max-width: 300px;
+			width: max-content;
 		}
 
 		:host([_fallback-css]) d2l-tooltip {
@@ -221,13 +220,8 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 	constructor() {
 		super();
 		this.tabIndex = 0;
-		this.role = 'listItem';
 		this.maxChars = 40;
 		this.tooltipPosition = 'top';
-	}
-
-	deleteItem() {
-		this.parentNode.removeChild(this);
 	}
 
 	render() {
@@ -244,6 +238,10 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 		`;
 	}
 
+	deleteItem() {
+		this.parentNode.removeChild(this);
+	}
+
 	_getScreenReaderText(text, shortText) {
 		return shortText || text;
 	}
@@ -256,7 +254,7 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 		if (text.length <= maxChars) {
 			return text;
 		}
-		return text.substring(0, maxChars) + '...';
+		return `${text.substring(0, maxChars)}...`;
 	}
 
 	_hasTooltip(text, shortText, maxChars) {
