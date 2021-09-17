@@ -41,7 +41,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 			_collapsed: {
 				type: Boolean,
 				value: false,
-				reflectToAttribute: true
+				reflect: true
 			},
 			/**
 			 *
@@ -62,7 +62,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 			description: {
 				type: String,
 				value: null,
-				reflectToAttribute: true
+				reflect: true
 			}
 		};
 	}
