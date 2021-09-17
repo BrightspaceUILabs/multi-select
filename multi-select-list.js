@@ -239,6 +239,9 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		if (itemIndex !== -1) {
 			switch (event.keyCode) {
 				case keyCodes.BACKSPACE:
+					if (rootTarget.classList.contains('d2l-show-button') || rootTarget.classList.contains('d2l-hide-button')) {
+						return;
+					}
 					event.preventDefault();
 					event.stopPropagation();
 					if (children.length > 1) {
@@ -247,6 +250,9 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 					rootTarget._onDeleteItem();
 					break;
 				case keyCodes.DELETE:
+					if (rootTarget.classList.contains('d2l-show-button') || rootTarget.classList.contains('d2l-hide-button')) {
+						return;
+					}
 					event.preventDefault();
 					event.stopPropagation();
 					if (children.length > 1) {

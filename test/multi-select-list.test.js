@@ -114,7 +114,7 @@ describe('multi-select-list', () => {
 			it('should render only items that fit', async() => {
 				// note: this is related to the max-width being set by the fixture
 				await waitUntil(() => el.hiddenChildren > 0, 'List did not collapse');
-				expect(el.hiddenChildren).to.equal(5);
+				expect(el.hiddenChildren).to.equal(7);
 			});
 
 			it('should expand/collapse the list when show/hide buttons are clicked', async() => {
