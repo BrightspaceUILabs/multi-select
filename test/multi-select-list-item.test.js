@@ -34,7 +34,7 @@ describe('multi-select-list-item', () => {
 
 	describe('functionality', () => {
 		describe('basic', () => {
-			beforeEach(async () => {
+			beforeEach(async() => {
 				item = await fixture('<d2l-labs-multi-select-list-item text="basic-item"></d2l-labs-multi-select-list-item>');
 				setItemVariables();
 			});
@@ -49,7 +49,7 @@ describe('multi-select-list-item', () => {
 		});
 
 		describe('deletable', () => {
-			before(async () => {
+			before(async() => {
 				item = await fixture('<d2l-labs-multi-select-list-item deletable text="deletable-item"></d2l-labs-multi-select-list-item>');
 				setItemVariables(item);
 			});

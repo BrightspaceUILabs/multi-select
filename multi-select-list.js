@@ -117,15 +117,6 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		this.addEventListener('focus', this._onListItemFocus, true);
 		this.addEventListener('keydown', this._onKeyDown);
 
-		// Set up for d2l-focusable-arrowkeys-behavior
-		this.arrowKeyFocusablesContainer = this.shadowRoot;
-		this.arrowKeyFocusablesDirection = 'updownleftright';
-		this.arrowKeyFocusablesNoWrap = true;
-
-		this.arrowKeyFocusablesProvider = function() {
-			return Promise.resolve(this._getVisibleEffectiveChildren());
-		};
-
 		this.observer = new ResizeObserver(this._debounceChildren);
 		this.observer.observe(this);
 		this._nodeObserver = new FlattenedNodesObserver(this, this._debounceChildren);
@@ -199,7 +190,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 
 	_focusVisibleChildElement(index) {
 		const children = this._getVisibleEffectiveChildren();
-		this._currentlyFocusedElement = index;
+		this._currentlyFocusedElement = children[index];
 		children[index].focus();
 	}
 
@@ -316,6 +307,39 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		}
 	}
 
+	_onListItemFocus(event) {
+		if (!event || !event.target) {
+			return;
+		}
+
+		if (event.target.tagName === 'D2L-LABS-MULTI-SELECT-LIST-ITEM') {
+			this._currentlyFocusedElement = event.composedPath()[0];
+		}
+	}
+
+	_onShowButtonKeyDown(event) {
+		const { ENTER, SPACE } = keyCodes;
+		const { keyCode } = event;
+
+		if (keyCode === ENTER) {
+			event.preventDefault();
+			event.stopPropagation();
+			this._expandCollapse();
+		} else if (keyCode === SPACE) {
+			event.preventDefault();
+		}
+	}
+
+	_onShowButtonKeyUp(event) {
+		const { SPACE } = keyCodes;
+		const { keyCode } = event;
+
+		if (keyCode === SPACE) {
+			event.preventDefault();
+			event.stopPropagation();
+			this._expandCollapse();
+		}
+	}
 	async _onSlotChange(event) {
 		if (!event || !event.target) {
 			return;
@@ -338,8 +362,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		const listItems = this._children;
 
 		if (listItems.length) {
-			this._currentlyFocusedElement = listItems[0];
-			listItems.forEach(function(listItem) {
+			listItems.forEach((listItem) => {
 				listItem.setAttribute('role', 'listitem');
 			});
 		}
@@ -357,7 +380,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		let childrenWidthTotal = 0;
 		const children = this._children;
 		const listItemContainer = this.shadowRoot.querySelector('.d2l-list-item-container');
-		const widthOfListItems = listItemContainer.getBoundingClientRect().width;
+		const widthOfListItems = listItemContainer.getBoundingClientRect()?.width;
 		let newHiddenChildren = 0;
 		for (let i = 0; i < children.length; i++) {
 			const listItem = children[i];
@@ -370,7 +393,6 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		const focusedIndex = children.indexOf(this._currentlyFocusedElement);
 		const hiddenIndex = children.length - newHiddenChildren;
 		this._handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren);
-
 		this.hiddenChildren = newHiddenChildren;
 	}
 }

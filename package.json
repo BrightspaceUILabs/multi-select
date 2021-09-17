@@ -51,7 +51,6 @@
   "dependencies": {
     "@brightspace-ui/core": "^1",
     "@polymer/polymer": "^3",
-    "d2l-localize-behavior": "BrightspaceUI/localize-behavior#semver:^2",
-    "d2l-resize-aware": "BrightspaceUI/resize-aware#semver:^1"
+    "d2l-localize-behavior": "BrightspaceUI/localize-behavior#semver:^2"
   }
 }

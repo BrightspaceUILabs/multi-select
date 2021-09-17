@@ -4,16 +4,6 @@ import { expect, fixture, html } from '@open-wc/testing';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { runConstructor } from '@brightspace-ui/core/tools/constructor-test-helper.js';
 
-function oneEvent(eventTarget, eventName) {
-	return new Promise(resolve => {
-		function listener(ev) {
-			resolve(ev);
-			eventTarget.removeEventListener(eventName, listener);
-		}
-		eventTarget.addEventListener(eventName, listener);
-	});
-}
-
 describe('multi-select-input', () => {
 	describe('constructor', () => {
 		it('constructs the component', () => {
