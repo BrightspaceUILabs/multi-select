@@ -14,9 +14,9 @@
 > - [ ] [Visual diff tests](https://github.com/BrightspaceUI/visual-diff)
 > - [x] [Localization](https://github.com/BrightspaceUI/guide/wiki/Localization) with Serge (if applicable)
 > - [x] Demo page
-> - [ ] README documentation
+> - [x] README documentation
 
-Polymer-based web component for D2L multi select and related components.
+Polymer/Lit-based web component for D2L multi select and related components.
 
 ## Installation
 
@@ -117,28 +117,28 @@ If you don't have it already, install the [Polymer CLI](https://www.polymer-proj
 npm install -g polymer-cli
 ```
 
-To start a [local web server](https://www.polymer-project.org/3.0/docs/tools/polymer-cli-commands#serve) that hosts the demo page and tests:
+To start a local web server that hosts the demo page and tests:
 
 ```shell
-polymer serve
+npm run start
 ```
 
-To lint ([eslint](http://eslint.org/) and [Polymer lint](https://www.polymer-project.org/3.0/docs/tools/polymer-cli-commands#lint)):
+To lint ([eslint](http://eslint.org/):
 
 ```shell
 npm run lint
 ```
 
-To run unit tests locally using [Polymer test](https://www.polymer-project.org/3.0/docs/tools/polymer-cli-commands#tests):
+To run unit tests locally:
 
 ```shell
-npm run test:polymer:local
+npm run test:headless
 ```
 
 To lint AND run local unit tests:
 
 ```shell
-npm test
+npm run test
 ```
 
 ## Versioning & Releasing
