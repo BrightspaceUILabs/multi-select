@@ -12,7 +12,7 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Unit Tests (SauceLabs)
-        run: npm run test:polymer:sauce
+        run: npm run test:sauce
         env:
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY_FEDERATION }}
           SAUCE_USERNAME: D2L_Federation

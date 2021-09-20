@@ -49,7 +49,13 @@ module.exports = config => {
 			customLaunchers: customLaunchers,
 			browsers: Object.keys(customLaunchers),
 			reporters: ['saucelabs'],
-			singleRun: true
+			browserDisconnectTimeout : 4000, // default 2000
+			browserNoActivityTimeout: 60000, // default 30000
+			client: {
+				mocha: {
+					timeout : 6000 // default 2000, for legacy-Edge
+				}
+			}
 		}),
 	);
 	return config;

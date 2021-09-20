@@ -15,6 +15,24 @@ const elHtml = html`
 		<d2l-labs-multi-select-list-item id="item2" deletable text="item2"></d2l-labs-multi-select-list-item>
 	</d2l-labs-multi-select-list>`;
 
+const collapsableHtml = html`
+	<d2l-labs-multi-select-list collapsable autoremove style="max-width: 500px;">
+		<!-- unrelated hidden children -->
+		<div style="display: none;"></div>
+		<span style="display: none;"></span>
+		<d2l-labs-multi-select-list-item id="item0" deletable text="item0"></d2l-labs-multi-select-list-item>
+		<d2l-labs-multi-select-list-item id="item1" deletable text="item1"></d2l-labs-multi-select-list-item>
+		<d2l-labs-multi-select-list-item id="item2" deletable text="item2"></d2l-labs-multi-select-list-item>
+		<d2l-labs-multi-select-list-item id="item3" deletable text="item3"></d2l-labs-multi-select-list-item>
+		<d2l-labs-multi-select-list-item id="item4" deletable text="item4"></d2l-labs-multi-select-list-item>
+		<d2l-labs-multi-select-list-item id="item5" deletable text="item5"></d2l-labs-multi-select-list-item>
+		<d2l-labs-multi-select-list-item id="item6" deletable text="item6"></d2l-labs-multi-select-list-item>
+		<d2l-labs-multi-select-list-item id="item7" deletable text="item7"></d2l-labs-multi-select-list-item>
+		<d2l-labs-multi-select-list-item id="item8" deletable text="item8"></d2l-labs-multi-select-list-item>
+		<d2l-labs-multi-select-list-item id="item9" deletable text="item9"></d2l-labs-multi-select-list-item>
+		<d2l-labs-multi-select-list-item id="item10" deletable text="item10"></d2l-labs-multi-select-list-item>
+	</d2l-labs-multi-select-list>`;
+
 describe('multi-select-list', () => {
 	let el;
 
@@ -93,31 +111,14 @@ describe('multi-select-list', () => {
 		describe('collapsable', () => {
 			let showButton, hideButton;
 			beforeEach(async() => {
-				el = await fixture(html`
-				<d2l-labs-multi-select-list collapsable autoremove style="max-width: 500px;">
-					<!-- unrelated hidden children -->
-					<div style="display: none;"></div>
-					<span style="display: none;"></span>
-					<d2l-labs-multi-select-list-item id="item0" deletable text="item0"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item id="item1" deletable text="item1"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item id="item2" deletable text="item2"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item id="item3" deletable text="item3"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item id="item4" deletable text="item4"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item id="item5" deletable text="item5"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item id="item6" deletable text="item6"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item id="item7" deletable text="item7"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item id="item8" deletable text="item8"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item id="item9" deletable text="item9"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item id="item10" deletable text="item10"></d2l-labs-multi-select-list-item>
-				</d2l-labs-multi-select-list>`);
+				el = await fixture(collapsableHtml);
 				showButton = el.shadowRoot.querySelector('.d2l-show-button');
 				hideButton = el.shadowRoot.querySelector('.d2l-hide-button');
 			});
 
 			it('should render only items that fit', async() => {
 				// note: this is related to the max-width being set by the fixture
-				await waitUntil(() => el.hiddenChildren > 0, 'List did not collapse');
-				expect(el.hiddenChildren).to.equal(5);
+				await waitUntil(() => el.hiddenChildren > 0, 'hidden children were not assigned');
 			});
 
 			it('should expand/collapse the list when show/hide buttons are clicked', async() => {
