@@ -80,7 +80,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 				flex-wrap: wrap;
 			}
 
-			div[collapse] {
+			div[data-collapsed] {
 				max-height: 1.94rem;
 				overflow: hidden;
 			}
@@ -138,7 +138,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 
 	render() {
 		return html`
-		<div class="d2l-list-item-container" role="list" aria-label="${this.description}" ?collapse=${this._collapsed}>
+		<div class="d2l-list-item-container" role="list" aria-label="${this.description}" ?data-collapsed=${this._collapsed}>
 			<slot @slotchange="${this._onSlotChange}"></slot>
 			<div class="${this._hideVisibility(this.collapsable, this._collapsed, this.hiddenChildren)}">
 				<d2l-button-subtle text="${this.localize('hide')}" class="d2l-hide-button" @click="${this._expandCollapse}" aria-expanded="true"></d2l-button-subtle>
