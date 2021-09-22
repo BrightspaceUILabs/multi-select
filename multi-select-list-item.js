@@ -42,7 +42,8 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			* Whether the multi-select-list-item can be deleted.
 			*/
 			deletable: {
-				type: Boolean
+				type: Boolean,
+				reflect: true
 			},
 
 			role: {
@@ -55,14 +56,15 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			*/
 			showDeleteHoverFocus: {
 				type: Boolean,
-				attribute: 'show-delete-hover-focus'
+				attribute: 'show-delete-hover-focus',
+				reflect: true
 			},
 
 			/**
-			* The tooltip position
+			* The tab index
 			*/
 			tabIndex: {
-				type: String,
+				type: Number,
 				reflect: true
 			},
 
@@ -189,10 +191,6 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			vertical-align: middle;
 		}
 
-		d2l-icon[hidden] {
-			display: none;
-		}
-
 		:host(:dir(rtl)) d2l-icon {
 			margin-left: 0;
 			margin-right: 0.15rem;
@@ -216,8 +214,12 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 
 	constructor() {
 		super();
-		this.tabIndex = 0;
+		this.text = "";
+		this.shortText = "";
 		this.maxChars = 40;
+		this.deletable = false;
+		this.showDeleteHoverFocus = false;
+		this.tabIndex = 0;
 		this.tooltipPosition = 'top';
 	}
 

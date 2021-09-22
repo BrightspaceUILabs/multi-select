@@ -102,7 +102,11 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 	constructor() {
 		super();
 		this._debounceChildren = this._debounceChildren.bind(this);
+		this.autoremove = false;
+		this.collapsable = false;
+		this._collapsed = false;
 		this._children = [];
+		this.description = "";
 		this.hiddenChildren = 0;
 	}
 
