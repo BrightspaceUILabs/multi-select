@@ -18,29 +18,25 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 			*/
 			_currentlyFocusedElement: {
 				type: Node,
-				value: null
 			},
 			/**
 			* Automatically remove list items when they fire a
 			* d2l-labs-multi-select-list-item-deleted event
 			*/
 			autoremove: {
-				type: Boolean,
-				value: false
+				type: Boolean
 			},
 			/**
 			 * Toggles collpasing mode
 			 */
 			collapsable: {
-				type: Boolean,
-				value: false
+				type: Boolean
 			},
 			/**
 			 * internal reflected attribute that shows the current state
 			 */
 			_collapsed: {
 				type: Boolean,
-				value: false,
 				reflect: true
 			},
 			/**
@@ -48,8 +44,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 			 * number of children elements that are hidden from view
 			 */
 			hiddenChildren: {
-				type: Number,
-				value: 0
+				type: Number
 			},
 			/**
 			 *
@@ -61,7 +56,6 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 			},
 			description: {
 				type: String,
-				value: null,
 				reflect: true
 			}
 		};
@@ -143,7 +137,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		<div class="d2l-list-item-container" role="list" aria-label="${this.description}" ?collapse=${this._collapsed}>
 			<slot @slotchange="${this._onSlotChange}"></slot>
 			<div class="${this._hideVisibility(this.collapsable, this._collapsed, this.hiddenChildren)}">
-				<d2l-button-subtle text="${this.localize('hide')}" role="button" class="d2l-hide-button" @click="${this._expandCollapse}" aria-expanded="true"></d2l-button-subtle>
+				<d2l-button-subtle text="${this.localize('hide')}" class="d2l-hide-button" @click="${this._expandCollapse}" aria-expanded="true"></d2l-button-subtle>
 				<slot name="aux-button"></slot>
 			</div>
 		</div>

@@ -15,8 +15,7 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			* Text displayed in the multi-select-list-item.
 			*/
 			text: {
-				type: String,
-				value: ''
+				type: String
 			},
 
 			/**
@@ -26,7 +25,6 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			*/
 			shortText: {
 				type: String,
-				value: null,
 				attribute: 'short-text'
 			},
 
@@ -44,8 +42,7 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			* Whether the multi-select-list-item can be deleted.
 			*/
 			deletable: {
-				type: Boolean,
-				value: false
+				type: Boolean
 			},
 
 			role: {
@@ -58,7 +55,6 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			*/
 			showDeleteHoverFocus: {
 				type: Boolean,
-				value: false,
 				attribute: 'show-delete-hover-focus'
 			},
 
@@ -86,7 +82,8 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 				value: function() {
 					return !window.CSS || !window.CSS.supports || !window.CSS.supports('width', 'max-content');
 				},
-				reflectToAttribute: true
+				reflect: true,
+				attribute: '_fallback-css'
 			}
 		};
 	}
