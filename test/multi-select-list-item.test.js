@@ -1,4 +1,5 @@
 import '../multi-select-list-item.js';
+import '../multi-select-list';
 import { expect, fixture, html } from '@open-wc/testing';
 import { runConstructor } from '@brightspace-ui/core/tools/constructor-test-helper.js';
 import sinon from 'sinon/pkg/sinon-esm.js';
@@ -23,9 +24,17 @@ describe('multi-select-list-item', () => {
 
 	describe('accessibility', () => {
 		it('should pass all aXe tests', async() => {
-			const el = await fixture(html`<d2l-labs-multi-select-list-item></d2l-labs-multi-select-list-item>`);
+			const el = await fixture(html`
+				<d2l-labs-multi-select-list>
+					<d2l-labs-multi-select-list-item>
+					</d2l-labs-multi-select-list-item>
+				</d2l-labs-multi-select-list>`);
+
 			const elFull = await fixture(html`
-				<d2l-labs-multi-select-list-item deletable text="item0"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list>
+					<d2l-labs-multi-select-list-item deletable text="item0">
+					</d2l-labs-multi-select-list-item>
+				</d2l-labs-multi-select-list>
 			`);
 			await expect(el).to.be.accessible();
 			await expect(elFull).to.be.accessible();

@@ -362,15 +362,6 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		);
 
 		this._children = children;
-
-		await this.updateComplete;
-		const listItems = this._children;
-
-		if (listItems.length) {
-			listItems.forEach((listItem) => {
-				listItem.setAttribute('role', 'listitem');
-			});
-		}
 	}
 
 	_showMoreVisibility(collapsable, _collapsed, hiddenChildren) {

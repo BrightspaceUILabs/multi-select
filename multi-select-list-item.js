@@ -103,6 +103,9 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			outline: none;
 			width: max-content;
 		}
+		:host([hidden]) {
+			display: none;
+		}
 		:host([_fallback-css]) {
 			min-width: 125px;
 		}
@@ -221,6 +224,7 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 		this.showDeleteHoverFocus = false;
 		this.tabIndex = 0;
 		this.tooltipPosition = 'top';
+		this.role = 'listitem';
 	}
 
 	render() {
