@@ -214,8 +214,8 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 
 	constructor() {
 		super();
-		this.text = "";
-		this.shortText = "";
+		this.text = '';
+		this.shortText = '';
 		this.maxChars = 40;
 		this.deletable = false;
 		this.showDeleteHoverFocus = false;

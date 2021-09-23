@@ -106,7 +106,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		this.collapsable = false;
 		this._collapsed = false;
 		this._children = [];
-		this.description = "";
+		this.description = '';
 		this.hiddenChildren = 0;
 	}
 
@@ -399,7 +399,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		const hiddenIndex = children.length - newHiddenChildren;
 		this._handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren);
 
-		if(this.hiddenChildren === 0 && newHiddenChildren > 0) {
+		if (this.hiddenChildren === 0 && newHiddenChildren > 0) {
 			this.hiddenChildren = newHiddenChildren;
 			const showButton = this.shadowRoot.querySelector('.d2l-show-button');
 			await showButton.updateComplete;
