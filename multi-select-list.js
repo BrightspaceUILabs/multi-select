@@ -1,6 +1,7 @@
 import '@brightspace-ui/core/components/button/button-subtle.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { getComposedChildren, isComposedAncestor } from '@brightspace-ui/core/helpers/dom';
+import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { getComposedActiveElement } from '@brightspace-ui/core/helpers/focus';
 import { Localizer } from './localization.js';
@@ -60,11 +61,13 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	static get styles() {
-		return css`
+		return [ bodyCompactStyles, css`
 			:host {
 				display: flex;
 				flex-direction: column;
 				width: 100%;
+				--d2l-labs-multi-select-list-item-padding: 0.25rem 0.75rem 0.2rem;
+				--d2l-labs-multi-select-list-item-padding-rtl: 0.25rem 0.75rem 0.2rem;
 			}
 
 			:host([_collapsed]) {
@@ -94,7 +97,28 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 			.d2l-hide {
 				display: none;
 			}
-		`;
+			.d2l-show-button {
+				background-color: var(--d2l-color-sylvite);
+				border: 1px solid var(--d2l-color-gypsum);
+				border-radius: 0.25rem;
+				color: var(--d2l-color-ferrite);
+				cursor: pointer;
+				line-height: normal;
+				padding: var(--d2l-labs-multi-select-list-item-padding);
+			}
+			:d2l-show-button([dir='rtl']) .d2l-labs-multi-select-list-item-text-wrapper {
+				padding: var(--d2l-labs-multi-select-list-item-padding-rtl);
+			}
+			.d2l-show-button:hover {
+				background-color: var(--d2l-color-gypsum);
+				border-color: var(--d2l-color-mica);
+			}
+			.d2l-show-button:focus {
+				background-color: var(--d2l-color-celestine);
+				border-color: var(--d2l-color-celestine-minus-1);
+				color: #ffffff;
+			}
+		`];
 	}
 
 	constructor() {
@@ -143,7 +167,14 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 			</div>
 		</div>
 		<div class="${this._showMoreVisibility(this.collapsable, this._collapsed, this.hiddenChildren)}">
-			<d2l-labs-multi-select-list-item text="${this.localize('hiddenChildren', 'num', this.hiddenChildren)}" role="button" class="d2l-show-button" @click="${this._expandCollapse}" @keyup="${this._onShowButtonKeyUp}" @keydown="${this._onShowButtonKeyDown}" aria-expanded="false"></d2l-labs-multi-select-list-item>
+			<button
+				class="d2l-body-compact d2l-show-button"
+				@click="${this._expandCollapse}"
+				@keyup="${this._onShowButtonKeyUp}"
+				@keydown="${this._onShowButtonKeyDown}"
+				aria-expanded="false">
+				${this.localize('hiddenChildren', 'num', this.hiddenChildren)}
+			</button>
 		</div>
 		`;
 	}
