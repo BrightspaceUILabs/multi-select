@@ -5,7 +5,6 @@ import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { getComposedActiveElement } from '@brightspace-ui/core/helpers/focus';
 import { Localizer } from './localization.js';
-import { microTask } from '@polymer/polymer/lib/utils/async.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
 const keyCodes = { BACKSPACE: 8, TAB: 9, DELETE: 46, ENTER: 13, SPACE: 32, 	LEFT: 37, RIGHT: 39, UP: 38, DOWN: 40 };
@@ -101,7 +100,6 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 
 	constructor() {
 		super();
-		this._debounceChildren = this._debounceChildren.bind(this);
 		this.autoremove = false;
 		this.collapsable = false;
 		this._collapsed = false;
@@ -116,9 +114,9 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		this.addEventListener('focus', this._onListItemFocus, true);
 		this.addEventListener('keydown', this._onKeyDown);
 
-		this.observer = new ResizeObserver(this._debounceChildren);
+		this.observer = new ResizeObserver(this._updateChildren.bind(this));
 		this.observer.observe(this);
-		this._nodeObserver = new FlattenedNodesObserver(this, this._debounceChildren);
+		this._nodeObserver = new FlattenedNodesObserver(this, this._updateChildren.bind(this));
 
 		this.setAttribute('role', 'application');
 
@@ -161,10 +159,6 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		));
 	}
 
-	_debounceChildren() {
-		this._debounceJob = Debouncer.debounce(this._debounceJob,
-			microTask, () => this._updateChildren());
-	}
 	_expandCollapse() {
 		this._collapsed = !this._collapsed;
 		this._focusLastVisibleElement();
@@ -400,7 +394,6 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 
 		if (this.hiddenChildren === 0 && newHiddenChildren > 0) {
 			this.hiddenChildren = newHiddenChildren;
-
 			await showButton.updateComplete;
 			this._updateChildren();
 		}
