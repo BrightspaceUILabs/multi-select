@@ -1,7 +1,6 @@
 import '@brightspace-ui/core/components/button/button-subtle.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { getComposedChildren, isComposedAncestor } from '@brightspace-ui/core/helpers/dom';
-import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { getComposedActiveElement } from '@brightspace-ui/core/helpers/focus';
 import { Localizer } from './localization.js';
@@ -384,7 +383,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		}
 
 		//It is possible we can still show all items if we remove the show button itself
-		if(newHiddenChildren > 0 && childrenWidthTotal < widthOfListItems + widthOfShowButton){
+		if (newHiddenChildren > 0 && childrenWidthTotal < widthOfListItems + widthOfShowButton) {
 			newHiddenChildren = 0;
 		}
 
