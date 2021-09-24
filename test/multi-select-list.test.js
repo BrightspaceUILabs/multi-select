@@ -132,32 +132,6 @@ describe('multi-select-list', () => {
 				await el.updateComplete;
 				expect(el._collapsed).to.be.true;
 			});
-
-			it('should expand list when Enter is pressed on show toggle', async() => {
-				await waitUntil(() => el._collapsed === true, 'List was never collapsed');
-
-				const keyboardDownEvent = new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 });
-				const keyboardUpEvent = new KeyboardEvent('keyup', { key: 'Enter', keyCode: 13 });
-
-				showButton.dispatchEvent(keyboardDownEvent);
-				await el.updateComplete;
-				showButton.dispatchEvent(keyboardUpEvent);
-				await el.updateComplete;
-				expect(el._collapsed).to.be.false;
-			});
-
-			it('should expand list when space is pressed on show toggle', async() => {
-				await waitUntil(() => el._collapsed === true, 'List was never collapsed');
-
-				const keyboardDownEvent = new KeyboardEvent('keydown', { key: 'Space', keyCode: 32 });
-				const keyboardUpEvent = new KeyboardEvent('keyup', { key: 'Space', keyCode: 32 });
-
-				showButton.dispatchEvent(keyboardDownEvent);
-				await el.updateComplete;
-				showButton.dispatchEvent(keyboardUpEvent);
-				await el.updateComplete;
-				expect(el._collapsed).to.be.false;
-			});
 		});
 	});
 });

@@ -63,11 +63,11 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 	static get styles() {
 		return [ bodyCompactStyles, css`
 			:host {
+				--d2l-labs-multi-select-list-item-padding: 0.25rem 0.75rem 0.2rem;
+				--d2l-labs-multi-select-list-item-padding-rtl: 0.25rem 0.75rem 0.2rem;
 				display: flex;
 				flex-direction: column;
 				width: 100%;
-				--d2l-labs-multi-select-list-item-padding: 0.25rem 0.75rem 0.2rem;
-				--d2l-labs-multi-select-list-item-padding-rtl: 0.25rem 0.75rem 0.2rem;
 			}
 
 			:host([_collapsed]) {
@@ -106,7 +106,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 				line-height: normal;
 				padding: var(--d2l-labs-multi-select-list-item-padding);
 			}
-			:d2l-show-button([dir='rtl']) .d2l-labs-multi-select-list-item-text-wrapper {
+			.d2l-show-button([dir='rtl']) .d2l-labs-multi-select-list-item-text-wrapper {
 				padding: var(--d2l-labs-multi-select-list-item-padding-rtl);
 			}
 			.d2l-show-button:hover {
@@ -170,8 +170,6 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 			<button
 				class="d2l-body-compact d2l-show-button"
 				@click="${this._expandCollapse}"
-				@keyup="${this._onShowButtonKeyUp}"
-				@keydown="${this._onShowButtonKeyDown}"
 				aria-expanded="false">
 				${this.localize('hiddenChildren', 'num', this.hiddenChildren)}
 			</button>
@@ -343,30 +341,6 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 
 		if (event.target.tagName === 'D2L-LABS-MULTI-SELECT-LIST-ITEM') {
 			this._currentlyFocusedElement = event.composedPath()[0];
-		}
-	}
-
-	_onShowButtonKeyDown(event) {
-		const { ENTER, SPACE } = keyCodes;
-		const { keyCode } = event;
-
-		if (keyCode === ENTER) {
-			event.preventDefault();
-			event.stopPropagation();
-			this._expandCollapse();
-		} else if (keyCode === SPACE) {
-			event.preventDefault();
-		}
-	}
-
-	_onShowButtonKeyUp(event) {
-		const { SPACE } = keyCodes;
-		const { keyCode } = event;
-
-		if (keyCode === SPACE) {
-			event.preventDefault();
-			event.stopPropagation();
-			this._expandCollapse();
 		}
 	}
 	async _onSlotChange(event) {
