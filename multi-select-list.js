@@ -374,25 +374,33 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 			return;
 		}
 		let childrenWidthTotal = 0;
+		const showButton = this.shadowRoot.querySelector('.d2l-show-button');
+		const widthOfShowButton = showButton.getBoundingClientRect().width;
+
 		const children = this._children;
 		const listItemContainer = this.shadowRoot.querySelector('.d2l-list-item-container');
 		const widthOfListItems = listItemContainer.getBoundingClientRect()?.width;
+
 		let newHiddenChildren = 0;
 		for (let i = 0; i < children.length; i++) {
 			const listItem = children[i];
 			childrenWidthTotal += listItem.getBoundingClientRect().width;
 			if (childrenWidthTotal > widthOfListItems) {
-				newHiddenChildren = children.length - i;
-				break;
-			}
+				newHiddenChildren ++;			}
 		}
+
+		//It is possible we can still show all items if we remove the show button itself
+		if(newHiddenChildren > 0 && childrenWidthTotal < widthOfListItems + widthOfShowButton){
+			newHiddenChildren = 0;
+		}
+
 		const focusedIndex = children.indexOf(this._currentlyFocusedElement);
 		const hiddenIndex = children.length - newHiddenChildren;
 		this._handleFocusChangeOnResize(focusedIndex, hiddenIndex, newHiddenChildren);
 
 		if (this.hiddenChildren === 0 && newHiddenChildren > 0) {
 			this.hiddenChildren = newHiddenChildren;
-			const showButton = this.shadowRoot.querySelector('.d2l-show-button');
+
 			await showButton.updateComplete;
 			this._updateChildren();
 		}
