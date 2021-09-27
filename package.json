@@ -22,8 +22,7 @@
     "lint:style": "stylelint \"**/*.js\"",
     "start": "web-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:headless",
-    "test:headless": "karma start",
-    "test:sauce": "karma start karma.sauce.conf.js"
+    "test:headless": "web-test-runner --group default"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
@@ -33,15 +32,14 @@
     "@babel/eslint-parser": "^7",
     "@brightspace-ui/stylelint-config": "^0.0.3",
     "@open-wc/testing": "^2.5.33",
-    "@open-wc/testing-karma": "^3",
     "@webcomponents/webcomponentsjs": "^2",
     "@web/dev-server": "^0.1.23",
+    "@web/test-runner": "^0.13",
     "eslint": "^7",
     "eslint-config-brightspace": "^0.13",
     "eslint-plugin-html": "^6",
     "eslint-plugin-lit": "1.4.1",
     "eslint-plugin-sort-class-members": "^1",
-    "karma-sauce-launcher": "^4",
     "lit-analyzer": "^1",
     "sinon": "^9.2.1",
     "stylelint": "^13"

@@ -14,17 +14,12 @@ describe('multi-select-input-text', () => {
 
 	describe('accessibility', () => {
 		it('should pass all aXe tests', async() => {
-			const el = await fixture(html`<d2l-labs-multi-select-input-text aria-label="label" placeholder="placeholder"></d2l-labs-multi-select-input-text>`);
-			const elFull = await fixture(html`
+			const el = await fixture(html`
 				<d2l-labs-multi-select-input-text aria-label="label" placeholder="placeholder">
 					<d2l-labs-multi-select-list-item deletable text="item0"></d2l-labs-multi-select-list-item>
 					<d2l-labs-multi-select-list-item deletable text="item1"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item deletable text="item2"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item deletable text="item3"></d2l-labs-multi-select-list-item>
-				</d2l-labs-multi-select-input-text>
-			`);
+				</d2l-labs-multi-select-input-text>`);
 			await expect(el).to.be.accessible();
-			await expect(elFull).to.be.accessible();
 		});
 	});
 

@@ -117,7 +117,7 @@ If you don't have it already, install the [Polymer CLI](https://www.polymer-proj
 npm install -g polymer-cli
 ```
 
-To start a local web server that hosts the demo page and tests:
+Start a [@web/dev-server](https://modern-web.dev/docs/dev-server/overview/) that hosts the demo pages:
 
 ```shell
 npm run start
