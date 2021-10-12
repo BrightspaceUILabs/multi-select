@@ -17,12 +17,10 @@ describe('multi-select-input-text', () => {
 			const el = await fixture(html`
 				<d2l-labs-multi-select-input-text aria-label="label" placeholder="placeholder">
 					<d2l-labs-multi-select-list-item deletable text="item0" id="item0"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item deletable text="item1" id="item1"></d2l-labs-multi-select-list-item>
 				</d2l-labs-multi-select-input-text>`);
 			const item0 = document.getElementById('item0');
-			const item1 = document.getElementById('item1');
 			await item0.updateComplete;
-			await item1.updateComplete;
+			await el.updateComplete;
 			await expect(el).to.be.accessible();
 		});
 	});
@@ -30,7 +28,7 @@ describe('multi-select-input-text', () => {
 	describe('functionality', () => {
 		it('should be able to add a list item', async() => {
 			const el = await fixture(html`
-				<d2l-labs-multi-select-input-text>
+				<d2l-labs-multi-select-input-text aria-label="label" placeholder="placeholder">
 					<d2l-labs-multi-select-list-item deletable text="item0"></d2l-labs-multi-select-list-item>
 					<d2l-labs-multi-select-list-item deletable text="item1"></d2l-labs-multi-select-list-item>
 					<d2l-labs-multi-select-list-item deletable text="item2"></d2l-labs-multi-select-list-item>

@@ -26,18 +26,13 @@ describe('multi-select-list-item', () => {
 		it('should pass all aXe tests', async() => {
 			const el = await fixture(html`
 				<d2l-labs-multi-select-list>
-					<d2l-labs-multi-select-list-item>
-					</d2l-labs-multi-select-list-item>
-				</d2l-labs-multi-select-list>`);
-
-			const elFull = await fixture(html`
-				<d2l-labs-multi-select-list>
-					<d2l-labs-multi-select-list-item deletable text="item0">
+					<d2l-labs-multi-select-list-item deletable text="item0" id="item0">
 					</d2l-labs-multi-select-list-item>
 				</d2l-labs-multi-select-list>
 			`);
+			const item = document.getElementById('item0');
+			await item.updateComplete;
 			await expect(el).to.be.accessible();
-			await expect(elFull).to.be.accessible();
 		});
 	});
 

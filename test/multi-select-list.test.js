@@ -45,6 +45,9 @@ describe('multi-select-list', () => {
 	describe('accessibility', () => {
 		it('should pass all aXe tests', async() => {
 			el = await fixture(elHtml);
+			const item = document.getElementById('item0');
+			expect(item).to.not.be.null;
+			await item.updateComplete;
 			expect(el).to.be.accessible();
 		});
 	});
@@ -109,19 +112,19 @@ describe('multi-select-list', () => {
 		});
 
 		describe('collapsable', () => {
-			let showButton, hideButton;
 			beforeEach(async() => {
 				el = await fixture(collapsableHtml);
-				showButton = el.shadowRoot.querySelector('.d2l-show-button');
-				hideButton = el.shadowRoot.querySelector('.d2l-hide-button');
 			});
 
 			it('should render only items that fit', async() => {
-				// note: this is related to the max-width being set by the fixture
-				await waitUntil(() => el.hiddenChildren > 0, 'hidden children were not assigned');
+				await waitUntil(() => el._collapsed === true, 'List was never collapsed');
+				expect(el.hiddenChildren > 0, 'hidden children were not assigned');
 			});
 
 			it('should expand/collapse the list when show/hide buttons are clicked', async() => {
+				const showButton = el.shadowRoot.querySelector('.d2l-show-button');
+				const hideButton = el.shadowRoot.querySelector('.d2l-hide-button');
+
 				await waitUntil(() => el._collapsed === true, 'List was never collapsed');
 
 				showButton.click();

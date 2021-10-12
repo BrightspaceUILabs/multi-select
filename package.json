@@ -22,7 +22,7 @@
     "lint:style": "stylelint \"**/*.js\"",
     "start": "web-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:headless",
-    "test:headless": "web-test-runner --group default"
+    "test:headless": "web-test-runner --node-resolve"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",

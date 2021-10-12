@@ -13,17 +13,15 @@ describe('multi-select-input', () => {
 
 	describe('accessibility', () => {
 		it('should pass all aXe tests', async() => {
-			const el = await fixture(html`<d2l-labs-multi-select-input></d2l-labs-multi-select-input>`);
-			const elFull = await fixture(html`
+			const el = await fixture(html`
 				<d2l-labs-multi-select-input>
-					<d2l-labs-multi-select-list-item deletable text="item0"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item deletable text="item1"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item deletable text="item2"></d2l-labs-multi-select-list-item>
-					<d2l-labs-multi-select-list-item deletable text="item3"></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item deletable text="item0" id="item0"></d2l-labs-multi-select-list-item>
 				</d2l-labs-multi-select-input>
 			`);
+			const item0 = document.getElementById('item0');
+			await item0.updateComplete;
+			await el.updateComplete;
 			expect(el).to.be.accessible();
-			expect(elFull).to.be.accessible();
 		});
 	});
 
