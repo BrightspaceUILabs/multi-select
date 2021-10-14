@@ -48,7 +48,7 @@ describe('multi-select-list', () => {
 			const item = document.getElementById('item0');
 			expect(item).to.not.be.null;
 			await item.updateComplete;
-			expect(el).to.be.accessible();
+			await expect(el).to.be.accessible();
 		});
 	});
 

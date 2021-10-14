@@ -21,7 +21,7 @@ describe('multi-select-input', () => {
 			const item0 = document.getElementById('item0');
 			await item0.updateComplete;
 			await el.updateComplete;
-			expect(el).to.be.accessible();
+			await expect(el).to.be.accessible();
 		});
 	});
 
