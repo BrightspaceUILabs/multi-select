@@ -1,6 +1,6 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import './multi-select-input.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 const $_documentContainer = document.createElement('template');
 $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-input-text">
@@ -46,7 +46,6 @@ document.head.appendChild($_documentContainer.content);
  * @demo demo/index.hmtl
  */
 class D2LMultiSelectInputText extends PolymerElement {
-	static get is() { return 'd2l-labs-multi-select-input-text'; }
 	static get properties() {
 		return {
 			/**
@@ -84,9 +83,7 @@ class D2LMultiSelectInputText extends PolymerElement {
 			}
 		};
 	}
-	constructor() {
-		super();
-	}
+	static get is() { return 'd2l-labs-multi-select-input-text'; }
 
 	_onInput(event) {
 		this.value = event.target.value;
