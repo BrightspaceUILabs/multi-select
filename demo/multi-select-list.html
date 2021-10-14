@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="/node_modules/@brightspace-ui/core/components/demo/styles.css" type="text/css">
+		<script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+		<script type="module">
+			import '@brightspace-ui/core/components/demo/demo-page.js';
+			import '../multi-select-input.js';
+			import '../multi-select-list-item.js';
+			import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
+		</script>
+		<title>d2l-labs-multi-select-list</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta charset="UTF-8">
+
+		<custom-style>
+			<style>
+				.d2l-labs-multi-select-list-item-custom {
+					--d2l-labs-multi-select-list-item-padding: 1rem 1rem 1rem 1rem;
+					--d2l-labs-multi-select-list-item-padding-rtl: 1rem 1rem 1rem 1rem;
+					--d2l-labs-multi-select-list-item-padding-deletable: 1rem 1rem 1rem 1rem;
+					--d2l-labs-multi-select-list-item-padding-deletable-rtl: 1rem 1rem 1rem 1rem;
+				}
+			</style>
+		</custom-style>
+	</head>
+	<body>
+	<d2l-demo-page page-title="d2l-labs-multi-select-list">
+		<h3>d2l-labs-multi-select-list</h3>
+			<d2l-demo-snippet>
+				<template>
+					<d2l-labs-multi-select-list autoremove>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 0"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 1"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 2"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 3"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 4"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 5"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item text="Short Text" deletable=""></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item text="Long Truncated Text" max-chars="11" deletable=""></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item text="Longer text for the tooltip" short-text="Alternate Text" deletable=""></d2l-labs-multi-select-list-item>
+					</d2l-labs-multi-select-list>
+				</template>
+			</d2l-demo-snippet>
+			<h3>d2l-labs-multi-select-list (unrelated hidden children)</h3>
+			<d2l-demo-snippet>
+				<template>
+					<d2l-labs-multi-select-list autoremove>
+						<div style="display: none;"></div>
+						<span style="display: none;"></span>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 0"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 1"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 2"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 3"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 4"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="List item 5"></d2l-labs-multi-select-list-item>
+					</d2l-labs-multi-select-list>
+				</template>
+			</d2l-demo-snippet>
+			<h3>d2l-labs-multi-select-list (collapsable)</h3>
+			<d2l-demo-snippet>
+				<template>
+					<d2l-labs-multi-select-list collapsable autoremove>
+					<d2l-labs-multi-select-list-item deletable text="0"></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item deletable text="1"></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item deletable text="2"></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item deletable text="3"></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item deletable text="4"></d2l-labs-multi-select-list-item>
+					<d2l-labs-multi-select-list-item deletable text="5"></d2l-labs-multi-select-list-item>
+				</d2l-labs-multi-select-list>
+				</template>
+			</d2l-demo-snippet>
+			<h3>Show delete icon on hover/focus only</h3>
+			<d2l-demo-snippet>
+				<template>
+					<d2l-labs-multi-select-list autoremove>
+						<d2l-labs-multi-select-list-item deletable="" show-delete-hover-focus text="List item 0"></d2l-labs-multi-select-list-item>
+					</d2l-labs-multi-select-list>
+				</template>
+			</d2l-demo-snippet>
+
+			<h3>Customized padding</h3>
+			<d2l-demo-snippet>
+				<template>
+					<d2l-labs-multi-select-list autoremove>
+						<d2l-labs-multi-select-list-item class="d2l-labs-multi-select-list-item-custom" deletable="" text="List item 0"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item class="d2l-labs-multi-select-list-item-custom" deletable="" text="List item 1"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item class="d2l-labs-multi-select-list-item-custom" deletable="" text="List item 2"></d2l-labs-multi-select-list-item>
+					</d2l-labs-multi-select-list>
+				</template>
+			</d2l-demo-snippet>
+		</d2l-demo-page>
+	</body>
+</html>

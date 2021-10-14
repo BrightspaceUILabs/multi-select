@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="/node_modules/@brightspace-ui/core/components/demo/styles.css" type="text/css">
+		<script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+		<script type="module">
+			import '@brightspace-ui/core/components/demo/demo-page.js';
+			import '../multi-select-input-text.js';
+			import '../multi-select-list-item.js';
+		</script>
+		<title>d2l-labs-multi-select-input-text</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta charset="UTF-8">
+	</head>
+	<body>
+	<d2l-demo-page page-title="d2l-labs-multi-select-input-text">
+		<h3>d2l-labs-multi-select-input-text</h3>
+			<d2l-demo-snippet>
+				<template>
+					<d2l-labs-multi-select-input-text autoremove aria-label="Multi select demo" placeholder="Press Enter to add an item">
+						<d2l-labs-multi-select-list-item deletable="" text="Existing list item 0"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="Existing list item 1"></d2l-labs-multi-select-list-item>
+						<d2l-labs-multi-select-list-item deletable="" text="Existing list item 2"></d2l-labs-multi-select-list-item>
+					</d2l-labs-multi-select-input-text>
+				</template>
+			</d2l-demo-snippet>
+	</d2l-demo-page>
+	</body>
+</html>
