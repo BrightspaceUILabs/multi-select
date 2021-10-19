@@ -16,7 +16,8 @@
 > - [x] Demo page
 > - [x] README documentation
 
-Polymer/Lit-based web component for D2L multi select and related components.
+Polymer/Lit-based web component collection for D2L multi-select, creating, editing, and listing tags/attributes.
+![animated screenshot of attribute picker](./screenshot.gif)
 
 ## Installation
 
@@ -64,6 +65,43 @@ button.addEventListener('click', () => {
 	multiSelectInput.addItem(input.value)
 })
 ```
+
+#### `d2l-labs-attribute-picker`
+## Usage
+```html
+<script type="module">
+    import '@brightspace-ui-labs/attribute-picker/attribute-picker.js';
+</script>
+<d2l-labs-attribute-picker>My element</d2l-labs-attribute-picker>
+```
+
+**Properties:**
+| Property | Type | Description |
+|--|--|--|
+| allow-freeform | Boolean | When enabled, the user can manually type any attribute they wish. If false, they must select from the dropdown. |
+| aria-label | String | Required. When true, the autocomplete dropdown will not be displayed to the user. |
+| attribute-list | Array |  An array of strings representing the attributes currently selected in the picker. |
+| assignable-attributes | Array | An array of strings available in the dropdown list. |
+| hide-dropdown | Boolean | When enabled, the autocomplete dropdown will not be displayed to the user. |
+| limit | Number | The maximum length of attribute-list permitted. |
+
+**Accessibility:**
+
+To make your usage of `d2l-labs-attribute-picker` accessible, use the following properties when applicable:
+
+| Attribute | Description |
+|--|--|
+| aria-label | The label should provide context for the attribute picker, such as type of attribute. |
+
+**Events:**
+The `d2l-labs-attribute-picker` dispatches the `d2l-attributes-changed` event each time an attribute has been added or removed. It will return the updated list of attributes:
+```javascript
+attributePicker.addEventListener('d2l-attributes-changed', (e) => {
+  console.log(e.detail.attributeList.toString());
+});
+```
+
+The `d2l-labs-attribute-picker` dispatches the `d2l-attribute-limit-reached` event when the user attempts to enter an attribute greater than the limit. This can be used to send feedback to the user.
 
 ### Components
 
