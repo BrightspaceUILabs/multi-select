@@ -24,8 +24,13 @@ function evaluateListValues(array, elementList) {
 	return true;
 }
 
-describe('d2l-labs-attribute-picker', () => {
+describe('constructor', () => {
+	it('should construct', () => {
+		runConstructor('d2l-labs-attribute-picker');
+	});
+});
 
+describe('d2l-labs-attribute-picker', () => {
 	describe('accessibility', () => {
 		it('should pass all axe tests', async() => {
 			const el = await fixture(html`<d2l-labs-attribute-picker></d2l-labs-attribute-picker>`);
@@ -41,13 +46,13 @@ describe('d2l-labs-attribute-picker', () => {
 						.assignableAttributes="${assignableAttributeList}">
 					</d2l-labs-attribute-picker>`
 			);
-			await expect(el).to.be.accessible();
-		});
-	});
 
-	describe('constructor', () => {
-		it('should construct', () => {
-			runConstructor('d2l-labs-attribute-picker');
+			const listItems = el.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
+			for (const item of listItems) {
+				await item.updateComplete;
+			}
+
+			await expect(el).to.be.accessible();
 		});
 	});
 
@@ -187,6 +192,10 @@ describe('d2l-labs-attribute-picker', () => {
 						.assignableAttributes="${assignableAttributeList}">
 					</d2l-labs-attribute-picker>`
 			);
+			const listItems = el.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
+			for (const item of listItems) {
+				await item.updateComplete;
+			}
 		});
 
 		it('should scroll through the dropdown using the up and down arrow keys', async() => {
@@ -279,23 +288,31 @@ describe('d2l-labs-attribute-picker', () => {
 		it('should delete focused tag using backspace', async() => {
 			const pageNumberInput = el.shadowRoot.querySelector('input');
 			pageNumberInput.focus();
+			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 
 			//Delete three
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37 }));
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', keyCode: 8 }));
+			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37, bubbles: true }));
+			await el.updateComplete;
+			let focusElement = el.shadowRoot.querySelector(':focus');
+			expect(focusElement).to.equal(listItems[2]);
+			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', keyCode: 8, bubbles: true }));
 			await el.updateComplete;
 
+			//Confirm the item has been deleted, and the second element is now focused
 			let expectedAttributeList =  ['one', 'two'];
 			let dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
+			focusElement = el.shadowRoot.querySelector(':focus');
 
-			//Delete one
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37 }));
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37 }));
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', keyCode: 8 }));
+			// Delete one
+			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37, bubbles: true }));
 			await el.updateComplete;
+			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', keyCode: 8, bubbles: true }));
+			await el.updateComplete;
+
 			expectedAttributeList =  ['two'];
 			dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
+			expect(dropdownElements.length).equal(1);
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
 		});
 	});
@@ -313,6 +330,10 @@ describe('d2l-labs-attribute-picker', () => {
 						limit="5">
 					</d2l-labs-attribute-picker>`
 			);
+			const listItems = el.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
+			for (const item of listItems) {
+				await item.updateComplete;
+			}
 		});
 
 		it('should fire the d2l-attributes-changed event when adding a tag', async() => {
@@ -333,8 +354,15 @@ describe('d2l-labs-attribute-picker', () => {
 
 			const pageNumberInput = el.shadowRoot.querySelector('input');
 			pageNumberInput.focus();
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37 }));
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', keyCode: 8 }));
+			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
+
+			//Delete three
+			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37, bubbles: true }));
+			await el.updateComplete;
+			const focusElement = el.shadowRoot.querySelector(':focus');
+			expect(focusElement).to.equal(listItems[2]);
+			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', keyCode: 8, bubbles: true }));
+			await el.updateComplete;
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');

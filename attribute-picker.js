@@ -1,5 +1,6 @@
-import '@brightspace-ui/core/components/icons/icon.js';
 import '@brightspace-ui/core/components/colors/colors.js';
+import './multi-select-list.js';
+import './multi-select-list-item.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { inputStyles } from '@brightspace-ui/core/components/inputs/input-styles.js';
 import { Localizer } from './localization.js';
@@ -12,7 +13,8 @@ const keyCodes = {
 	LEFT: 37,
 	RIGHT: 39,
 	UP: 38,
-	DOWN: 40
+	DOWN: 40,
+	DELETE: 46
 };
 
 class AttributePicker extends RtlMixin(Localizer(LitElement)) {
@@ -38,9 +40,6 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 			/* The inner text of the input. */
 			text: { type: String, attribute: 'text', reflect: true },
-
-			/* Represents the index of the currently focused attribute. If no attribute is focused, equals -1. */
-			_activeAttributeIndex: { type: Number, reflect: false },
 
 			/* Represents the index of the currently focused dropdown list item. If no item is focused, equals -1. */
 			_dropdownIndex: { type: Number, reflect: false },
@@ -83,39 +82,13 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			.d2l-attribute-picker-content {
 				cursor: text;
 				display: flex;
-				flex-wrap: wrap;
+				flex-direction: row;
 				margin-top: -1px;
 			}
 			.d2l-attribute-picker-attribute {
-				align-items: center;
-				background-color: var(--d2l-color-sylvite);
-				border-radius: 6px;
-				color: var(--d2l-color-ferrite);
-				cursor: pointer;
 				display: flex;
 				height: 1.55rem;
 				margin: 1px 5px 1px 1px;
-				overflow: hidden;
-				padding: 0 8px;
-				position: relative;
-				text-overflow: ellipsis;
-			}
-			.d2l-attribute-picker-attribute:hover {
-				background-color: var(--d2l-color-gypsum);
-			}
-			.d2l-attribute-picker-attribute:focus, .d2l-attribute-picker-attribute:focus > d2l-icon {
-				background-color: var(--d2l-color-celestine);
-				color: white;
-				outline: none;
-			}
-			d2l-icon {
-				color: var(--d2l-color-galena);
-				/* display: none; */
-				margin-left: 0.3rem;
-			}
-			.d2l-attribute-picker-attribute:focus > d2l-icon,
-			.d2l-attribute-picker-attribute:focus > d2l-icon:hover {
-				color: white;
 			}
 			.d2l-attribute-picker-input {
 				background: transparent;
@@ -178,26 +151,19 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 		return html`
 		<div role="application" class="d2l-attribute-picker-container ${this._inputFocused ? 'd2l-attribute-picker-container-focused' : ''}">
-			<div class="d2l-attribute-picker-content" aria-live="polite">
+			<div class="d2l-attribute-picker-content" aria-live="polite" role="${this.attributeList.length > 0 ? 'list' : ''}">
 				${this.attributeList.map((item, index) => html`
-				<div
-					class="d2l-attribute-picker-attribute"
-					tabindex="0"
-					.index="${index}"
-					aria-label="${this.localize('picker_attribute_name', 'attribute', item)}"
-					@keydown="${this._onAttributeKeydown}"
-					@blur="${this._onAttributeBlur}"
-					@focus="${this._onAttributeFocus}">
-						${item}
-					<d2l-icon
-						aria-live="off"
-						aria-label="${this.localize('picker_remove_attribute', 'attribute', item)}"
-						class="${(this._inputFocused || this._activeAttributeIndex > -1) ? 'focused' : ''}"
-						.value="${item}" .index="${index}" ?hidden="${!this._inputFocused && this._activeAttributeIndex === -1}"
-						icon="d2l-tier1:close-small"
-						@click="${this._onAttributeRemoveClick}">
-					</d2l-icon>
-				</div>`)}
+					<d2l-labs-multi-select-list-item
+						class="d2l-attribute-picker-attribute"
+						text="${item}"
+						.index="${index}"
+						deletable
+						@d2l-labs-multi-select-list-item-deleted="${this._onAttributeRemoved}"
+						@blur="${this._onAttributeBlur}"
+						@focus="${this._onAttributeFocus}"
+						@keydown="${this._onAttributeKeydown}">
+					</d2l-labs-multi-select-list-item>
+				`)}
 
 				<input
 					aria-activedescendant="${this._dropdownIndex > -1 ? `attribute-dropdown-list-item-${this._dropdownIndex}` : ''}"
@@ -273,7 +239,6 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 		//Wait until we can get the full list of available list items after clearing the text
 		await this.updateComplete;
-
 		const list = this.shadowRoot.querySelectorAll('li');
 
 		//If we removed the final index of the list, move our index back to compensate
@@ -311,6 +276,12 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		return this.limit && (this.attributeList.length >= this.limit);
 	}
 
+	_focusAttribute(index) {
+		const selectedAttributes = this.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
+		this._activeAttributeIndex = index;
+		selectedAttributes[index].focus();
+	}
+
 	// Absolute value % operator for navigating menus.
 	_mod(x, y) {
 		return ((x % y) + y) % y;
@@ -334,30 +305,55 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		switch (e.keyCode) {
 			case keyCodes.BACKSPACE: {
 				this._removeAttributeIndex(this._activeAttributeIndex);
-				this.shadowRoot.querySelector('.d2l-attribute-picker-input').focus();
-				break;
-			}
-			case keyCodes.LEFT: {
-				if (this._activeAttributeIndex > 0 && this._activeAttributeIndex < this.attributeList.length) {
-					this._activeAttributeIndex -= 1;
+				if (this.attributeList.length === 0) {
+					this.shadowRoot.querySelector('.d2l-attribute-picker-input').focus();
+				} else if (this._activeAttributeIndex > 0) {
+					this._focusAttribute(this._activeAttributeIndex - 1);
 				}
 				break;
 			}
-			case keyCodes.RIGHT: {
-				if (this._activeAttributeIndex >= 0 && this._activeAttributeIndex < this.attributeList.length - 1) {
-					this._activeAttributeIndex += 1;
-				} else {
-					this._activeAttributeIndex = -1;
+			case keyCodes.DELETE: {
+				this._removeAttributeIndex(this._activeAttributeIndex);
+				if (this.attributeList.length === 0) {
 					this.shadowRoot.querySelector('.d2l-attribute-picker-input').focus();
+				} else if (this.attributeList.length <= this._activeAttributeIndex) {
+					this._focusAttribute(this._activeAttributeIndex - 1);
+				}
+				break;
+			}
+			case keyCodes.UP:
+			case keyCodes.LEFT: {
+				e.preventDefault();
+				e.stopPropagation();
+				if (this._activeAttributeIndex > 0 && this._activeAttributeIndex < this.attributeList.length) {
+					this._focusAttribute(this._activeAttributeIndex - 1);
+				}
+				break;
+			}
+			case keyCodes.DOWN:
+			case keyCodes.RIGHT: {
+				e.preventDefault();
+				e.stopPropagation();
+				if (this._activeAttributeIndex === this.attributeList.length - 1) {
+					this.shadowRoot.querySelector('.d2l-attribute-picker-input').focus();
+				} else if (this.attributeList.length > 0) {
+					this._focusAttribute(this._activeAttributeIndex + 1);
 				}
 				break;
 			}
 		}
 	}
 
-	_onAttributeRemoveClick(e) {
-		this._removeAttributeIndex(e.target.index);
-		this.shadowRoot.querySelector('input').focus();
+	_onAttributeRemoved(e) {
+		this.attributeList.splice(this.attributeList.indexOf(e.detail.value), 1);
+		this.dispatchEvent(new CustomEvent('d2l-attributes-changed', {
+			bubbles: true,
+			composed: true,
+			detail: {
+				attributeList: this.attributeList
+			}
+		}));
+		this.requestUpdate();
 	}
 
 	_onInputBlur() {
@@ -366,7 +362,6 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 	_onInputFocus() {
 		this._inputFocused = true;
-		this._activeAttributeIndex = -1;
 
 		if (this.allowFreeform) {
 			this._dropdownIndex = -1;
@@ -384,17 +379,13 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				}
 				break;
 			}
+			case keyCodes.LEFT:
 			case keyCodes.BACKSPACE: {
-				if (this._activeAttributeIndex >= 0) {
-					this._removeAttributeIndex(this._activeAttributeIndex);
-					this._activeAttributeIndex = -1;
+				if (this.shadowRoot.querySelector('.d2l-attribute-picker-input').selectionStart === 0 && this.attributeList.length > 0) {
 					e.preventDefault();
-					return;
+					e.stopPropagation();
+					this._focusAttribute(this.attributeList.length - 1);
 				}
-				break;
-			}
-			case keyCodes.LEFT: {
-				this._activeAttributeIndex = this.attributeList.length - 1;
 				break;
 			}
 			case keyCodes.UP: {
@@ -448,7 +439,6 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 	_removeAttributeIndex(index) {
 		this.attributeList = this.attributeList.slice(0, index).concat(this.attributeList.slice(index + 1, this.attributeList.length));
-		this._activeAttributeIndex = -1;
 
 		this.dispatchEvent(new CustomEvent('d2l-attributes-changed', {
 			bubbles: true,

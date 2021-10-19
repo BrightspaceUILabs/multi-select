@@ -190,7 +190,8 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			--d2l-icon-width: 0.5rem;
 			color: var(--d2l-color-galena);
 			cursor: pointer;
-			padding: 0.4rem 0.85rem;
+			margin: 0 8px 0 3px;
+			padding: 0.4rem 4px;
 			vertical-align: middle;
 		}
 
