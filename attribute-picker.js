@@ -191,7 +191,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 					${availableAttributes.map((item) => html`
 						<li id="attribute-dropdown-list-item-${listIndex}"
-							aria-label="${this.localize('picker_add_attribute', 'attribute', item)}"
+							aria-label="${this.localize('picker_add_value', 'value', item)}"
 							aria-selected="${this._dropdownIndex === listIndex ? true : false}"
 							class="d2l-attribute-picker-li ${this._dropdownIndex === listIndex ? 'd2l-selected' : ''}"
 							.text="${item}"

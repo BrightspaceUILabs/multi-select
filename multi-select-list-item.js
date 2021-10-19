@@ -235,7 +235,7 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 					<div class="d2l-labs-multi-select-list-item-text" aria-hidden="true">${this._getVisibleText(this.text, this.shortText, this.maxChars)}</div>
 					<d2l-offscreen>${this._getScreenReaderText(this.text, this.shortText)}</d2l-offscreen>
 				</div>
-				<d2l-icon aria-hidden="true" class="d2l-labs-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" ?hidden="${!this.deletable}" @click="${this._onDeleteItem}"></d2l-icon>
+				<d2l-icon aria-label="${this.localize('picker_remove_value', 'value', this.text)}" class="d2l-labs-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" ?hidden="${!this.deletable}" @click="${this._onDeleteItem}"></d2l-icon>
 			</div>
 			${this._hasTooltip(this.text, this.shortText, this.maxChars) ? html`
 				<d2l-tooltip position="${this.tooltipPosition}">${this.text}</d2l-tooltip>` : null }
