@@ -15,7 +15,7 @@ describe('multi-select-input-text', () => {
 	describe('accessibility', () => {
 		it('should pass all aXe tests', async() => {
 			const el = await fixture(html`
-				<d2l-labs-multi-select-input-text aria-label="label" placeholder="placeholder">
+				<d2l-labs-multi-select-input-text placeholder="placeholder">
 					<d2l-labs-multi-select-list-item deletable text="item0" id="item0"></d2l-labs-multi-select-list-item>
 				</d2l-labs-multi-select-input-text>`);
 			const item0 = document.getElementById('item0');
@@ -28,7 +28,7 @@ describe('multi-select-input-text', () => {
 	describe('functionality', () => {
 		it('should be able to add a list item', async() => {
 			const el = await fixture(html`
-				<d2l-labs-multi-select-input-text aria-label="label" placeholder="placeholder">
+				<d2l-labs-multi-select-input-text placeholder="placeholder">
 					<d2l-labs-multi-select-list-item deletable text="item0"></d2l-labs-multi-select-list-item>
 					<d2l-labs-multi-select-list-item deletable text="item1"></d2l-labs-multi-select-list-item>
 					<d2l-labs-multi-select-list-item deletable text="item2"></d2l-labs-multi-select-list-item>
