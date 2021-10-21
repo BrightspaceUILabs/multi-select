@@ -35,22 +35,22 @@ Include the [webcomponents.js](http://webcomponents.org/polyfills/) polyfill loa
 </head>
 ```
 
-### Inputs
+# Components
 
-#### `d2l-labs-multi-select-input-text`
+## `d2l-labs-multi-select-input-text`
 
 `d2l-labs-multi-select-input-text` includes a `d2l-input-text` that is hooked up to add items when 'Enter' is pressed.
-
+**Usage:**
 ```html
 <d2l-labs-multi-select-input-text>
 	<d2l-labs-multi-select-list-item deletable text="Item 1"></d2l-labs-multi-select-list-item>
 </d2l-labs-multi-select-input-text>
 ```
 
-#### `d2l-labs-multi-select-input`
+## `d2l-labs-multi-select-input`
 
 You can use your own input component instead by putting it as a child of `d2l-labs-multi-select-input` and setting `slot="input"` on your input element. To add items to the list, call `addItem` with the item text.
-
+**Usage:**
 ```html
 <d2l-labs-multi-select-input id="multi-select-input">
 	<div slot="input">
@@ -66,8 +66,10 @@ button.addEventListener('click', () => {
 })
 ```
 
-#### `d2l-labs-attribute-picker`
-## Usage
+## `d2l-labs-attribute-picker`
+
+An autocompleting dropdown to choose one or more new or pre-existing attributes inline.
+**Usage:**
 ```html
 <script type="module">
     import '@brightspace-ui-labs/attribute-picker/attribute-picker.js';
@@ -103,9 +105,7 @@ attributePicker.addEventListener('d2l-attributes-changed', (e) => {
 
 The `d2l-labs-attribute-picker` dispatches the `d2l-attribute-limit-reached` event when the user attempts to enter an attribute greater than the limit. This can be used to send feedback to the user.
 
-### Components
-
-#### `d2l-labs-multi-select-list-item`
+## `d2l-labs-multi-select-list-item`
 
 `d2l-labs-multi-select-list-item` is a compact representation of information.
 
@@ -126,9 +126,11 @@ Also the following css variables are exposed to clients and can be use to overri
 --d2l-labs-multi-select-list-item-padding-deletable-rtl
 ```
 
-#### `d2l-labs-multi-select-list`
+## `d2l-labs-multi-select-list`
 
 `d2l-labs-multi-select-list` wraps a list of items, and provides spacing between the items, as well as keyboard navigation (arrow keys) and handling of item deletion (backspace/delete).
+
+**Usage:**
 ```html
 <d2l-labs-multi-select-list>
 	<d2l-labs-multi-select-list-item text="List item 1"></d2l-labs-multi-select-list-item>
@@ -139,11 +141,12 @@ Also the following css variables are exposed to clients and can be use to overri
 
 You can opt for a condensed view by adding the `collapsable` attribute, which limits the element to the first line of items and provides a button for viewing the remaining items.
 
-### Events
+**Events:**
 
 - `d2l-labs-multi-select-list-item-deleted`: fired on item deletion
 
 - `d2l-labs-multi-select-list-item-added`: fired on item added to the `d2l-labs-multi-select-list`
+
 
 ## Developing, Testing and Contributing
 

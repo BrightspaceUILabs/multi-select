@@ -39,7 +39,10 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			attributeList: { type: Array, attribute: 'attribute-list', reflect: true },
 
 			/* The inner text of the input. */
-			text: { type: String, attribute: 'text', reflect: true },
+			_text: { type: String, attribute: 'text', reflect: true },
+
+			/* Represents the index of the currently focused attribute. If no attribute is focused, equals -1. */
+			_activeAttributeIndex: { type: Number, reflect: false },
 
 			/* Represents the index of the currently focused dropdown list item. If no item is focused, equals -1. */
 			_dropdownIndex: { type: Number, reflect: false },
