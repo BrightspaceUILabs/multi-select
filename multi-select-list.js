@@ -377,7 +377,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 
 		const children = this._children;
 		const listItemContainer = this.shadowRoot.querySelector('.d2l-list-item-container');
-		const widthOfListItems = listItemContainer.getBoundingClientRect()?.width;
+		const widthOfListItems = listItemContainer.getBoundingClientRect() && listItemContainer.getBoundingClientRect().width;
 
 		let newHiddenChildren = 0;
 		for (let i = 0; i < children.length; i++) {
