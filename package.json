@@ -9,7 +9,7 @@
     "access": "public"
   },
   "files": [
-    "./lang/**",
+    "lang/.*",
     "attribute-picker.js",
     "localization.js",
     "localize-behavior.js",
