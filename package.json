@@ -9,6 +9,9 @@
     "access": "public"
   },
   "files": [
+    "./lang/**",
+    "attribute-picker.js",
+    "localization.js",
     "localize-behavior.js",
     "multi-select-input-text.js",
     "multi-select-input.js",
@@ -16,37 +19,37 @@
     "multi-select-list.js"
   ],
   "scripts": {
-    "lint": "npm run lint:wc && npm run lint:js",
-    "lint:js": "eslint . --ext .js,.html test/**/*.html demo/**/*.html",
-    "lint:wc": "polymer lint",
-    "test:polymer:local": "polymer test --skip-plugin sauce",
-    "test:polymer:sauce": "polymer test --skip-plugin local",
-    "test": "npm run lint && npm run test:polymer:local",
-    "serve": "polymer serve"
+    "lint": "npm run lint:eslint && npm run lint:lit && npm run lint:style",
+    "lint:eslint": "eslint . --ext .js,.html",
+    "lint:lit": "lit-analyzer  \"{demo,test}/**/*.js\" --strict --rules.no-unknown-tag-name off --rules.no-incompatible-type-binding off --rules.no-unknown-attribute off --rules.no-unknown-property off",
+    "lint:style": "stylelint \"**/*.js\"",
+    "start": "web-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
+    "test": "npm run lint && npm run test:headless",
+    "test:headless": "web-test-runner --node-resolve"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
-  "version": "4.1.9",
+  "version": "4.2.1",
   "devDependencies": {
     "@babel/core": "^7",
     "@babel/eslint-parser": "^7",
-    "@babel/polyfill": "^7",
-    "@polymer/iron-test-helpers": "^3",
+    "@brightspace-ui/stylelint-config": "^0.0.3",
+    "@open-wc/testing": "^2.5.33",
     "@webcomponents/webcomponentsjs": "^2",
+    "@web/dev-server": "^0.1.23",
+    "@web/test-runner": "^0.13",
     "eslint": "^7",
     "eslint-config-brightspace": "^0.13",
     "eslint-plugin-html": "^6",
+    "eslint-plugin-lit": "1.4.1",
     "eslint-plugin-sort-class-members": "^1",
-    "polymer-cli": "^1",
-    "wct-browser-legacy": "^1"
+    "lit-analyzer": "^1",
+    "sinon": "^9.2.1",
+    "stylelint": "^13"
   },
   "dependencies": {
     "@brightspace-ui/core": "^1",
     "@polymer/polymer": "^3",
-    "d2l-localize-behavior": "BrightspaceUI/localize-behavior#semver:^2",
-    "d2l-resize-aware": "BrightspaceUI/resize-aware#semver:^1",
-    "d2l-polymer-behaviors": "Brightspace/d2l-polymer-behaviors-ui#semver:^2",
-    "d2l-tooltip": "BrightspaceUI/tooltip#semver:^3",
-    "d2l-typography": "BrightspaceUI/typography#semver:^7"
+    "d2l-localize-behavior": "BrightspaceUI/localize-behavior#semver:^2"
   }
 }

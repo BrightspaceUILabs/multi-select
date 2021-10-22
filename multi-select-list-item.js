@@ -1,169 +1,13 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@brightspace-ui/core/components/colors/colors.js';
-import 'd2l-typography/d2l-typography-shared-styles.js';
 import '@brightspace-ui/core/components/icons/icon.js';
 import '@brightspace-ui/core/components/offscreen/offscreen.js';
-import 'd2l-tooltip/d2l-tooltip.js';
-import './localize-behavior.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+import '@brightspace-ui/core/components/tooltip/tooltip.js';
+import { css, html, LitElement } from 'lit-element/lit-element.js';
+import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
+import { Localizer } from './localization.js';
+import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
-const $_documentContainer = document.createElement('template');
-$_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-list-item">
-	<template strip-whitespace="">
-		<style>
-			:host {
-				cursor: pointer;
-				display: inline-block;
-				outline: none;
-				--d2l-labs-multi-select-list-item-padding: 0.25rem 0.75rem 0.2rem;
-				--d2l-labs-multi-select-list-item-padding-rtl: 0.25rem 0.75rem 0.2rem;
-				--d2l-labs-multi-select-list-item-padding-deletable: 0.25rem 0 0.2rem 0.6rem;
-				--d2l-labs-multi-select-list-item-padding-deletable-rtl: 0.25rem 0.6rem 0.2rem 0;
-				--d2l-labs-multi-select-list-item-font: {
-					@apply --d2l-body-compact-text;
-				};
-				width: max-content;
-			}
-			:host([_fallback-css]) {
-				min-width: 125px;
-			}
-
-			.d2l-labs-multi-select-list-item-text-wrapper {
-				padding: var(--d2l-labs-multi-select-list-item-padding);
-			}
-
-			.d2l-labs-multi-select-list-item-wrapper {
-				@apply --d2l-labs-multi-select-list-item-font;
-				-moz-user-select: none;
-				-ms-user-select: none;
-				-webkit-user-select: none;
-
-				align-items: baseline;
-				background-color: var(--d2l-color-sylvite);
-				border: 1px solid var(--d2l-color-gypsum);
-				border-radius: 0.25rem;
-				cursor: pointer;
-				display: flex;
-				line-height: normal;
-				outline: none;
-
-			}
-
-			:host([dir='rtl']) .d2l-labs-multi-select-list-item-text-wrapper {
-				padding: var(--d2l-labs-multi-select-list-item-padding-rtl);
-			}
-
-			:host([deletable]) .d2l-labs-multi-select-list-item-text-wrapper {
-				padding: var(--d2l-labs-multi-select-list-item-padding-deletable);
-			}
-
-			:host([deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
-				visibility: hidden;
-				margin-left: -0.7rem;
-			}
-
-			:host([dir='rtl'][deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
-				margin-left: 0;
-				margin-right: -0.7rem;
-			}
-
-			:host(:hover[deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
-				visibility: unset;
-				background-color: var(--d2l-color-gypsum);
-			}
-
-			:host(:focus[deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
-				visibility: unset;
-				background-color: var(--d2l-color-celestine);
-			}
-
-			:host([dir='rtl'][deletable]) .d2l-labs-multi-select-list-item-text-wrapper {
-				padding: var(--d2l-labs-multi-select-list-item-padding-deletable-rtl);
-			}
-
-			:host(:hover) .d2l-labs-multi-select-list-item-wrapper {
-				background-color: var(--d2l-color-gypsum);
-				border-color: var(--d2l-color-mica);
-			}
-
-			:host(:hover) .d2l-labs-multi-select-list-item-wrapper d2l-icon:hover {
-				color: var(--d2l-color-ferrite);
-			}
-
-			:host(:focus) .d2l-labs-multi-select-list-item-wrapper {
-				background-color: var(--d2l-color-celestine);
-				border-color: var(--d2l-color-celestine-minus-1);
-				color: #ffffff;
-			}
-
-			:host(:focus) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
-				color: #c6dbef; // this color is the same as #ffffff with opacity of 0.75
-			}
-
-            :host(:focus) .d2l-labs-multi-select-list-item-wrapper d2l-icon:hover {
-				color: #ffffff;
-				opacity: 1;
-			}
-
-			d2l-icon {
-				--d2l-icon-height: 0.5rem;
-				--d2l-icon-width: 0.5rem;
-				color: var(--d2l-color-galena);
-				cursor: pointer;
-				padding: 0.4rem 0.85rem;
-				vertical-align: middle;
-			}
-
-			d2l-icon[hidden] {
-				display: none;
-			}
-
-			:host(:dir(rtl)) d2l-icon {
-				margin-left: 0;
-				margin-right: 0.15rem;
-			}
-
-			d2l-tooltip {
-				@apply --d2l-body-small-text;
-				color: var(--d2l-color-white);
-				width: max-content;
-				max-width: 300px;
-			}
-
-			:host([_fallback-css]) d2l-tooltip {
-				min-width: 200px;
-			}
-
-			.d2l-labs-multi-select-delete-icon {
-				z-index: 0;
-			}
-
-		</style>
-
-		<div class="d2l-labs-multi-select-list-item-wrapper" id="tag" on-click="_onClick">
-			<div class="d2l-labs-multi-select-list-item-text-wrapper">
-				<div class="d2l-labs-multi-select-list-item-text" aria-hidden="true">[[_getVisibleText(text,shortText,maxChars)]]</div>
-				<d2l-offscreen>[[_getScreenReaderText(text,shortText)]]</d2l-offscreen>
-			</div>
-			<d2l-icon aria-hidden="true" class="d2l-labs-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" hidden="[[!deletable]]" on-click="_onDeleteItem"></d2l-icon>
-		</div>
-		<template is="dom-if" if="[[_hasTooltip(text,shortText,maxChars)]]">
-			<d2l-tooltip position="[[tooltipPosition]]">[[text]]</d2l-tooltip>
-		</template>
-	</template>
-
-</dom-module>`;
-
-document.head.appendChild($_documentContainer.content);
-/**
- * `<d2l-labs-multi-select-list-item>`
- * Polymer-based web component for D2L multi-select-list-item
- * @demo demo/index.hmtl
- */
-class D2LMultiSelectItem extends mixinBehaviors(
-	[D2L.PolymerBehaviors.D2LMultiSelect.LocalizeBehavior], PolymerElement
-) {
-	static get is() { return 'd2l-labs-multi-select-list-item'; }
+class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 	static get properties() {
 		return {
 
@@ -171,8 +15,7 @@ class D2LMultiSelectItem extends mixinBehaviors(
 			* Text displayed in the multi-select-list-item.
 			*/
 			text: {
-				type: String,
-				value: ''
+				type: String
 			},
 
 			/**
@@ -182,7 +25,7 @@ class D2LMultiSelectItem extends mixinBehaviors(
 			*/
 			shortText: {
 				type: String,
-				value: null
+				attribute: 'short-text'
 			},
 
 			/**
@@ -192,7 +35,7 @@ class D2LMultiSelectItem extends mixinBehaviors(
 			*/
 			maxChars: {
 				type: Number,
-				value: 40
+				attribute: 'max-chars'
 			},
 
 			/**
@@ -200,7 +43,12 @@ class D2LMultiSelectItem extends mixinBehaviors(
 			*/
 			deletable: {
 				type: Boolean,
-				value: false
+				reflect: true
+			},
+
+			role: {
+				type: String,
+				reflect: true
 			},
 
 			/**
@@ -208,7 +56,16 @@ class D2LMultiSelectItem extends mixinBehaviors(
 			*/
 			showDeleteHoverFocus: {
 				type: Boolean,
-				value: false
+				attribute: 'show-delete-hover-focus',
+				reflect: true
+			},
+
+			/**
+			* The tab index
+			*/
+			tabIndex: {
+				type: Number,
+				reflect: true
 			},
 
 			/**
@@ -216,7 +73,7 @@ class D2LMultiSelectItem extends mixinBehaviors(
 			*/
 			tooltipPosition: {
 				type: String,
-				value: 'top'
+				attribute: 'tooltip-position'
 			},
 
 			/**
@@ -227,20 +84,162 @@ class D2LMultiSelectItem extends mixinBehaviors(
 				value: function() {
 					return !window.CSS || !window.CSS.supports || !window.CSS.supports('width', 'max-content');
 				},
-				reflectToAttribute: true
+				reflect: true,
+				attribute: '_fallback-css'
 			}
 		};
 	}
 
-	constructor() {
-		super();
+	static get styles() {
+		return [bodyCompactStyles, css`
+		:host {
+			--d2l-labs-multi-select-list-item-padding: 0.25rem 0.75rem 0.2rem;
+			--d2l-labs-multi-select-list-item-padding-rtl: 0.25rem 0.75rem 0.2rem;
+			--d2l-labs-multi-select-list-item-padding-deletable: 0.25rem 0 0.2rem 0.6rem;
+			--d2l-labs-multi-select-list-item-padding-deletable-rtl: 0.25rem 0.6rem 0.2rem 0;
+
+			cursor: pointer;
+			display: inline-block;
+			outline: none;
+			width: max-content;
+		}
+		:host([hidden]) {
+			display: none;
+		}
+		:host([_fallback-css]) {
+			min-width: 125px;
+		}
+
+		.d2l-labs-multi-select-list-item-text-wrapper {
+			padding: var(--d2l-labs-multi-select-list-item-padding);
+		}
+
+		.d2l-labs-multi-select-list-item-wrapper {
+			align-items: baseline;
+			background-color: var(--d2l-color-sylvite);
+			border: 1px solid var(--d2l-color-gypsum);
+			border-radius: 0.25rem;
+			cursor: pointer;
+			display: flex;
+			line-height: normal;
+			outline: none;
+
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-webkit-user-select: none;
+		}
+
+		:host([dir='rtl']) .d2l-labs-multi-select-list-item-text-wrapper {
+			padding: var(--d2l-labs-multi-select-list-item-padding-rtl);
+		}
+
+		:host([deletable]) .d2l-labs-multi-select-list-item-text-wrapper {
+			padding: var(--d2l-labs-multi-select-list-item-padding-deletable);
+		}
+
+		:host([deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
+			margin-left: -0.7rem;
+			visibility: hidden;
+		}
+
+		:host([dir='rtl'][deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
+			margin-left: 0;
+			margin-right: -0.7rem;
+		}
+
+		:host(:hover[deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
+			background-color: var(--d2l-color-gypsum);
+			visibility: unset;
+		}
+
+		:host(:focus[deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
+			background-color: var(--d2l-color-celestine);
+			visibility: unset;
+		}
+
+		:host([dir='rtl'][deletable]) .d2l-labs-multi-select-list-item-text-wrapper {
+			padding: var(--d2l-labs-multi-select-list-item-padding-deletable-rtl);
+		}
+
+		:host(:hover) .d2l-labs-multi-select-list-item-wrapper {
+			background-color: var(--d2l-color-gypsum);
+			border-color: var(--d2l-color-mica);
+		}
+
+		:host(:hover) .d2l-labs-multi-select-list-item-wrapper d2l-icon:hover {
+			color: var(--d2l-color-ferrite);
+		}
+
+		:host(:focus) .d2l-labs-multi-select-list-item-wrapper {
+			background-color: var(--d2l-color-celestine);
+			border-color: var(--d2l-color-celestine-minus-1);
+			color: #ffffff;
+		}
+
+		:host(:focus) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
+			color: #c6dbef;
+		}
+
+		:host(:focus) .d2l-labs-multi-select-list-item-wrapper d2l-icon:hover {
+			color: #ffffff;
+			opacity: 1;
+		}
+
+		d2l-icon {
+			--d2l-icon-height: 0.5rem;
+			--d2l-icon-width: 0.5rem;
+			color: var(--d2l-color-galena);
+			cursor: pointer;
+			margin: 0 8px 0 3px;
+			padding: 0.4rem 4px;
+			vertical-align: middle;
+		}
+
+		:host(:dir(rtl)) d2l-icon {
+			margin-left: 0;
+			margin-right: 0.15rem;
+		}
+
+		d2l-tooltip {
+			@apply --d2l-body-small-text;
+			max-width: 300px;
+			width: max-content;
+		}
+
+		:host([_fallback-css]) d2l-tooltip {
+			min-width: 200px;
+		}
+
+		.d2l-labs-multi-select-delete-icon {
+			z-index: 0;
+		}
+		`];
 	}
 
-	connectedCallback() {
-		super.connectedCallback();
-		// Set tabindex to allow focusable behaviour from the list
-		this.setAttribute('role', 'listitem');
-		this.tabIndex = -1;
+	constructor() {
+		super();
+		this.text = '';
+		this.shortText = '';
+		this.maxChars = 40;
+		this.deletable = false;
+		this.showDeleteHoverFocus = false;
+		this.tabIndex = 0;
+		this.tooltipPosition = 'top';
+		this.role = 'listitem';
+	}
+
+	render() {
+		return html`
+			<div class="d2l-body-compact d2l-labs-multi-select-list-item-wrapper" id="tag" @click="${this._onClick}">
+				<div class="d2l-labs-multi-select-list-item-text-wrapper">
+					<div class="d2l-labs-multi-select-list-item-text" aria-hidden="true">${this._getVisibleText(this.text, this.shortText, this.maxChars)}</div>
+					<d2l-offscreen>${this._getScreenReaderText(this.text, this.shortText)}</d2l-offscreen>
+				</div>
+				<d2l-icon role="button" aria-label="${this.localize('picker_remove_value', 'value', this.text)}" class="d2l-labs-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" ?hidden="${!this.deletable}" @click="${this._onDeleteItem}"></d2l-icon>
+			</div>
+			${this._hasTooltip(this.text, this.shortText, this.maxChars) ? html`
+				<d2l-tooltip position="${this.tooltipPosition}">${this.text}</d2l-tooltip>` : null }
+		`;
 	}
 
 	deleteItem() {
@@ -259,8 +258,7 @@ class D2LMultiSelectItem extends mixinBehaviors(
 		if (text.length <= maxChars) {
 			return text;
 		}
-
-		return text.substring(0, maxChars) + '...';
+		return `${text.substring(0, maxChars)}...`;
 	}
 
 	_hasTooltip(text, shortText, maxChars) {
@@ -280,4 +278,4 @@ class D2LMultiSelectItem extends mixinBehaviors(
 		));
 	}
 }
-customElements.define(D2LMultiSelectItem.is, D2LMultiSelectItem);
+customElements.define('d2l-labs-multi-select-list-item', MultiSelectListItem);
