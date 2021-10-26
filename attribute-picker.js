@@ -29,14 +29,17 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			/* An array of strings available in the dropdown list. */
 			assignableAttributes: { type: Array, attribute: 'assignable-attributes', reflect: true },
 
+			/* An array of strings representing the attributes currently selected in the picker. */
+			attributeList: { type: Array, attribute: 'attribute-list', reflect: true },
+
 			/* When true, the autocomplete dropdown will not be displayed to the user. */
 			hideDropdown: { type: Boolean, attribute: 'hide-dropdown', reflect: true },
 
 			/* The maximum number of attributes permitted. */
 			limit: { type: Number, attribute: 'limit', reflect: true },
 
-			/* An array of strings representing the attributes currently selected in the picker. */
-			attributeList: { type: Array, attribute: 'attribute-list', reflect: true },
+			/* If true, delete buttons will not be displayed on attributes. */
+			hideDeleteButtons: { type: Boolean, attribute: 'hide-delete-buttons', reflect: true },
 
 			/* The inner text of the input. */
 			_text: { type: String, attribute: 'text', reflect: true },
@@ -87,6 +90,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				display: flex;
 				flex-direction: row;
 				margin-top: -1px;
+				flex-wrap: wrap;
 			}
 			.d2l-attribute-picker-attribute {
 				display: flex;
@@ -160,7 +164,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 						class="d2l-attribute-picker-attribute"
 						text="${item}"
 						.index="${index}"
-						deletable
+						?deletable=${!this.hideDeleteButtons}
 						@d2l-labs-multi-select-list-item-deleted="${this._onAttributeRemoved}"
 						@blur="${this._onAttributeBlur}"
 						@focus="${this._onAttributeFocus}"
