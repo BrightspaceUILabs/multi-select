@@ -346,6 +346,24 @@ describe('attribute-picker', () => {
 			expect(dropdownElements.length).equal(1);
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
 		});
+
+		it.only('Applies the deletable attribute on focused pickers and attributes', async() => {
+			const pageNumberInput = el.shadowRoot.querySelector('input');
+			pageNumberInput.focus();
+			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
+			await el.updateComplete;
+			expect(listItems[0].deletable).equal(true);
+
+			listItems[0].focus();
+			await el.updateComplete;
+			expect(listItems[0].deletable).equal(true);
+
+			listItems[0].blur();
+			await listItems[0].updateComplete;
+			await el.updateComplete;
+			expect(listItems[0].deletable).equal(false);
+		});
+
 	});
 
 	describe('eventing', () => {

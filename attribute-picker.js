@@ -38,9 +38,6 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			/* The maximum number of attributes permitted. */
 			limit: { type: Number, attribute: 'limit', reflect: true },
 
-			/* If true, delete buttons will not be displayed on attributes. */
-			hideDeleteButtons: { type: Boolean, attribute: 'hide-delete-buttons', reflect: true },
-
 			/* The inner text of the input. */
 			_text: { type: String, attribute: 'text', reflect: true },
 
@@ -89,8 +86,8 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				cursor: text;
 				display: flex;
 				flex-direction: row;
-				margin-top: -1px;
 				flex-wrap: wrap;
+				margin-top: -1px;
 			}
 			.d2l-attribute-picker-attribute {
 				display: flex;
@@ -164,7 +161,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 						class="d2l-attribute-picker-attribute"
 						text="${item}"
 						.index="${index}"
-						?deletable=${!this.hideDeleteButtons}
+						?deletable="${this._inputFocused || this._activeAttributeIndex !== -1}"
 						@d2l-labs-multi-select-list-item-deleted="${this._onAttributeRemoved}"
 						@blur="${this._onAttributeBlur}"
 						@focus="${this._onAttributeFocus}"
