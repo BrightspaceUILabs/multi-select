@@ -460,5 +460,18 @@ describe('attribute-picker', () => {
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');
 		});
+
+		it('should convert different capitalization into captitalization matching an available attribute if any exist', async() => {
+			const element = el; //require-atomic-updates deems this necessary
+			const pageNumberInput = el.shadowRoot.querySelector('input');
+			expect(element.attributeList.length).to.equal(3);
+
+			pageNumberInput.focus();
+			element._text = 'FouR';
+			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			await element.requestUpdate;
+			expect(element.attributeList.length).to.equal(4);
+			expect(element.attributeList[3].text).to.equal('four');
+		});
 	});
 });
