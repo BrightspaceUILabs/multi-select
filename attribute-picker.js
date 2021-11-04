@@ -150,7 +150,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		//Hash active attributes and filter out unavailable and unmatching dropdown items.
 		const hash = {};
 		this.attributeList.map((item) => hash[item] = true);
-		const availableAttributes = this.assignableAttributes.filter(x => hash[x] !== true && (x === '' || x.includes(this._text)));
+		const availableAttributes = this.assignableAttributes.filter(x => hash[x] !== true && (x === '' || x.toLowerCase().includes(this._text.toLowerCase())));
 		let listIndex = 0;
 
 		return html`
@@ -413,8 +413,25 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				if (this._dropdownIndex >= 0 && this._dropdownIndex < list.length) {
 					this.addAttribute(list[this._dropdownIndex].text);
 				} else if (this.allowFreeform) {
-					const trimmedAttribute =  this._text.trim();
-					if (trimmedAttribute.length > 0 && !this.attributeList.includes(trimmedAttribute)) {
+					const trimmedAttribute =  this._text.trim().toLowerCase();
+
+					const attributeListStandardized = this.attributeList.map((item) => {
+						return item.toLowerCase();
+					});
+
+					if (trimmedAttribute.length === 0 || attributeListStandardized.includes(trimmedAttribute)) {
+						return;
+					}
+
+					const matchedIndex = this.assignableAttributes.map((item) => {
+						return item.toLowerCase();
+					}).findIndex((x) => {
+						return x === trimmedAttribute;
+					});
+
+					if (matchedIndex >= 0) {
+						this.addAttribute(this.assignableAttributes[matchedIndex]);
+					} else {
 						this.addAttribute(this._text.trim());
 					}
 				}
