@@ -347,7 +347,7 @@ describe('attribute-picker', () => {
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
 		});
 
-		it.only('Applies the deletable attribute on focused pickers and attributes', async() => {
+		it('Applies the deletable attribute on focused pickers and attributes', async() => {
 			const pageNumberInput = el.shadowRoot.querySelector('input');
 			pageNumberInput.focus();
 			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
@@ -375,7 +375,7 @@ describe('attribute-picker', () => {
 				html`<d2l-labs-attribute-picker
 						allow-freeform
 						.attributeList="${attributeList}"
-						.assignable-attributes="${assignableAttributeList}"
+						.assignableAttributes="${assignableAttributeList}"
 						limit="5">
 					</d2l-labs-attribute-picker>`
 			);
@@ -446,16 +446,15 @@ describe('attribute-picker', () => {
 			pageNumberInput.focus();
 			element._text = 'four';
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
-			await element.requestUpdate;
+
 			expect(element.attributeList.length).to.equal(4);
 			element._text = 'five';
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
-			await element.requestUpdate;
+
 			expect(element.attributeList.length).to.equal(5);
 			element._text = 'six';
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
 			expect(element.attributeList.length).to.equal(5);
-			await element.requestUpdate;
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');
@@ -469,9 +468,9 @@ describe('attribute-picker', () => {
 			pageNumberInput.focus();
 			element._text = 'FouR';
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
-			await element.requestUpdate;
+			await element.updateComplete
 			expect(element.attributeList.length).to.equal(4);
-			expect(element.attributeList[3].text).to.equal('four');
+			expect(element.attributeList[3]).to.equal('four');
 		});
 	});
 });
