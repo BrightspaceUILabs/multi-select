@@ -468,7 +468,7 @@ describe('attribute-picker', () => {
 			pageNumberInput.focus();
 			element._text = 'FouR';
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
-			await element.updateComplete
+			await element.updateComplete;
 			expect(element.attributeList.length).to.equal(4);
 			expect(element.attributeList[3]).to.equal('four');
 		});
