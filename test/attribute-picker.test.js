@@ -470,7 +470,12 @@ describe('attribute-picker', () => {
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
 			await element.updateComplete;
 			expect(element.attributeList.length).to.equal(4);
-			expect(element.attributeList[3]).to.equal('four');
+			expect(element.attributeList).to.deep.equal(['one', 'two', 'three', 'four']);
+
+			element._text = 'FOUR';
+			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			await element.updateComplete;
+			expect(element.attributeList).to.deep.equal(['one', 'two', 'three', 'four']);
 		});
 	});
 });
