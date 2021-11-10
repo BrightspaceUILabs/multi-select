@@ -29,14 +29,14 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			/* An array of strings available in the dropdown list. */
 			assignableAttributes: { type: Array, attribute: 'assignable-attributes', reflect: true },
 
+			/* An array of strings representing the attributes currently selected in the picker. */
+			attributeList: { type: Array, attribute: 'attribute-list', reflect: true },
+
 			/* When true, the autocomplete dropdown will not be displayed to the user. */
 			hideDropdown: { type: Boolean, attribute: 'hide-dropdown', reflect: true },
 
 			/* The maximum number of attributes permitted. */
 			limit: { type: Number, attribute: 'limit', reflect: true },
-
-			/* An array of strings representing the attributes currently selected in the picker. */
-			attributeList: { type: Array, attribute: 'attribute-list', reflect: true },
 
 			/* The inner text of the input. */
 			_text: { type: String, attribute: 'text', reflect: true },
@@ -86,6 +86,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				cursor: text;
 				display: flex;
 				flex-direction: row;
+				flex-wrap: wrap;
 				margin-top: -1px;
 			}
 			.d2l-attribute-picker-attribute {
@@ -149,7 +150,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		//Hash active attributes and filter out unavailable and unmatching dropdown items.
 		const hash = {};
 		this.attributeList.map((item) => hash[item] = true);
-		const availableAttributes = this.assignableAttributes.filter(x => hash[x] !== true && (x === '' || x.includes(this._text)));
+		const availableAttributes = this.assignableAttributes.filter(x => hash[x] !== true && (x === '' || x.toLowerCase().includes(this._text.toLowerCase())));
 		let listIndex = 0;
 
 		return html`
@@ -160,7 +161,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 						class="d2l-attribute-picker-attribute"
 						text="${item}"
 						.index="${index}"
-						deletable
+						?deletable="${this._inputFocused || this._activeAttributeIndex !== -1}"
 						@d2l-labs-multi-select-list-item-deleted="${this._onAttributeRemoved}"
 						@blur="${this._onAttributeBlur}"
 						@focus="${this._onAttributeFocus}"
@@ -412,8 +413,25 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				if (this._dropdownIndex >= 0 && this._dropdownIndex < list.length) {
 					this.addAttribute(list[this._dropdownIndex].text);
 				} else if (this.allowFreeform) {
-					const trimmedAttribute =  this._text.trim();
-					if (trimmedAttribute.length > 0 && !this.attributeList.includes(trimmedAttribute)) {
+					const trimmedAttribute =  this._text.trim().toLowerCase();
+
+					const attributeListStandardized = this.attributeList.map((item) => {
+						return item.toLowerCase();
+					});
+
+					if (trimmedAttribute.length === 0 || attributeListStandardized.includes(trimmedAttribute)) {
+						return;
+					}
+
+					const matchedIndex = this.assignableAttributes.map((item) => {
+						return item.toLowerCase();
+					}).findIndex((x) => {
+						return x === trimmedAttribute;
+					});
+
+					if (matchedIndex >= 0) {
+						this.addAttribute(this.assignableAttributes[matchedIndex]);
+					} else {
 						this.addAttribute(this._text.trim());
 					}
 				}

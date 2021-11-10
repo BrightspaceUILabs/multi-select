@@ -346,6 +346,24 @@ describe('attribute-picker', () => {
 			expect(dropdownElements.length).equal(1);
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
 		});
+
+		it('Applies the deletable attribute on focused pickers and attributes', async() => {
+			const pageNumberInput = el.shadowRoot.querySelector('input');
+			pageNumberInput.focus();
+			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
+			await el.updateComplete;
+			expect(listItems[0].deletable).equal(true);
+
+			listItems[0].focus();
+			await el.updateComplete;
+			expect(listItems[0].deletable).equal(true);
+
+			listItems[0].blur();
+			await listItems[0].updateComplete;
+			await el.updateComplete;
+			expect(listItems[0].deletable).equal(false);
+		});
+
 	});
 
 	describe('eventing', () => {
@@ -357,7 +375,7 @@ describe('attribute-picker', () => {
 				html`<d2l-labs-attribute-picker
 						allow-freeform
 						.attributeList="${attributeList}"
-						.assignable-attributes="${assignableAttributeList}"
+						.assignableAttributes="${assignableAttributeList}"
 						limit="5">
 					</d2l-labs-attribute-picker>`
 			);
@@ -428,19 +446,36 @@ describe('attribute-picker', () => {
 			pageNumberInput.focus();
 			element._text = 'four';
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
-			await element.requestUpdate;
+
 			expect(element.attributeList.length).to.equal(4);
 			element._text = 'five';
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
-			await element.requestUpdate;
+
 			expect(element.attributeList.length).to.equal(5);
 			element._text = 'six';
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
 			expect(element.attributeList.length).to.equal(5);
-			await element.requestUpdate;
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');
+		});
+
+		it('should convert different capitalization into captitalization matching an available attribute if any exist', async() => {
+			const element = el; //require-atomic-updates deems this necessary
+			const pageNumberInput = el.shadowRoot.querySelector('input');
+			expect(element.attributeList.length).to.equal(3);
+
+			pageNumberInput.focus();
+			element._text = 'FouR';
+			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			await element.updateComplete;
+			expect(element.attributeList.length).to.equal(4);
+			expect(element.attributeList).to.deep.equal(['one', 'two', 'three', 'four']);
+
+			element._text = 'FOUR';
+			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			await element.updateComplete;
+			expect(element.attributeList).to.deep.equal(['one', 'two', 'three', 'four']);
 		});
 	});
 });
