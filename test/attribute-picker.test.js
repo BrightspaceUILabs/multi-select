@@ -17,11 +17,18 @@ function evaluateListValues(array, elementList) {
 	}
 
 	array.forEach((arrayElement, index) => {
-		if (!elementList[index].innerText.includes(arrayElement)) {
+		if (!elementList[index].innerText.includes(arrayElement.name)) {
 			return false;
 		}
 	});
 	return true;
+}
+
+function createAttributeList(nameList) {
+	return nameList.map(name => ({
+		name,
+		value: `value_of_${name}`
+	}));
 }
 
 describe('attribute-picker', () => {
@@ -58,9 +65,10 @@ describe('attribute-picker', () => {
 
 	describe('render', () => {
 		it('should display the initial attributes and dropdown values', async() => {
-			const attributeList = ['one', 'two', 'four'];
-			const assignableAttributeList = ['one', 'two', 'three', 'four', 'five', 'six'];
-			const expectedDropdownList = ['three', 'five', 'six'];
+			const assignableAttributeList = createAttributeList(['one', 'two', 'three', 'four', 'five', 'six']);
+			const attributeList = [assignableAttributeList[0], assignableAttributeList[3]];
+			const expectedDropdownList = assignableAttributeList.filter(a => !attributeList.some(x => x.value === a.value));
+
 			const el = await fixture(
 				html`<d2l-labs-attribute-picker
 						allow-freeform
@@ -81,11 +89,11 @@ describe('attribute-picker', () => {
 		});
 
 		it('should adjust the attributes and dropdown values when set to new values', async() => {
-			const attributeList = ['one', 'two', 'three'];
-			const assignableAttributeList = ['one', 'two', 'three', 'four', 'five', 'six'];
-			const changedAttributeList = ['apple', 'orange', 'pineapple'];
-			const changedAssignableList = ['apple', 'banana', 'lemon'];
-			const expectedAssignableList = ['banana', 'lemon'];
+			const assignableAttributeList = createAttributeList(['one', 'two', 'three', 'four', 'five', 'six']);
+			const attributeList = assignableAttributeList.slice(0, 4);
+			const changedAssignableList = createAttributeList(['apple', 'banana', 'lemon']);
+			const changedAttributeList = createAttributeList(['apple', 'orange', 'pineapple']);
+			const expectedAssignableList = changedAssignableList.slice(1).map(a => a.name);
 			let attributeElements;
 			let dropdownElements;
 
@@ -117,12 +125,11 @@ describe('attribute-picker', () => {
 			expect(evaluateListValues(changedAttributeList, attributeElements)).to.equal(true);
 			dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-li');
 			expect(evaluateListValues(expectedAssignableList, dropdownElements)).to.equal(true);
-
 		});
 
 		it('should hide the dropdown list if hide-dropdown is enabled', async() => {
-			const attributeList = ['one', 'two', 'four'];
-			const assignableAttributeList = ['one', 'two', 'three', 'four', 'five', 'six'];
+			const attributeList = createAttributeList(['one', 'two', 'four']);
+			const assignableAttributeList = createAttributeList(['one', 'two', 'three', 'four', 'five', 'six']);
 			const el = await fixture(
 				html`<d2l-labs-attribute-picker
 						hide-dropdown
@@ -141,8 +148,8 @@ describe('attribute-picker', () => {
 		});
 
 		it('should allow unlisted attributes if allow-freeform is enabled.', async() => {
-			const attributeList = ['one', 'two', 'four'];
-			const assignableAttributeList = ['one', 'two', 'three', 'four', 'five', 'six'];
+			const attributeList = createAttributeList(['one', 'two', 'four']);
+			const assignableAttributeList = createAttributeList(['one', 'two', 'three', 'four', 'five', 'six']);
 			const el = await fixture(
 				html`<d2l-labs-attribute-picker
 						allow-freeform
@@ -157,12 +164,14 @@ describe('attribute-picker', () => {
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
 			await el.updateComplete;
 
-			expect(el.attributeList[el.attributeList.length - 1]).to.equal('unlisted attribute');
+			// Some attribute types, like strings or dates, have values that are equal to their names...
+			expect(el.attributeList[el.attributeList.length - 1].name).to.equal('unlisted attribute');
+			expect(el.attributeList[el.attributeList.length - 1].value).to.equal('unlisted attribute');
 		});
 
 		it('should prevent unlisted if allow-freeform is disabled.', async() => {
-			const attributeList = ['one', 'two', 'four'];
-			const assignableAttributeList = ['one', 'two', 'three', 'four', 'five', 'six'];
+			const attributeList = createAttributeList(['one', 'two', 'four']);
+			const assignableAttributeList = createAttributeList(['one', 'two', 'three', 'four', 'five', 'six']);
 			const el = await fixture(
 				html`<d2l-labs-attribute-picker
 						.attributeList="${attributeList}"
@@ -181,8 +190,8 @@ describe('attribute-picker', () => {
 	});
 
 	describe('interaction', () => {
-		const attributeList = ['one', 'two', 'three'];
-		const assignableAttributeList = ['one', 'two', 'three', 'four', 'five', 'six'];
+		const attributeList = createAttributeList(['one', 'two', 'three']);
+		const assignableAttributeList = createAttributeList(['one', 'two', 'three', 'four', 'five', 'six']);
 		let el;
 		beforeEach(async() => {
 			el = await fixture(
@@ -207,35 +216,35 @@ describe('attribute-picker', () => {
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Down', keyCode: 40 }));
 			await el.updateComplete;
 			let selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
-			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[3]);
+			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[3].name);
 
 			//Select the middle and last item
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Down', keyCode: 40 }));
 			await el.updateComplete;
 			selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
-			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[4]);
+			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[4].name);
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Down', keyCode: 40 }));
 			await el.updateComplete;
 			selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
-			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[5]);
+			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[5].name);
 
 			//Pressing down once more should focus the first item again.
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Down', keyCode: 40 }));
 			await el.updateComplete;
 			selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
-			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[3]);
+			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[3].name);
 
 			//Pressing up should loop back to the end.
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Up', keyCode: 38 }));
 			await el.updateComplete;
 			selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
-			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[5]);
+			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[5].name);
 
 			//Pressing up again should move the selection up once.
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Up', keyCode: 38 }));
 			await el.updateComplete;
 			selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
-			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[4]);
+			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[4].name);
 		});
 
 		it('should scroll through tags using left and right arrow keys', async() => {
@@ -367,8 +376,8 @@ describe('attribute-picker', () => {
 	});
 
 	describe('eventing', () => {
-		const attributeList = ['one', 'two', 'three'];
-		const assignableAttributeList = ['one', 'two', 'three', 'four', 'five', 'six'];
+		const attributeList = createAttributeList(['one', 'two', 'three']);
+		const assignableAttributeList = createAttributeList(['one', 'two', 'three', 'four', 'five', 'six']);
 		let el;
 		beforeEach(async() => {
 			el = await fixture(
@@ -395,7 +404,13 @@ describe('attribute-picker', () => {
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');
+
 			expect(result.detail.attributeList.length).to.equal(4);
+			expect(result.detail.attributeList).to.deep.equal(
+				assignableAttributeList
+					.slice(0, result.detail.attributeList.length)
+					.map(a => a.value)
+			);
 		});
 
 		it('should fire the d2l-attributes-changed event when removing a tag with backspace', async() => {
@@ -434,6 +449,13 @@ describe('attribute-picker', () => {
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');
+
+			expect(result.detail.attributeList.length).to.equal(2);
+			expect(result.detail.attributeList).to.deep.equal(
+				assignableAttributeList
+					.slice(0, result.detail.attributeList.length)
+					.map(a => a.value)
+			);
 		});
 
 		it('should fire the d2l-attribute-limit-reached event when attempting to add a tag beyond the limit', async() => {
@@ -458,9 +480,11 @@ describe('attribute-picker', () => {
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');
+
+			expect(result.detail.limit).to.equal(5);
 		});
 
-		it('should convert different capitalization into captitalization matching an available attribute if any exist', async() => {
+		it('should convert different capitalization into capitalization matching an available attribute if any exist', async() => {
 			const element = el; //require-atomic-updates deems this necessary
 			const pageNumberInput = el.shadowRoot.querySelector('input');
 			expect(element.attributeList.length).to.equal(3);
@@ -470,12 +494,12 @@ describe('attribute-picker', () => {
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
 			await element.updateComplete;
 			expect(element.attributeList.length).to.equal(4);
-			expect(element.attributeList).to.deep.equal(['one', 'two', 'three', 'four']);
+			expect(element.attributeList).to.deep.equal(assignableAttributeList.slice(0, 4));
 
 			element._text = 'FOUR';
 			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
 			await element.updateComplete;
-			expect(element.attributeList).to.deep.equal(['one', 'two', 'three', 'four']);
+			expect(element.attributeList).to.deep.equal(assignableAttributeList.slice(0, 4));
 		});
 	});
 });
