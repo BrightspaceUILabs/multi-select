@@ -147,11 +147,11 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	render() {
-		//Hash active attributes and filter out unavailable and unmatching dropdown items.
+		// Hash active attributes and filter out unavailable and unmatching dropdown items.
 		const hash = {};
-		this.attributeList.map((item) => hash[item] = true);
-		const availableAttributes = this.assignableAttributes.filter(x => hash[x] !== true && (x === '' || x.toLowerCase().includes(this._text.toLowerCase())));
-		let listIndex = 0;
+		this.attributeList.forEach(item => hash[item.name] = true);
+		const comparableText = this._text.toLowerCase();
+		const availableAttributes = this.assignableAttributes.filter(x => hash[x.name] !== true && (comparableText === '' || x.name.toLowerCase().includes(comparableText)));
 
 		return html`
 		<div role="application" class="d2l-attribute-picker-container ${this._inputFocused ? 'd2l-attribute-picker-container-focused' : ''}">
@@ -159,7 +159,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				${this.attributeList.map((item, index) => html`
 					<d2l-labs-multi-select-list-item
 						class="d2l-attribute-picker-attribute"
-						text="${item}"
+						text="${item.name}"
 						.index="${index}"
 						?deletable="${this._inputFocused || this._activeAttributeIndex !== -1}"
 						@d2l-labs-multi-select-list-item-deleted="${this._onAttributeRemoved}"
@@ -200,10 +200,10 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 							role="option"
 							class="d2l-attribute-picker-li ${this._dropdownIndex === listIndex ? 'd2l-selected' : ''}"
 							.text="${item}"
-							.index=${listIndex++}
+							.index=${index}
 							@mouseover="${this._onListItemMouseOver}"
 							@mousedown="${this._onListItemTapped}">
-							${item}
+							${item.name}
 						</li>
 					`)}
 				</ul>
@@ -223,8 +223,9 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	//Returns true or false depending on if the attribute was successfully added. Fires the d2l-attribute-limit-reached event if necessary.
-	async addAttribute(newValue) {
-		if (!newValue || this.attributeList.findIndex(attribute => attribute.value === newValue) >= 0) {
+	// TODO  Is there a reason why this function is async?
+	async addAttribute(newAttribute) {
+		if (!newAttribute || this.attributeList.findIndex(attribute => attribute.name === newAttribute.name) >= 0) {
 			return false;
 		}
 
@@ -239,7 +240,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			return false;
 		}
 
-		this.attributeList = [...this.attributeList, newValue];
+		this.attributeList = [...this.attributeList, newAttribute];
 		this._text = '';
 
 		//Wait until we can get the full list of available list items after clearing the text
@@ -251,13 +252,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			this._dropdownIndex --;
 		}
 
-		this.dispatchEvent(new CustomEvent('d2l-attributes-changed', {
-			bubbles: true,
-			composed: true,
-			detail: {
-				attributeList: this.attributeList
-			}
-		}));
+		this._dispatchAttributeChangedEvent();
 
 		return true;
 	}
@@ -279,6 +274,17 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 	_attributeLimitReached() {
 		return this.limit && (this.attributeList.length >= this.limit);
+	}
+
+	_dispatchAttributeChangedEvent() {
+		this.dispatchEvent(new CustomEvent('d2l-attributes-changed', {
+			bubbles: true,
+			composed: true,
+			detail: {
+				// The only thing people care to get from us is the list of values and not their names!
+				attributeList: this.attributeList.map(a => a.value)
+			}
+		}));
 	}
 
 	_focusAttribute(index) {
@@ -406,27 +412,21 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				if (this._dropdownIndex >= 0 && this._dropdownIndex < list.length) {
 					this.addAttribute(list[this._dropdownIndex].text);
 				} else if (this.allowFreeform) {
-					const trimmedAttribute =  this._text.trim().toLowerCase();
-
-					const attributeListStandardized = this.attributeList.map((item) => {
-						return item.toLowerCase();
-					});
-
-					if (trimmedAttribute.length === 0 || attributeListStandardized.includes(trimmedAttribute)) {
+					const trimmedAttribute =  this._text.trim();
+					if (trimmedAttribute.length === 0) {
 						return;
 					}
 
-					const matchedIndex = this.assignableAttributes.map((item) => {
-						return item.toLowerCase();
-					}).findIndex((x) => {
-						return x === trimmedAttribute;
-					});
-
-					if (matchedIndex >= 0) {
-						this.addAttribute(this.assignableAttributes[matchedIndex]);
-					} else {
-						this.addAttribute(this._text.trim());
+					const comparableAttribute = trimmedAttribute.toLowerCase();
+					if (this.attributeList.map(a => a.name.toLowerCase()).includes(comparableAttribute)) {
+						return;
 					}
+
+					const matchedIndex = this.assignableAttributes.findIndex(a => a.name.toLowerCase() === comparableAttribute);
+					this.addAttribute(matchedIndex >= 0 ? this.assignableAttributes[matchedIndex] : {
+						name: trimmedAttribute,
+						value: trimmedAttribute // this is unlikely to ever be right but what else can we do?!
+					});
 				}
 				this._updateDropdownFocus();
 				break;
@@ -453,14 +453,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 	_removeAttributeIndex(index) {
 		this.attributeList = this.attributeList.slice(0, index).concat(this.attributeList.slice(index + 1, this.attributeList.length));
-
-		this.dispatchEvent(new CustomEvent('d2l-attributes-changed', {
-			bubbles: true,
-			composed: true,
-			detail: {
-				attributeList: this.attributeList
-			}
-		}));
+		this._dispatchAttributeChangedEvent();
 	}
 
 	_updateDropdownFocus() {
@@ -468,7 +461,6 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			const items = this.shadowRoot.querySelectorAll('li');
 			if (items.length > 0 && this._dropdownIndex >= 0) {
 				items[this._dropdownIndex].scrollIntoView({ block: 'nearest' });
-
 			}
 		});
 	}
