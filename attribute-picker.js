@@ -425,7 +425,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 					const matchedIndex = this.assignableAttributes.findIndex(a => a.name.toLowerCase() === comparableAttribute);
 					this.addAttribute(matchedIndex >= 0 ? this.assignableAttributes[matchedIndex] : {
 						name: trimmedAttribute,
-						value: trimmedAttribute // this is unlikely to ever be right but what else can we do?!
+						value: trimmedAttribute
 					});
 				}
 				this._updateDropdownFocus();
