@@ -222,9 +222,8 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		}
 	}
 
-	//Returns true or false depending on if the attribute was successfully added. Fires the d2l-attribute-limit-reached event if necessary.
-	// TODO  Is there a reason why this function is async?
-	async addAttribute(newAttribute) {
+	// Returns true or false depending on if the attribute was successfully added. Fires the d2l-attribute-limit-reached event if necessary.
+	addAttribute(newAttribute) {
 		if (!newAttribute || this.attributeList.findIndex(attribute => attribute.name === newAttribute.name) >= 0) {
 			return false;
 		}
@@ -244,15 +243,16 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		this._text = '';
 
 		//Wait until we can get the full list of available list items after clearing the text
-		await this.updateComplete;
-		const list = this.shadowRoot.querySelectorAll('li');
+		this.updateComplete.then(() => {
+			const list = this.shadowRoot.querySelectorAll('li');
 
-		//If we removed the final index of the list, move our index back to compensate
-		if (this._dropdownIndex > -1 && this._dropdownIndex > list.length - 1) {
-			this._dropdownIndex --;
-		}
+			//If we removed the final index of the list, move our index back to compensate
+			if (this._dropdownIndex > -1 && this._dropdownIndex > list.length - 1) {
+				this._dropdownIndex --;
+			}
 
-		this._dispatchAttributeChangedEvent();
+			this._dispatchAttributeChangedEvent();
+		});
 
 		return true;
 	}
