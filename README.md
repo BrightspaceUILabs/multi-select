@@ -82,8 +82,8 @@ An autocompleting dropdown to choose one or more new or pre-existing attributes 
 |--|--|--|
 | allow-freeform | Boolean | When enabled, the user can manually type any attribute they wish. If false, they must select from the dropdown. |
 | aria-label | String | Required. When true, the autocomplete dropdown will not be displayed to the user. |
-| attribute-list | Array |  An array of strings representing the attributes currently selected in the picker. |
-| assignable-attributes | Array | An array of strings available in the dropdown list. |
+| attribute-list | Array |  An array of string/value pairs representing the attributes currently selected in the picker (eg `[{"name":"shown to user","value":"sent in event"}]`). Only the values are sent in events and the string names are otherwise ignored. |
+| assignable-attributes | Array | An array of string/value pairs, just like _attribute-list_, available in the dropdown list. |
 | hide-dropdown | Boolean | When enabled, the autocomplete dropdown will not be displayed to the user. |
 | limit | Number | The maximum length of attribute-list permitted. |
 
