@@ -2,7 +2,7 @@
 
 export default {
 	hide: '隱藏',
-	hiddenChildren: '+ {num} 其他',
-	picker_remove_value: 'Click to remove value {value}',
-	picker_add_value: 'Click to add value {value}'
+	hiddenChildren: '還有 {num} 個',
+	picker_remove_value: '按一下以移除值 {value}',
+	picker_add_value: '按一下以新增值 {value}'
 };

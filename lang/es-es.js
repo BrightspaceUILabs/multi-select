@@ -3,6 +3,6 @@
 export default {
 	hide: 'Ocultar',
 	hiddenChildren: '+ {num} más',
-	picker_remove_value: 'Click to remove value {value}',
-	picker_add_value: 'Click to add value {value}'
+	picker_remove_value: 'Haga clic para eliminar el valor {value}',
+	picker_add_value: 'Haga clic para agregar el valor {value}'
 };

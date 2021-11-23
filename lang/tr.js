@@ -2,7 +2,7 @@
 
 export default {
 	hide: 'Gizle',
-	hiddenChildren: '+ {num} daha',
-	picker_remove_value: 'Click to remove value {value}',
-	picker_add_value: 'Click to add value {value}'
+	hiddenChildren: '+ {num} adet daha',
+	picker_remove_value: '{value} değerini kaldırmak için tıklayın',
+	picker_add_value: '{value} değeri eklemek için tıklayın'
 };

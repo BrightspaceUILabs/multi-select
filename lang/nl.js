@@ -2,7 +2,7 @@
 
 export default {
 	hide: 'Verbergen',
-	hiddenChildren: '+ {num} meer',
-	picker_remove_value: 'Click to remove value {value}',
-	picker_add_value: 'Click to add value {value}'
+	hiddenChildren: '+ nog {num}',
+	picker_remove_value: 'Klik om waarde {value} te verwijderen',
+	picker_add_value: 'Klik om waarde {value} toe te voegen'
 };
