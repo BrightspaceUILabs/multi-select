@@ -409,7 +409,6 @@ describe('attribute-picker', () => {
 			expect(result.detail.attributeList).to.deep.equal(
 				assignableAttributeList
 					.slice(0, result.detail.attributeList.length)
-					.map(a => a.value)
 			);
 		});
 
@@ -452,9 +451,7 @@ describe('attribute-picker', () => {
 
 			expect(result.detail.attributeList.length).to.equal(2);
 			expect(result.detail.attributeList).to.deep.equal(
-				assignableAttributeList
-					.slice(0, result.detail.attributeList.length)
-					.map(a => a.value)
+				assignableAttributeList.slice(0, result.detail.attributeList.length)
 			);
 		});
 
