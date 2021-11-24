@@ -282,7 +282,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			composed: true,
 			detail: {
 				// The only thing people care to get from us is the list of values and not their names!
-				attributeList: this.attributeList.map(a => a.value)
+				attributeList: this.attributeList
 			}
 		}));
 	}
