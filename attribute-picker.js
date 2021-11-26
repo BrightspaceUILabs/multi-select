@@ -350,15 +350,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	_onAttributeRemoved(e) {
-		this.attributeList.splice(this.attributeList.indexOf(e.detail.value), 1);
-		this.dispatchEvent(new CustomEvent('d2l-attributes-changed', {
-			bubbles: true,
-			composed: true,
-			detail: {
-				attributeList: this.attributeList
-			}
-		}));
-		this.requestUpdate();
+		this._removeAttributeIndex(this.attributeList.indexOf(e.detail.value));
 	}
 
 	_onInputBlur() {
