@@ -1,8 +1,8 @@
 /* eslint quotes: 0 */
 
 export default {
-	hide: 'Ocultar',
-	hiddenChildren: '+ {num} mais',
-	picker_remove_value: 'Click to remove value {value}',
-	picker_add_value: 'Click to add value {value}'
+	hide: "Ocultar",
+	hiddenChildren: "+ {num} mais",
+	picker_remove_value: "Clique para remover valor {value}",
+	picker_add_value: "Clique para adicionar valor {value}"
 };
