@@ -29,7 +29,7 @@
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
-  "version": "4.2.4",
+  "version": "4.2.5",
   "devDependencies": {
     "@babel/core": "^7",
     "@babel/eslint-parser": "^7",
