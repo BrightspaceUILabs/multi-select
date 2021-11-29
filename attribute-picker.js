@@ -193,14 +193,14 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 					?hidden="${!this._inputFocused || this.hideDropdown || availableAttributes.length === 0}"
 					class="d2l-attribute-list">
 
-					${availableAttributes.map((item) => html`
+					${availableAttributes.map((item, listIndex) => html`
 						<li id="attribute-dropdown-list-item-${listIndex}"
 							aria-label="${this.localize('picker_add_value', 'value', item)}"
 							aria-selected="${this._dropdownIndex === listIndex ? true : false}"
 							role="option"
 							class="d2l-attribute-picker-li ${this._dropdownIndex === listIndex ? 'd2l-selected' : ''}"
 							.text="${item}"
-							.index=${index}
+							.index=${listIndex}
 							@mouseover="${this._onListItemMouseOver}"
 							@mousedown="${this._onListItemTapped}">
 							${item.name}
