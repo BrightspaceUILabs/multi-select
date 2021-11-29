@@ -24,7 +24,7 @@ document.head.appendChild($_documentContainer.content);
 /**
  * `<d2l-labs-multi-select-input>`
  * Polymer-based web component for D2L multi-select-input
- * @demo demo/index.hmtl
+ * @demo demo/index.html
  */
 class D2LMultiSelectInput extends PolymerElement {
 	static get properties() {
