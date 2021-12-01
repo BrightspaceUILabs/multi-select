@@ -356,7 +356,13 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	_onAttributeRemoved(e) {
-		this._removeAttributeIndex(this.attributeList.indexOf(e.detail.value));
+		let index = this.attributeList.map((e) => e.name).indexOf(e.detail.value);
+		if (index === -1) {
+			index = this.attributeList.map((e) => e.value).indexOf(e.detail.value);
+		}
+		if (index !== -1) {
+			this._removeAttributeIndex(index);
+		}
 	}
 
 	_onInputBlur() {
