@@ -165,7 +165,8 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 						@d2l-labs-multi-select-list-item-deleted="${this._onAttributeRemoved}"
 						@blur="${this._onAttributeBlur}"
 						@focus="${this._onAttributeFocus}"
-						@keydown="${this._onAttributeKeydown}">
+						@keydown="${this._onAttributeKeydown}"
+						aria-live="off">
 					</d2l-labs-multi-select-list-item>
 				`)}
 
