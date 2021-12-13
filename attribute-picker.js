@@ -112,6 +112,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				max-height: 7.8rem;
 				min-height: 0;
 				overflow-y: scroll;
+				padding-left: 0px;
 				text-overflow: ellipsis;
 			}
 
