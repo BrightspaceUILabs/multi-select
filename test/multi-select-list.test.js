@@ -1,5 +1,5 @@
-import '../multi-select-list';
-import '../multi-select-list-item';
+import '../multi-select-list.js';
+import '../multi-select-list-item.js';
 import { expect, fixture, html, waitUntil } from '@open-wc/testing';
 import { runConstructor } from '@brightspace-ui/core/tools/constructor-test-helper.js';
 
