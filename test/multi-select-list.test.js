@@ -50,6 +50,11 @@ describe('multi-select-list', () => {
 			await item.updateComplete;
 			await expect(el).to.be.accessible();
 		});
+
+		it('should pass all aXe tests when collapsible', async() => {
+			el = await fixture(collapsableHtml);
+			await expect(el).to.be.accessible();
+		});
 	});
 
 	describe('functionality', () => {
