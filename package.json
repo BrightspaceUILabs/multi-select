@@ -35,7 +35,6 @@
     "@babel/eslint-parser": "^7",
     "@brightspace-ui/stylelint-config": "^0.0.3",
     "@open-wc/testing": "^3.0.3",
-    "@webcomponents/webcomponentsjs": "^2",
     "@web/dev-server": "^0.1.23",
     "@web/test-runner": "^0.13",
     "eslint": "^7",

@@ -161,7 +161,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 		return html`
 		<div class="d2l-list-item-container" role="list" aria-label="${this.description}" ?data-collapsed=${this._collapsed}>
 			<slot @slotchange="${this._onSlotChange}"></slot>
-			<div class="${this._hideVisibility(this.collapsable, this._collapsed, this.hiddenChildren)}">
+			<div class="${this._hideVisibility(this.collapsable, this._collapsed, this.hiddenChildren)}" role="listitem">
 				<d2l-button-subtle text="${this.localize('hide')}" class="d2l-hide-button" @click="${this._expandCollapse}" aria-expanded="true"></d2l-button-subtle>
 				<slot name="aux-button"></slot>
 			</div>
