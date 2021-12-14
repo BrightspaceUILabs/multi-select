@@ -27,17 +27,7 @@ npm install @brightspace-ui-labs/multi-select
 
 ## Usage
 
-Include the [webcomponents.js](http://webcomponents.org/polyfills/) polyfill loader (for browsers who don't natively support web components), then import the appropriate `multi-select` components as needed:
-
-```html
-<head>
-	<script src="node_modules/webcomponentsjs/webcomponents-loader.js"></script>
-</head>
-```
-
-# Components
-
-## `d2l-labs-multi-select-input-text`
+### `d2l-labs-multi-select-input-text`
 
 `d2l-labs-multi-select-input-text` includes a `d2l-input-text` that is hooked up to add items when 'Enter' is pressed.
 **Usage:**
@@ -47,7 +37,7 @@ Include the [webcomponents.js](http://webcomponents.org/polyfills/) polyfill loa
 </d2l-labs-multi-select-input-text>
 ```
 
-## `d2l-labs-multi-select-input`
+### `d2l-labs-multi-select-input`
 
 You can use your own input component instead by putting it as a child of `d2l-labs-multi-select-input` and setting `slot="input"` on your input element. To add items to the list, call `addItem` with the item text.
 **Usage:**
@@ -66,7 +56,7 @@ button.addEventListener('click', () => {
 })
 ```
 
-## `d2l-labs-attribute-picker`
+### `d2l-labs-attribute-picker`
 
 An autocompleting dropdown to choose one or more new or pre-existing attributes inline.
 **Usage:**
@@ -105,7 +95,7 @@ attributePicker.addEventListener('d2l-attributes-changed', (e) => {
 
 The `d2l-labs-attribute-picker` dispatches the `d2l-attribute-limit-reached` event when the user attempts to enter an attribute greater than the limit. This can be used to send feedback to the user.
 
-## `d2l-labs-multi-select-list-item`
+### `d2l-labs-multi-select-list-item`
 
 `d2l-labs-multi-select-list-item` is a compact representation of information.
 
@@ -126,7 +116,7 @@ Also the following css variables are exposed to clients and can be use to overri
 --d2l-labs-multi-select-list-item-padding-deletable-rtl
 ```
 
-## `d2l-labs-multi-select-list`
+### `d2l-labs-multi-select-list`
 
 `d2l-labs-multi-select-list` wraps a list of items, and provides spacing between the items, as well as keyboard navigation (arrow keys) and handling of item deletion (backspace/delete).
 
@@ -151,12 +141,6 @@ You can opt for a condensed view by adding the `collapsable` attribute, which li
 ## Developing, Testing and Contributing
 
 After cloning the repo, run `npm install` to install dependencies.
-
-If you don't have it already, install the [Polymer CLI](https://www.polymer-project.org/3.0/docs/tools/polymer-cli) globally:
-
-```shell
-npm install -g polymer-cli
-```
 
 Start a [@web/dev-server](https://modern-web.dev/docs/dev-server/overview/) that hosts the demo pages:
 
