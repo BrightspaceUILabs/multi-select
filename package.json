@@ -22,7 +22,7 @@
     "lint": "npm run lint:eslint && npm run lint:lit && npm run lint:style",
     "lint:eslint": "eslint . --ext .js,.html",
     "lint:lit": "lit-analyzer  \"{demo,test}/**/*.js\" --strict --rules.no-unknown-tag-name off --rules.no-incompatible-type-binding off --rules.no-unknown-attribute off --rules.no-unknown-property off",
-    "lint:style": "stylelint \"**/*.js\"",
+    "lint:style": "stylelint \"**/*.{js,html}\"",
     "start": "web-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:headless",
     "test:headless": "web-test-runner --node-resolve"
@@ -33,7 +33,7 @@
   "devDependencies": {
     "@babel/core": "^7",
     "@babel/eslint-parser": "^7",
-    "@brightspace-ui/stylelint-config": "^0.0.3",
+    "@brightspace-ui/stylelint-config": "^0.3",
     "@open-wc/testing": "^3.0.3",
     "@web/dev-server": "^0.1.23",
     "@web/test-runner": "^0.13",
@@ -45,7 +45,7 @@
     "eslint-plugin-sort-class-members": "^1",
     "lit-analyzer": "^1",
     "sinon": "^11.1.2",
-    "stylelint": "^13"
+    "stylelint": "^14"
   },
   "dependencies": {
     "@brightspace-ui/core": "^1",
