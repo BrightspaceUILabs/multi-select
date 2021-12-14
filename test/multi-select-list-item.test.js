@@ -2,7 +2,7 @@ import '../multi-select-list-item.js';
 import '../multi-select-list.js';
 import { expect, fixture, html } from '@open-wc/testing';
 import { runConstructor } from '@brightspace-ui/core/tools/constructor-test-helper.js';
-import sinon from 'sinon/pkg/sinon-esm.js';
+import sinon from 'sinon';
 
 describe('multi-select-list-item', () => {
 	let item;
