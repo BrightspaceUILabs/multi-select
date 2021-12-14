@@ -1,5 +1,5 @@
-import '../multi-select-input-text';
-import '../multi-select-list-item';
+import '../multi-select-input-text.js';
+import '../multi-select-list-item.js';
 import { expect, fixture, html } from '@open-wc/testing';
 import { runConstructor } from '@brightspace-ui/core/tools/constructor-test-helper.js';
 
