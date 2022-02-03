@@ -1,9 +1,9 @@
 import '@brightspace-ui/core/components/button/button-subtle.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { getComposedChildren, isComposedAncestor } from '@brightspace-ui/core/helpers/dom';
+import { getComposedChildren, isComposedAncestor } from '@brightspace-ui/core/helpers/dom.js';
 import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { getComposedActiveElement } from '@brightspace-ui/core/helpers/focus';
+import { getComposedActiveElement } from '@brightspace-ui/core/helpers/focus.js';
 import { Localizer } from './localization.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
@@ -216,6 +216,9 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	_getVisibleEffectiveChildren() {
+		if (!this.shadowRoot) {
+			return [];
+		}
 		const children = this._children;
 		const auxButton = (this.collapsable && getComposedChildren(this.shadowRoot.querySelector('.d2l-aux-button'))) || [];
 		const hideButton = (this.collapsable && !this._collapsed && [this.shadowRoot.querySelector('.d2l-hide-button')]) || [];
@@ -368,7 +371,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 
 	async _updateChildren() {
 		await this.updateComplete;
-		if (!this.collapsable) {
+		if (!this.collapsable || !this.shadowRoot) {
 			return;
 		}
 		let childrenWidthTotal = 0;

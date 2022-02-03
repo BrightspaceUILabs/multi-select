@@ -246,7 +246,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 		//Wait until we can get the full list of available list items after clearing the text
 		this.updateComplete.then(() => {
-			const list = this.shadowRoot.querySelectorAll('li');
+			const list = this.shadowRoot && this.shadowRoot.querySelectorAll('li');
 
 			//If we removed the final index of the list, move our index back to compensate
 			if (this._dropdownIndex > -1 && this._dropdownIndex > list.length - 1) {
@@ -264,7 +264,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	_activeAttributeIndexChanged() {
-		const selectedAttributes = this.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
+		const selectedAttributes = this.shadowRoot && this.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 		if (this._activeAttributeIndex >= 0 && this._activeAttributeIndex < selectedAttributes.length) {
 			selectedAttributes[this._activeAttributeIndex].focus();
 		}
@@ -290,6 +290,9 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	_focusAttribute(index) {
+		if (!this.shadowRoot) {
+			return;
+		}
 		const selectedAttributes = this.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
 		this._activeAttributeIndex = index;
 		selectedAttributes[index].focus();
@@ -315,6 +318,9 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	_onAttributeKeydown(e) {
+		if (!this.shadowRoot) {
+			return;
+		}
 		switch (e.keyCode) {
 			case keyCodes.BACKSPACE: {
 				this._removeAttributeIndex(this._activeAttributeIndex);
@@ -374,11 +380,14 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			this._dropdownIndex = -1;
 		}
 		else {
-			this._dropdownIndex = this.shadowRoot.querySelector('li') !== null ? 0 : -1;
+			this._dropdownIndex = this.shadowRoot && this.shadowRoot.querySelector('li') !== null ? 0 : -1;
 		}
 	}
 
 	_onInputKeydown(e) {
+		if (!this.shadowRoot) {
+			return;
+		}
 		switch (e.keyCode) {
 			case keyCodes.ESCAPE: {
 				if (this.allowFreeform) {//Unselect any dropdown item so enter will apply to just the typed text instead
@@ -462,7 +471,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 	_updateDropdownFocus() {
 		this.updateComplete.then(() => {
-			const items = this.shadowRoot.querySelectorAll('li');
+			const items = this.shadowRoot && this.shadowRoot.querySelectorAll('li');
 			if (items.length > 0 && this._dropdownIndex >= 0) {
 				items[this._dropdownIndex].scrollIntoView({ block: 'nearest' });
 			}
