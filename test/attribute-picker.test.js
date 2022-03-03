@@ -40,7 +40,7 @@ describe('attribute-picker', () => {
 
 	describe('accessibility', () => {
 		it('should pass all axe tests', async() => {
-			const el = await fixture(html`<d2l-labs-attribute-picker></d2l-labs-attribute-picker>`);
+			const el = await fixture(html`<d2l-labs-attribute-picker aria-label="attributes"></d2l-labs-attribute-picker>`);
 			await expect(el).to.be.accessible();
 		});
 
@@ -49,6 +49,7 @@ describe('attribute-picker', () => {
 			const assignableAttributeList = ['one', 'two', 'three', 'four', 'five', 'six'];
 			const el = await fixture(
 				html`<d2l-labs-attribute-picker
+						aria-label="attributes"
 						.attributeList="${attributeList}"
 						.assignableAttributes="${assignableAttributeList}">
 					</d2l-labs-attribute-picker>`
