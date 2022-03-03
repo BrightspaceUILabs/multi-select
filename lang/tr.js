@@ -1,6 +1,7 @@
 /* eslint quotes: 0 */
 
 export default {
+	delete: "Sil",
 	hide: "Gizle",
 	hiddenChildren: "+ {num} adet daha",
 	picker_remove_value: "{value} değerini kaldırmak için tıklayın",

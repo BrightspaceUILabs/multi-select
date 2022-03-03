@@ -1,6 +1,7 @@
 /* eslint quotes: 0 */
 
 export default {
+	delete: "Ta bort",
 	hide: "Dölj",
 	hiddenChildren: "+ {num} till",
 	picker_remove_value: "Klicka för att ta bort värde {value}",

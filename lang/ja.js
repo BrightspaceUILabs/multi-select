@@ -1,6 +1,7 @@
 /* eslint quotes: 0 */
 
 export default {
+	delete: "削除",
 	hide: "表示しない",
 	hiddenChildren: "他 {num} 件",
 	picker_remove_value: "クリックして値 {value} を削除",

@@ -1,6 +1,7 @@
 /* eslint quotes: 0 */
 
 export default {
+	delete: "삭제",
 	hide: "숨기기",
 	hiddenChildren: "{num}개 이상",
 	picker_remove_value: "클릭하여 {value} 값을 제거합니다.",

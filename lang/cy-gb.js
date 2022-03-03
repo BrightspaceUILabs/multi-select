@@ -1,6 +1,7 @@
 /* eslint quotes: 0 */
 
 export default {
+	delete: "Delete",
 	hide: "Cuddio",
 	hiddenChildren: "+ {num} arall",
 	picker_remove_value: "Cliciwch i dynnu'r gwerth {value}",
