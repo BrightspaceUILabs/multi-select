@@ -1,6 +1,7 @@
 /* eslint quotes: 0 */
 
 export default {
+	delete: "刪除",
 	hide: "隱藏",
 	hiddenChildren: "還有 {num} 個",
 	picker_remove_value: "按一下以移除值 {value}",
