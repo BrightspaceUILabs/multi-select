@@ -1,6 +1,7 @@
 /* eslint quotes: 0 */
 
 export default {
+	delete: "Delete",
 	hide: "Hide",
 	hiddenChildren: "+ {num} more",
 	picker_remove_value: "Click to remove value {value}",
