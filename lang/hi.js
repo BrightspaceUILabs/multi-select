@@ -2,8 +2,8 @@
 
 export default {
 	delete: "Delete",
-	hide: "Hide",
-	hiddenChildren: "+ {num} more",
-	picker_remove_value: "Click to remove value {value}",
-	picker_add_value: "Click to add value {value}"
+	hide: "छुपाएँ",
+	hiddenChildren: "+ {num} और",
+	picker_remove_value: "मान {value} निकालने के लिए क्लिक करें",
+	picker_add_value: "मान {value} जोड़ने के लिए क्लिक करें"
 };
