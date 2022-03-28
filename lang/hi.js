@@ -1,7 +1,7 @@
 /* eslint quotes: 0 */
 
 export default {
-	delete: "Delete",
+	delete: "हटाएँ",
 	hide: "छुपाएँ",
 	hiddenChildren: "+ {num} और",
 	picker_remove_value: "मान {value} निकालने के लिए क्लिक करें",
