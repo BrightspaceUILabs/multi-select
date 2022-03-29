@@ -59,8 +59,9 @@ describe('multi-select-list', () => {
 
 			expect(subcomponents.length).to.be.greaterThan(0);
 			const actions = subcomponents.map(() => { el.updateComplete; });
-
 			await Promise.all(actions);
+
+			await el.updateComplete;
 			await expect(el).to.be.accessible();
 		});
 	});
