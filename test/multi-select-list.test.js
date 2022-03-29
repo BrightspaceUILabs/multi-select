@@ -53,6 +53,11 @@ describe('multi-select-list', () => {
 
 		it('should pass all aXe tests when collapsible', async() => {
 			el = await fixture(collapsableHtml);
+
+			const subcomponents = Array.from(el.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item'));
+			const actions = subcomponents.map(() => { el.updateComplete(); });
+
+			await Promise.all(actions);
 			await expect(el).to.be.accessible();
 		});
 	});
