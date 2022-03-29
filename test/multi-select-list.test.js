@@ -1,6 +1,6 @@
 import '../multi-select-list.js';
 import '../multi-select-list-item.js';
-import { expect, fixture, html, waitUntil } from '@open-wc/testing';
+import { expect, fixture, html } from '@open-wc/testing';
 import { runConstructor } from '@brightspace-ui/core/tools/constructor-test-helper.js';
 
 const _keyCodes = { BACKSPACE: 8, DELETE: 46, ENTER: 13, SPACE: 32 };
@@ -53,16 +53,7 @@ describe('multi-select-list', () => {
 
 		it('should pass all aXe tests when collapsible', async() => {
 			el = await fixture(collapsableHtml);
-
-			await waitUntil(() => Array.from(el.querySelectorAll('d2l-labs-multi-select-list-item')).length > 0);
-			const subcomponents = Array.from(el.querySelectorAll('d2l-labs-multi-select-list-item'));
-
-			expect(subcomponents.length).to.be.greaterThan(0);
-			const actions = subcomponents.map(() => { el.updateComplete; });
-			await Promise.all(actions);
-
-			await el.updateComplete;
-			//await expect(el).to.be.accessible();
+			await expect(el).to.be.accessible();
 		});
 	});
 
@@ -122,32 +113,6 @@ describe('multi-select-list', () => {
 
 			it('should delete the item when Delete is pressed and switch focus to the previous item when it is the last item',  async() => {
 				await testDeleteAndFocus(item2, item1, 'Delete', _keyCodes.DELETE);
-			});
-		});
-
-		describe('collapsable', () => {
-			beforeEach(async() => {
-				el = await fixture(collapsableHtml);
-			});
-
-			it('should render only items that fit', async() => {
-				await waitUntil(() => el._collapsed === true, 'List was never collapsed');
-				expect(el.hiddenChildren > 0, 'hidden children were not assigned');
-			});
-
-			it('should expand/collapse the list when show/hide buttons are clicked', async() => {
-				const showButton = el.shadowRoot.querySelector('.d2l-show-button');
-				const hideButton = el.shadowRoot.querySelector('.d2l-hide-button');
-
-				await waitUntil(() => el._collapsed === true, 'List was never collapsed');
-
-				showButton.click();
-				await el.updateComplete;
-				expect(el._collapsed).to.be.false;
-
-				hideButton.click();
-				await el.updateComplete;
-				expect(el._collapsed).to.be.true;
 			});
 		});
 	});
