@@ -4,11 +4,12 @@ import { getComposedChildren, isComposedAncestor } from '@brightspace-ui/core/he
 import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { getComposedActiveElement } from '@brightspace-ui/core/helpers/focus.js';
+import { LocalizeDynamicMixin } from '@brightspace-ui/core/mixins/localize-dynamic-mixin.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
 const keyCodes = { BACKSPACE: 8, TAB: 9, DELETE: 46, ENTER: 13, SPACE: 32, 	LEFT: 37, RIGHT: 39, UP: 38, DOWN: 40 };
 
-class MultiSelectList extends RtlMixin(LitElement) {
+class MultiSelectList extends RtlMixin(LocalizeDynamicMixin(LitElement)) {
 	static get properties() {
 		return {
 			/**
@@ -130,6 +131,12 @@ class MultiSelectList extends RtlMixin(LitElement) {
 		this.hiddenChildren = 0;
 	}
 
+	static get localizeConfig() {
+		return {
+			importFunc: async lang => (await import(`./lang/${lang}.js`)).default
+		};
+	}
+
 	connectedCallback() {
 		super.connectedCallback();
 		this.addEventListener('d2l-labs-multi-select-list-item-deleted', this._onListItemDeleted);
@@ -161,7 +168,7 @@ class MultiSelectList extends RtlMixin(LitElement) {
 		<div class="d2l-list-item-container" role="list" aria-label="${this.description}" ?data-collapsed=${this._collapsed}>
 			<slot @slotchange="${this._onSlotChange}"></slot>
 			<div class="${this._hideVisibility(this.collapsable, this._collapsed, this.hiddenChildren)}" role="listitem">
-				<d2l-button-subtle text="hide" class="d2l-hide-button" @click="${this._expandCollapse}" aria-expanded="true"></d2l-button-subtle>
+				<d2l-button-subtle text="${this.localize('hide')}" class="d2l-hide-button" @click="${this._expandCollapse}" aria-expanded="true"></d2l-button-subtle>
 				<slot name="aux-button"></slot>
 			</div>
 		</div>
@@ -170,7 +177,7 @@ class MultiSelectList extends RtlMixin(LitElement) {
 				class="d2l-body-compact d2l-show-button"
 				@click="${this._expandCollapse}"
 				aria-expanded="false">
-				hiddenChildren
+				${this.localize('hiddenChildren', 'num', this.hiddenChildren)}
 			</button>
 		</div>
 		`;

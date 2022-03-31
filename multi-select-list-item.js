@@ -4,9 +4,10 @@ import '@brightspace-ui/core/components/offscreen/offscreen.js';
 import '@brightspace-ui/core/components/tooltip/tooltip.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
+import { LocalizeDynamicMixin } from '@brightspace-ui/core/mixins/localize-dynamic-mixin.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
-class MultiSelectListItem extends RtlMixin(LitElement) {
+class MultiSelectListItem extends RtlMixin(LocalizeDynamicMixin(LitElement)) {
 	static get properties() {
 		return {
 
@@ -227,6 +228,12 @@ class MultiSelectListItem extends RtlMixin(LitElement) {
 		this.role = 'listitem';
 	}
 
+	static get localizeConfig() {
+		return {
+			importFunc: async lang => (await import(`./lang/${lang}.js`)).default
+		};
+	}
+
 	render() {
 		return html`
 			<div class="d2l-body-compact d2l-labs-multi-select-list-item-wrapper" id="tag" @click="${this._onClick}">
@@ -234,7 +241,7 @@ class MultiSelectListItem extends RtlMixin(LitElement) {
 					<div class="d2l-labs-multi-select-list-item-text" aria-hidden="true">${this._getVisibleText(this.text, this.shortText, this.maxChars)}</div>
 					<d2l-offscreen>${this._getScreenReaderText(this.text, this.shortText)}</d2l-offscreen>
 				</div>
-				<d2l-icon role="button" aria-label="test" class="d2l-labs-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" ?hidden="${!this.deletable}" @click="${this._onDeleteItem}"></d2l-icon>
+				<d2l-icon role="button" aria-label="${this.localize('picker_remove_value', 'value', this.text)}" class="d2l-labs-multi-select-delete-icon" icon="d2l-tier1:close-large-thick" ?hidden="${!this.deletable}" @click="${this._onDeleteItem}"></d2l-icon>
 			</div>
 			${this._hasTooltip(this.text, this.shortText, this.maxChars) ? html`
 				<d2l-tooltip position="${this.tooltipPosition}">${this.text}</d2l-tooltip>` : null }

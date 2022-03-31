@@ -3,7 +3,7 @@ import './multi-select-list.js';
 import './multi-select-list-item.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { inputStyles } from '@brightspace-ui/core/components/inputs/input-styles.js';
-import { Localizer } from './localization.js';
+import { LocalizeDynamicMixin } from '@brightspace-ui/core/mixins/localize-dynamic-mixin.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
 const keyCodes = {
@@ -17,7 +17,7 @@ const keyCodes = {
 	DELETE: 46
 };
 
-class AttributePicker extends RtlMixin(Localizer(LitElement)) {
+class AttributePicker extends RtlMixin(LocalizeDynamicMixin(LitElement)) {
 	static get properties() {
 		return {
 			/* When true, the user can manually enter any attribute they wish. If false, they must match a value from the dropdown. */
@@ -145,6 +145,12 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		this._inputFocused = false;
 		this._activeAttributeIndex = -1;
 		this._dropdownIndex = -1;
+	}
+
+	static get localizeConfig() {
+		return {
+			importFunc: async lang => (await import(`./lang/${lang}.js`)).default
+		};
 	}
 
 	render() {
