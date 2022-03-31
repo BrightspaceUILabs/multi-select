@@ -252,7 +252,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	_hideVisibility(collapsable, _collapsed, hiddenChildren) {
-		return collapsable && !_collapsed && hiddenChildren > 0 ? '' : '';
+		return collapsable && !_collapsed && hiddenChildren > 0 ?  '' : 'd2l-hide';
 	}
 
 	_onKeyDown(event) {
@@ -366,7 +366,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	_showMoreVisibility(collapsable, _collapsed, hiddenChildren) {
-		return collapsable && _collapsed && hiddenChildren > 0 ? '' : 'd2l-hide';
+		return collapsable && _collapsed && hiddenChildren > 0 ? 'd2l-aux-button' : 'd2l-hide';
 	}
 
 	async _updateChildren() {
