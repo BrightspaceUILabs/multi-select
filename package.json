@@ -48,7 +48,7 @@
     "stylelint": "^14"
   },
   "dependencies": {
-    "@brightspace-ui/core": "^2",
+    "@brightspace-ui/core": "BrigthspaceUI/core#05b7401a77182308da5e224c5160982901855cbe",
     "@polymer/polymer": "^3",
     "d2l-localize-behavior": "BrightspaceUI/localize-behavior#semver:^2",
     "lit-element": "^3"
