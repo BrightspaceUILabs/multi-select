@@ -55,9 +55,7 @@ describe('multi-select-list', () => {
 		});
 
 		it('should pass all aXe tests when collapsible', async function() {
-			if (isSafariBrowser) {
-				this.skip();
-			}
+			isSafariBrowser && this.skip();
 			el = await fixture(collapsableHtml);
 			await expect(el).to.be.accessible();
 		});
@@ -128,17 +126,13 @@ describe('multi-select-list', () => {
 			});
 
 			it('should render only items that fit', async function() {
-				if (isSafariBrowser) {
-					this.skip();
-				}
+				isSafariBrowser && this.skip();
 				await waitUntil(() => el._collapsed === true, 'List was never collapsed');
 				expect(el.hiddenChildren > 0, 'hidden children were not assigned');
 			});
 
 			it('should expand/collapse the list when show/hide buttons are clicked', async function() {
-				if (isSafariBrowser) {
-					this.skip();
-				}
+				isSafariBrowser && this.skip();
 				const showButton = el.shadowRoot.querySelector('.d2l-show-button');
 				const hideButton = el.shadowRoot.querySelector('.d2l-hide-button');
 
