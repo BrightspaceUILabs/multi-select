@@ -452,6 +452,15 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		if (this._dropdownIndex >= 0) {
 			this.allowFreeform ? this._dropdownIndex = -1 : this._dropdownIndex = 0;
 		}
+
+		this.dispatchEvent(new CustomEvent('d2l-attribute-input-changed', {
+			bubbles: true,
+			composed: true,
+			detail: {
+				text: this._text
+			}
+		}));
+
 		this.requestUpdate();
 	}
 
