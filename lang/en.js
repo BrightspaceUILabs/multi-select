@@ -4,6 +4,6 @@ export default {
 	delete: "Delete",
 	hide: "Hide",
 	hiddenChildren: "+ {num} more",
-	picker_remove_value: "Click to remove value {value}",
+	picker_remove_value: "Press backspace to remove",
 	picker_add_value: "Click to add value {value}"
 };
