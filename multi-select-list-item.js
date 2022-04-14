@@ -239,7 +239,7 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			</div>
 			<d2l-tooltip position="${this.tooltipPosition}">
 				${this._hasTooltip(this.text, this.shortText, this.maxChars) ?
-		html`<span aria-hidden="true">${this.text}<br/></span>`
+		html`<div aria-hidden="true">${this.text}</div>`
 		: null}
 				${this.localize('picker_remove_value')}
 			</d2l-tooltip>
