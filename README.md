@@ -62,7 +62,7 @@ An autocompleting dropdown to choose one or more new or pre-existing attributes 
 **Usage:**
 ```html
 <script type="module">
-    import '@brightspace-ui-labs/attribute-picker/attribute-picker.js';
+    import '@brightspace-ui-labs/multi-select/attribute-picker.js';
 </script>
 <d2l-labs-attribute-picker>My element</d2l-labs-attribute-picker>
 ```
