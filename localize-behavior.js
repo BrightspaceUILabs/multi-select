@@ -1,4 +1,4 @@
-import 'd2l-localize-behavior/d2l-localize-behavior.js';
+import '@brightspace-ui/localize-behavior/d2l-localize-behavior.js';
 window.D2L = window.D2L || {};
 window.D2L.PolymerBehaviors = window.D2L.PolymerBehaviors || {};
 window.D2L.PolymerBehaviors.D2LMultiSelect = window.D2L.PolymerBehaviors.D2LMultiSelect || {};
