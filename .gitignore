@@ -3,3 +3,5 @@ package-lock.json
 *.log
 
 node_modules
+/test/**/screenshots/current/
+/test/**/screenshots/golden/
