@@ -1,6 +1,7 @@
 {
   "name": "@brightspace-ui-labs/multi-select",
   "description": "Polymer-based web component for D2L multi select and related components",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/BrightspaceUILabs/multi-select.git"

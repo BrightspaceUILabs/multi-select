@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" data-timezone='{"name":"Canada - Toronto", "identifier":"America/Toronto"}'>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+		<title>attribute-picker visual diff test</title>
+		<script type="module" src="../../attribute-picker.js"></script>
+
+		<style>
+		html {
+			font-size: 20px;
+		}
+		div {
+			margin: 50px 10px;
+			width: 310px;
+		}
+		</style>
+		<script type="module">
+			import '@brightspace-ui/core/components/typography/typography.js';
+		</script>
+	</head>
+	<body class="d2l-typography">
+		<div id="default" class="visual-diff">
+			<d2l-labs-attribute-picker aria-label="attributes"
+				id="attribute-component"
+				allow-freeform
+				attribute-list='[{"name":"one","value":1},{"name":"two","value":2},{"name":"three","value":3}]'
+				assignable-attributes='[{"name":"one","value":1},{"name":"two","value":2},{"name":"three","value":3},{"name":"four","value":4},{"name":"five","value":5},{"name":"six","value":6}]'
+			></d2l-labs-attribute-picker>
+		</div>
+	</body>
+</html>
