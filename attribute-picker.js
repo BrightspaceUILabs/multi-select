@@ -155,7 +155,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		const availableAttributes = this.assignableAttributes.filter(x => hash[x.name] !== true && (comparableText === '' || x.name.toLowerCase().includes(comparableText)));
 
 		return html`
-		<div role="application" id="removeMeLater" class="d2l-attribute-picker-container ${this._inputFocused ? 'd2l-attribute-picker-container-focused' : ''}">
+		<div role="application" class="d2l-attribute-picker-container ${this._inputFocused ? 'd2l-attribute-picker-container-focused' : ''}">
 			<div class="d2l-attribute-picker-content" role="${this.attributeList.length > 0 ? 'list' : ''}">
 				${this.attributeList.map((item, index) => html`
 					<d2l-labs-multi-select-list-item
