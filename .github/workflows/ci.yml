@@ -15,5 +15,8 @@ jobs:
           npm install @web/test-runner-saucelabs --no-save
       - name: Lint
         run: npm run lint
-      - name: Unit Tests
+      - name: Unit Tests (SauceLabs)
+        env:
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY_FEDERATION }}
+          SAUCE_USERNAME: D2L_Federation
         run: npx web-test-runner --config web-test-runner.sauce.config.mjs --group default
