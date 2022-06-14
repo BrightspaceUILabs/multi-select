@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" data-timezone='{"name":"Canada - Toronto", "identifier":"America/Toronto"}'>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+		<title>multi-select-input visual diff test</title>
+		<script type="module" src="../../multi-select-list.js"></script>
+		<script type="module" src="../../multi-select-list-item.js"></script>
+
+		<style>
+		html {
+			font-size: 20px;
+		}
+		div {
+			margin: 50px 10px;
+			width: 600px;
+		}
+		.d2l-labs-multi-select-list-item-custom {
+			--d2l-labs-multi-select-list-item-padding: 1rem 1rem 1rem 1rem;
+			--d2l-labs-multi-select-list-item-padding-rtl: 1rem 1rem 1rem 1rem;
+			--d2l-labs-multi-select-list-item-padding-deletable: 1rem 1rem 1rem 1rem;
+			--d2l-labs-multi-select-list-item-padding-deletable-rtl: 1rem 1rem 1rem 1rem;
+		}
+		</style>
+		<script type="module">
+			import '@brightspace-ui/core/components/typography/typography.js';
+        </script>
+	</head>
+	<body class="d2l-typography">
+		<div id="default" class="visual-diff">
+			<d2l-labs-multi-select-list autoremove>
+				<d2l-labs-multi-select-list-item deletable text="List item 0"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item deletable text="List item 1"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item deletable text="List item 2"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item deletable text="List item 3"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item deletable text="List item 4"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item deletable text="List item 5"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item deletable text="Short Text"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item deletable text="Long Truncated Text" max-chars="11"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item deletable text="Longer text for the tooltip" short-text="Alternate Text"></d2l-labs-multi-select-list-item>
+			</d2l-labs-multi-select-list>
+		</div>
+	</body>
+</html>

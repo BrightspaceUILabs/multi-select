@@ -1,7 +1,7 @@
 import '../../attribute-picker.js';
 import { expect, fixture, html } from '@open-wc/testing';
 
-describe.only('d2l-labs-attribute-picker-axe', () => {
+describe('d2l-labs-attribute-picker-axe', () => {
 
 	it('unclicked', async() => {
 		const el = await fixture(html`
@@ -11,7 +11,7 @@ describe.only('d2l-labs-attribute-picker-axe', () => {
 			></d2l-labs-attribute-picker>`);
 		el.attributeList = [{ 'name':'one', 'value':1 }, { 'name':'two', 'value':2 }, { 'name':'three', 'value':3 }];
 		el.assignableAttributes = [{ 'name':'one', 'value':1 }, { 'name':'two', 'value':2 }, { 'name':'three', 'value':3 }, { 'name':'four', 'value':4 }, { 'name':'five', 'value':5 }, { 'name':'six', 'value':6 }];
-		await expect(el).to.be.accessible();
+		expect(el).to.be.accessible();
 	});
 
 	it('clicked', async() => {
@@ -23,7 +23,7 @@ describe.only('d2l-labs-attribute-picker-axe', () => {
 		el.attributeList = [{ 'name':'one', 'value':1 }, { 'name':'two', 'value':2 }, { 'name':'three', 'value':3 }];
 		el.assignableAttributes = [{ 'name':'one', 'value':1 }, { 'name':'two', 'value':2 }, { 'name':'three', 'value':3 }, { 'name':'four', 'value':4 }, { 'name':'five', 'value':5 }, { 'name':'six', 'value':6 }];
 		await open(el);
-		await expect(el).to.be.accessible();
+		expect(el).to.be.accessible();
 	});
 
 	async function open(elem) {

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" data-timezone='{"name":"Canada - Toronto", "identifier":"America/Toronto"}'>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+		<title>multi-select-input visual diff test</title>
+		<script type="module" src="../../multi-select-input-text.js"></script>
+		<script type="module" src="../../multi-select-list-item.js"></script>
+
+		<style>
+		html {
+			font-size: 20px;
+		}
+		div {
+			margin: 50px 10px;
+			width: 600px;
+		}
+		</style>
+		<script type="module">
+			import '@brightspace-ui/core/components/typography/typography.js';
+        </script>
+	</head>
+	<body class="d2l-typography">
+		<div id="default" class="visual-diff">
+			<d2l-labs-multi-select-input-text autoremove aria-label="Multi select demo" placeholder="Press Enter to add an item">
+				<d2l-labs-multi-select-list-item deletable text="Existing list item 0"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item deletable text="Existing list item 1"></d2l-labs-multi-select-list-item>
+				<d2l-labs-multi-select-list-item deletable text="Existing list item 2"></d2l-labs-multi-select-list-item>
+			</d2l-labs-multi-select-input-text>
+		</div>
+	</body>
+</html>
