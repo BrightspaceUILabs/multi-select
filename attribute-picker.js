@@ -1,7 +1,7 @@
 import '@brightspace-ui/core/components/colors/colors.js';
 import './multi-select-list.js';
 import './multi-select-list-item.js';
-import { css, html, LitElement } from 'lit-element/lit-element.js';
+import { css, html, LitElement } from 'lit';
 import { inputStyles } from '@brightspace-ui/core/components/inputs/input-styles.js';
 import { Localizer } from './localization.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';

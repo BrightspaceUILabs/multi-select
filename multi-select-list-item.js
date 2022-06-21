@@ -2,7 +2,7 @@ import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/icons/icon.js';
 import '@brightspace-ui/core/components/offscreen/offscreen.js';
 import '@brightspace-ui/core/components/tooltip/tooltip.js';
-import { css, html, LitElement } from 'lit-element/lit-element.js';
+import { css, html, LitElement } from 'lit';
 import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { Localizer } from './localization.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
