@@ -47,6 +47,7 @@ describe('multi-select-list', () => {
 
 	describe('accessibility', () => {
 		it('should pass all aXe tests', async() => {
+			isSafariBrowser && this.skip();
 			el = await fixture(elHtml);
 			const item = document.getElementById('item0');
 			expect(item).to.not.be.null;
@@ -55,8 +56,6 @@ describe('multi-select-list', () => {
 		});
 
 		it('should pass all aXe tests when collapsible', async function() {
-			// eslint-disable-next-line no-console
-			console.log('userAgent', navigator.userAgent);
 			isSafariBrowser && this.skip();
 			el = await fixture(collapsableHtml);
 			await expect(el).to.be.accessible();
