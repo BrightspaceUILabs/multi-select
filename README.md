@@ -25,7 +25,7 @@ Polymer/Lit-based web component collection for D2L multi-select, creating, editi
 npm install @brightspace-ui-labs/multi-select
 ```
 
-## Usage
+## Components
 
 ### `d2l-labs-multi-select-input-text`
 
@@ -95,6 +95,10 @@ attributePicker.addEventListener('d2l-attributes-changed', (e) => {
 
 The `d2l-labs-attribute-picker` dispatches the `d2l-attribute-limit-reached` event when the user attempts to enter an attribute greater than the limit. This can be used to send feedback to the user.
 
+## Deprecated Components
+
+**The following components are deprecated. Use [`d2l-tag-list` and `d2l-tag-list-item`](https://github.com/BrightspaceUI/core/tree/main/components/tag-list) in `BrightspaceUI/core` instead.**
+
 ### `d2l-labs-multi-select-list-item`
 
 `d2l-labs-multi-select-list-item` is a compact representation of information.
@@ -148,7 +152,7 @@ Start a [@web/dev-server](https://modern-web.dev/docs/dev-server/overview/) that
 npm run start
 ```
 
-To lint ([eslint](http://eslint.org/):
+To lint:
 
 ```shell
 npm run lint
