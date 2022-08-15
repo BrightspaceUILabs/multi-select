@@ -26,7 +26,7 @@ describe('multi-select-list-item', () => {
 	});
 
 	describe('accessibility', () => {
-		it('should pass all aXe tests', async() => {
+		it('should pass all aXe tests', async function() {
 			isSafariBrowser && this.skip();
 			const el = await fixture(html`
 				<d2l-labs-multi-select-list>

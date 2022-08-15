@@ -46,7 +46,7 @@ describe('multi-select-list', () => {
 	});
 
 	describe('accessibility', () => {
-		it('should pass all aXe tests', async() => {
+		it('should pass all aXe tests', async function() {
 			isSafariBrowser && this.skip();
 			el = await fixture(elHtml);
 			const item = document.getElementById('item0');
