@@ -5,9 +5,6 @@ import { runConstructor } from '@brightspace-ui/core/tools/constructor-test-help
 
 const _keyCodes = { BACKSPACE: 8, DELETE: 46, ENTER: 13, SPACE: 32 };
 
-//Safari currenly fails with 'script error' on multiple valid tests.
-const isSafariBrowser = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
 const elHtml = html`
 	<d2l-labs-multi-select-list autoremove>
 		<!-- unrelated hidden children -->
@@ -39,6 +36,13 @@ const collapsableHtml = html`
 describe('multi-select-list', () => {
 	let el;
 
+	//Safari currently fails with 'script error' on multiple valid tests.
+	const isSafariBrowser = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+	beforeEach(async function() {
+		isSafariBrowser && this.skip();
+	});
+
 	describe('constructor', () => {
 		it('constructs the component', () => {
 			runConstructor('d2l-labs-multi-select-list');
@@ -54,8 +58,7 @@ describe('multi-select-list', () => {
 			await expect(el).to.be.accessible();
 		});
 
-		it('should pass all aXe tests when collapsible', async function() {
-			isSafariBrowser && this.skip();
+		it('should pass all aXe tests when collapsible', async() => {
 			el = await fixture(collapsableHtml);
 			await expect(el).to.be.accessible();
 		});
@@ -125,14 +128,12 @@ describe('multi-select-list', () => {
 				el = await fixture(collapsableHtml);
 			});
 
-			it('should render only items that fit', async function() {
-				isSafariBrowser && this.skip();
+			it('should render only items that fit', async() => {
 				await waitUntil(() => el._collapsed === true, 'List was never collapsed');
 				expect(el.hiddenChildren > 0, 'hidden children were not assigned');
 			});
 
-			it('should expand/collapse the list when show/hide buttons are clicked', async function() {
-				isSafariBrowser && this.skip();
+			it('should expand/collapse the list when show/hide buttons are clicked', async() => {
 				const showButton = el.shadowRoot.querySelector('.d2l-show-button');
 				const hideButton = el.shadowRoot.querySelector('.d2l-hide-button');
 
