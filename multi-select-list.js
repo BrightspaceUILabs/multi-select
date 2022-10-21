@@ -1,4 +1,5 @@
 import '@brightspace-ui/core/components/button/button-subtle.js';
+
 import { css, html, LitElement } from 'lit';
 import { getComposedChildren, isComposedAncestor } from '@brightspace-ui/core/helpers/dom.js';
 import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
