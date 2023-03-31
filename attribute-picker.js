@@ -4,6 +4,7 @@ import './multi-select-list-item.js';
 import { css, html, LitElement } from 'lit';
 import { inputStyles } from '@brightspace-ui/core/components/inputs/input-styles.js';
 import { Localizer } from './localization.js';
+import { repeat } from 'lit/directives/repeat.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
 const keyCodes = {
@@ -156,7 +157,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 		return html`
 		<div role="application" class="d2l-attribute-picker-container ${this._inputFocused ? 'd2l-attribute-picker-container-focused' : ''}">
-			<div class="d2l-attribute-picker-content" role="${this.attributeList.length > 0 ? 'list' : ''}">
+			<div class="d2l-attribute-picker-content" aria-busy="${this._isNotActive()}" role="${this.attributeList.length > 0 ? 'list' : ''}">
 				${this.attributeList.map((item, index) => html`
 					<d2l-labs-multi-select-list-item
 						class="d2l-attribute-picker-attribute"
@@ -186,7 +187,6 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 					role="combobox"
 					type="text"
 					.value="${this._text}">
-				</input>
 			</div>
 
 			<div class="d2l-attribute-picker-absolute-container">
@@ -195,9 +195,9 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 					?hidden="${!this._inputFocused || this.hideDropdown || availableAttributes.length === 0}"
 					class="d2l-attribute-list">
 
-					${availableAttributes.map((item, listIndex) => html`
+					${repeat(availableAttributes, (item) => item.name, (item, listIndex) => html`
 						<li id="attribute-dropdown-list-item-${listIndex}"
-							aria-label="${this.localize('picker_add_value', 'value', item)}"
+							aria-label="${this.localize('picker_add_value', 'value', item.name)}"
 							aria-selected="${this._dropdownIndex === listIndex ? true : false}"
 							role="option"
 							class="d2l-attribute-picker-li ${this._dropdownIndex === listIndex ? 'd2l-selected' : ''}"
@@ -296,6 +296,10 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		const selectedAttributes = this.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
 		this._activeAttributeIndex = index;
 		selectedAttributes[index].focus();
+	}
+
+	_isNotActive() {
+		return this._activeAttributeIndex === -1 && this._dropdownIndex === -1 && !this._inputFocused;
 	}
 
 	// Absolute value % operator for navigating menus.
