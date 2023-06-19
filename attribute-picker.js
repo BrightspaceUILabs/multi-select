@@ -68,7 +68,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			}
 			.d2l-attribute-picker-container {
 				background-color: white;
-				border-colour: var(--d2l-color-galena);
+				border-color: var(--d2l-color-galena);
 				border-radius: 6px;
 				border-style: solid;
 				border-width: 1px;
