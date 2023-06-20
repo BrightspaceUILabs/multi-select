@@ -180,6 +180,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 					aria-label="${this.ariaLabel}"
 					aria-owns="attribute-dropdown-list"
 					class="d2l-input d2l-attribute-picker-input"
+					enterkeyhint="enter"
 					@blur="${this._onInputBlur}"
 					@focus="${this._onInputFocus}"
 					@keydown="${this._onInputKeydown}"
