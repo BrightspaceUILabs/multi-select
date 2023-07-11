@@ -430,7 +430,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				if (this._dropdownIndex >= 0 && this._dropdownIndex < list.length) {
 					this.addAttribute(list[this._dropdownIndex].text);
 				} else if (this.allowFreeform) {
-					const trimmedAttribute =  this._text.trim();
+					const trimmedAttribute = this._text.trim();
 					if (trimmedAttribute.length === 0) {
 						return;
 					}

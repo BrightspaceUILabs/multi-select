@@ -309,7 +309,7 @@ describe('attribute-picker', () => {
 			await el.updateComplete;
 
 			//Confirm the item has been deleted, and the second element is now focused
-			let expectedAttributeList =  ['one', 'two'];
+			let expectedAttributeList = ['one', 'two'];
 			let dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
 			focusElement = el.shadowRoot.querySelector(':focus');
@@ -320,7 +320,7 @@ describe('attribute-picker', () => {
 			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', keyCode: 8, bubbles: true }));
 			await el.updateComplete;
 
-			expectedAttributeList =  ['two'];
+			expectedAttributeList = ['two'];
 			dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			expect(dropdownElements.length).equal(1);
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
@@ -340,7 +340,7 @@ describe('attribute-picker', () => {
 			await el.updateComplete;
 
 			//Confirm the item has been deleted, and the second element is now focused
-			let expectedAttributeList =  ['one', 'two'];
+			let expectedAttributeList = ['one', 'two'];
 			let dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
 			focusElement = el.shadowRoot.querySelector(':focus');
@@ -351,7 +351,7 @@ describe('attribute-picker', () => {
 			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', keyCode: 46, bubbles: true }));
 			await el.updateComplete;
 
-			expectedAttributeList =  ['two'];
+			expectedAttributeList = ['two'];
 			dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			expect(dropdownElements.length).equal(1);
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
