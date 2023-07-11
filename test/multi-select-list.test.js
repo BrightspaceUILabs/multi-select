@@ -114,11 +114,11 @@ describe('multi-select-list', () => {
 				await testDeleteAndFocus(item0, item1, 'Backspace', _keyCodes.BACKSPACE);
 			});
 
-			it('should delete the item when Delete is pressed and switch focus to the next item',  async() => {
+			it('should delete the item when Delete is pressed and switch focus to the next item', async() => {
 				await testDeleteAndFocus(item1, item2, 'Delete', _keyCodes.DELETE);
 			});
 
-			it('should delete the item when Delete is pressed and switch focus to the previous item when it is the last item',  async() => {
+			it('should delete the item when Delete is pressed and switch focus to the previous item when it is the last item', async() => {
 				await testDeleteAndFocus(item2, item1, 'Delete', _keyCodes.DELETE);
 			});
 		});
