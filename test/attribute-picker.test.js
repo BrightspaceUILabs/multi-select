@@ -391,6 +391,12 @@ describe('attribute-picker', () => {
 			expect(el._inputFocused).to.be.false;
 			expect(el._initialFocus).to.be.true;
 
+			let invalidIcon = el.shadowRoot.querySelector('.d2l-input-text-invalid-icon');
+			expect(invalidIcon).to.not.exist;
+
+			let tooltip = el.shadowRoot.querySelector('d2l-tooltip');
+			expect(tooltip).to.not.exist;
+
 			const pageNumberInput = el.shadowRoot.querySelector('input');
 			pageNumberInput.focus();
 			await el.updateComplete;
@@ -407,15 +413,23 @@ describe('attribute-picker', () => {
 			expect(attributeContainer.hasAttribute('aria-required')).to.be.true;
 			expect(attributeContainer.hasAttribute('aria-invalid')).to.be.true;
 
-			let invalidIcon = el.shadowRoot.querySelector('.d2l-input-text-invalid-icon');
+			invalidIcon = el.shadowRoot.querySelector('.d2l-input-text-invalid-icon');
 			expect(invalidIcon).to.exist;
+
+			tooltip = el.shadowRoot.querySelector('d2l-tooltip');
+			expect(tooltip).to.exist;
+			expect(tooltip.innerHTML).to.contain('At least one attribute must be selected');
 
 			el.addAttribute(attributeList[0]);
 			await el.updateComplete;
 
 			expect(attributeContainer.hasAttribute('aria-invalid')).to.be.false;
+
 			invalidIcon = el.shadowRoot.querySelector('.d2l-input-text-invalid-icon');
 			expect(invalidIcon).to.not.exist;
+
+			tooltip = el.shadowRoot.querySelector('d2l-tooltip');
+			expect(tooltip).to.not.exist;
 		});
 	});
 

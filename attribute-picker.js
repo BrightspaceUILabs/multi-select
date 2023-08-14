@@ -1,4 +1,5 @@
 import '@brightspace-ui/core/components/colors/colors.js';
+import '@brightspace-ui/core/components/tooltip/tooltip.js';
 import './multi-select-list.js';
 import './multi-select-list-item.js';
 import { css, html, LitElement } from 'lit';
@@ -202,7 +203,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		const ariaRequired = this.required ? true : undefined;
 
 		return html`
-		<div role="application" class="${classMap(containerClasses)}" aria-invalid="${ifDefined(ariaInvalid)}" aria-required=${ifDefined(ariaRequired)}>
+		<div role="application" id="d2l-attribute-picker-container" class="${classMap(containerClasses)}" aria-invalid="${ifDefined(ariaInvalid)}" aria-required=${ifDefined(ariaRequired)}>
 			<div class="d2l-attribute-picker-content" aria-busy="${this._isNotActive()}" role="${this.attributeList.length > 0 ? 'list' : ''}">
 				${this.attributeList.map((item, index) => html`
 					<d2l-labs-multi-select-list-item
@@ -261,6 +262,10 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				</ul>
 			</div>
 		</div>
+
+		${!isValid ? html`
+			<d2l-tooltip for="d2l-attribute-picker-container" state="error" announced position="top" ?force-show=${this._inputFocused}>${this.localize('oneAttributeRequired')}</d2l-tooltip>
+		` : null}
 		`;
 	}
 
