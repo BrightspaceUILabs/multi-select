@@ -2,7 +2,7 @@ name: Lang
 on:
   pull_request:
     paths:
-      - 'lang/**'
+      - '**/lang/**'
 jobs:
   test:
     timeout-minutes: 5
