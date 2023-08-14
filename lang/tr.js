@@ -4,7 +4,7 @@ export default {
 	delete: "Sil",
 	hide: "Gizle",
 	hiddenChildren: "+ {num} adet daha",
-	oneAttributeRequired: "At least one attribute must be selected", // Tooltip that appears when no values have been set and we need to inform the user that this is an invalid state
+	oneAttributeRequired: "At least one attribute must be set", // Tooltip that appears when no values have been set and we need to inform the user that this is an invalid state
 	picker_remove_value: "{value} değerini kaldırmak için tıklayın",
 	picker_add_value: "{value} değeri eklemek için tıklayın"
 };

@@ -39,6 +39,12 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			/* When true, the autocomplete dropdown will not be displayed to the user. */
 			hideDropdown: { type: Boolean, attribute: 'hide-dropdown', reflect: true },
 
+			/*
+				The text that will appear in the tooltip that informs a user that the state is invalid
+				The default value is: 'At least one attribute must be set'
+			*/
+			invalidTooltipText: { type: String, attribute: 'invalid-tooltip-text', reflect: true },
+
 			/* The maximum number of attributes permitted. */
 			limit: { type: Number, attribute: 'limit', reflect: true },
 
@@ -264,7 +270,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		</div>
 
 		${!isValid ? html`
-			<d2l-tooltip for="d2l-attribute-picker-container" state="error" announced position="top" ?force-show=${this._inputFocused}>${this.localize('oneAttributeRequired')}</d2l-tooltip>
+			<d2l-tooltip for="d2l-attribute-picker-container" state="error" announced position="top" ?force-show=${this._inputFocused}>${this.invalidTooltipText || this.localize('oneAttributeRequired')}</d2l-tooltip>
 		` : null}
 		`;
 	}
