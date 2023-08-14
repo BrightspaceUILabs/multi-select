@@ -1,7 +1,10 @@
 import '@brightspace-ui/core/components/colors/colors.js';
+import '@brightspace-ui/core/components/tooltip/tooltip.js';
 import './multi-select-list.js';
 import './multi-select-list-item.js';
 import { css, html, LitElement } from 'lit';
+import { classMap } from 'lit-html/directives/class-map.js';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { inputStyles } from '@brightspace-ui/core/components/inputs/input-styles.js';
 import { Localizer } from './localization.js';
 import { repeat } from 'lit/directives/repeat.js';
@@ -36,11 +39,17 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			/* When true, the autocomplete dropdown will not be displayed to the user. */
 			hideDropdown: { type: Boolean, attribute: 'hide-dropdown', reflect: true },
 
+			/*
+				The text that will appear in the tooltip that informs a user that the state is invalid
+				The default value is: 'At least one attribute must be set'
+			*/
+			invalidTooltipText: { type: String, attribute: 'invalid-tooltip-text', reflect: true },
+
 			/* The maximum number of attributes permitted. */
 			limit: { type: Number, attribute: 'limit', reflect: true },
 
-			/* The inner text of the input. */
-			_text: { type: String, attribute: 'text', reflect: true },
+			/* When true, an error state will appear if no attributes are set. */
+			required: { type: Boolean, attribute: 'required', reflect: true },
 
 			/* Represents the index of the currently focused attribute. If no attribute is focused, equals -1. */
 			_activeAttributeIndex: { type: Number, reflect: false },
@@ -48,8 +57,14 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			/* Represents the index of the currently focused dropdown list item. If no item is focused, equals -1. */
 			_dropdownIndex: { type: Number, reflect: false },
 
+			/* When true, the user has yet to lose focus for the first time, meaning the validation won't be shown until they've lost focus for the first time. */
+			_initialFocus: { type: Boolean, reflect: false },
+
 			/* When true, the user currently has focus within the input. */
 			_inputFocused: { type: Boolean, reflect: false },
+
+			/* The inner text of the input. */
+			_text: { type: String, attribute: 'text', reflect: true }
 		};
 	}
 
@@ -77,12 +92,20 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				position: relative;
 				vertical-align: middle;
 			}
+
+			.d2l-attribute-picker-container:hover,
 			.d2l-attribute-picker-container-focused {
 				border-color: var(--d2l-color-celestine);
 				border-width: 2px;
 				outline-width: 0;
 				padding: 4px 4px 4px 4px;
 			}
+
+			.d2l-attribute-picker-container-error,
+			.d2l-attribute-picker-container-error:hover {
+				border-color: var(--d2l-color-cinnabar);
+			}
+
 			.d2l-attribute-picker-content {
 				cursor: text;
 				display: flex;
@@ -134,6 +157,23 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				width: 100%;
 				z-index: 1;
 			}
+
+			.d2l-input-text-invalid-icon {
+				background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIiIGhlaWdodD0iMjIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgIDxwYXRoIGZpbGw9IiNGRkYiIGQ9Ik0wIDBoMjJ2MjJIMHoiLz4KICAgIDxwYXRoIGQ9Ik0xOC44NjQgMTYuNDdMMTIuNjIzIDMuOTg5YTEuNzgzIDEuNzgzIDAgMDAtMy4xOTIgMEwzLjE4OSAxNi40N2ExLjc2MSAxLjc2MSAwIDAwLjA4IDEuNzNjLjMyNS41MjUuODk4Ljc5OCAxLjUxNi43OTloMTIuNDgzYy42MTggMCAxLjE5Mi0uMjczIDEuNTE2LS44LjIzNy0uMzM1LjI2NS0xLjM3LjA4LTEuNzN6IiBmaWxsPSIjQ0QyMDI2IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz4KICAgIDxwYXRoIGQ9Ik0xMS4wMjcgMTcuMjY0YTEuMzM3IDEuMzM3IDAgMTEwLTIuNjc1IDEuMzM3IDEuMzM3IDAgMDEwIDIuNjc1ek0xMS45IDEyLjk4YS44OTIuODkyIDAgMDEtMS43NDcgMEw5LjI3IDguNTJhLjg5Mi44OTIgMCAwMS44NzQtMS4wNjRoMS43NjhhLjg5Mi44OTIgMCAwMS44NzQgMS4wNjVsLS44ODYgNC40NTh6IiBmaWxsPSIjRkZGIi8+CiAgPC9nPgo8L3N2Zz4K");
+				display: flex;
+				height: 22px;
+				left: unset;
+				position: absolute;
+				right: 8px;
+				top: 50%;
+				transform: translateY(-50%);
+				width: 22px;
+			}
+
+			:host([dir='rtl']) .d2l-input-text-invalid-icon {
+				left: 8px;
+				right: unset;
+			}
 		`];
 	}
 
@@ -146,6 +186,8 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		this._inputFocused = false;
 		this._activeAttributeIndex = -1;
 		this._dropdownIndex = -1;
+		this._initialFocus = true;
+		this.required = false;
 	}
 
 	render() {
@@ -155,8 +197,19 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		const comparableText = this._text.toLowerCase();
 		const availableAttributes = this.assignableAttributes.filter(x => hash[x.name] !== true && (comparableText === '' || x.name?.toLowerCase().includes(comparableText)));
 
+		const isValid = this._initialFocus || !this.required || this.attributeList.length;
+
+		const containerClasses = {
+			'd2l-attribute-picker-container': true,
+			'd2l-attribute-picker-container-focused' : this._inputFocused,
+			'd2l-attribute-picker-container-error' : !isValid
+		};
+
+		const ariaInvalid = !isValid ? true : undefined;
+		const ariaRequired = this.required ? true : undefined;
+
 		return html`
-		<div role="application" class="d2l-attribute-picker-container ${this._inputFocused ? 'd2l-attribute-picker-container-focused' : ''}">
+		<div role="application" id="d2l-attribute-picker-container" class="${classMap(containerClasses)}" aria-invalid="${ifDefined(ariaInvalid)}" aria-required=${ifDefined(ariaRequired)}>
 			<div class="d2l-attribute-picker-content" aria-busy="${this._isNotActive()}" role="${this.attributeList.length > 0 ? 'list' : ''}">
 				${this.attributeList.map((item, index) => html`
 					<d2l-labs-multi-select-list-item
@@ -175,19 +228,22 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				<input
 					aria-activedescendant="${this._dropdownIndex > -1 ? `attribute-dropdown-list-item-${this._dropdownIndex}` : ''}"
 					aria-autocomplete="list"
-					aria-haspopup="true"
 					aria-expanded="${this._inputFocused}"
+					aria-haspopup="true"
 					aria-label="${this.ariaLabel}"
 					aria-owns="attribute-dropdown-list"
 					class="d2l-input d2l-attribute-picker-input"
 					enterkeyhint="enter"
 					@blur="${this._onInputBlur}"
 					@focus="${this._onInputFocus}"
+					@focusout="${this._onInputLoseFocus}"
 					@keydown="${this._onInputKeydown}"
 					@input="${this._onInputTextChanged}"
 					role="combobox"
 					type="text"
 					.value="${this._text}">
+
+				${(!isValid && !this._inputFocused) ? html`<div class="d2l-input-text-invalid-icon" @click="${this._handleInvalidIconClick}"></div>` : null}
 			</div>
 
 			<div class="d2l-attribute-picker-absolute-container">
@@ -212,6 +268,10 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				</ul>
 			</div>
 		</div>
+
+		${!isValid ? html`
+			<d2l-tooltip for="d2l-attribute-picker-container" state="error" announced position="top" ?force-show=${this._inputFocused}>${this.invalidTooltipText || this.localize('oneAttributeRequired')}</d2l-tooltip>
+		` : null}
 		`;
 	}
 
@@ -297,6 +357,13 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		const selectedAttributes = this.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
 		this._activeAttributeIndex = index;
 		selectedAttributes[index].focus();
+	}
+
+	_handleInvalidIconClick() {
+		const input = this.shadowRoot && this.shadowRoot.querySelector('input');
+		if (!input) return;
+		this._inputFocused = true;
+		input.focus();
 	}
 
 	_isNotActive() {
@@ -450,6 +517,10 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				break;
 			}
 		}
+	}
+
+	_onInputLoseFocus() {
+		this._initialFocus = false;
 	}
 
 	_onInputTextChanged(event) {
