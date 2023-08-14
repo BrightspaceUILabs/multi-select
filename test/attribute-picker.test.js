@@ -418,7 +418,7 @@ describe('attribute-picker', () => {
 
 			tooltip = el.shadowRoot.querySelector('d2l-tooltip');
 			expect(tooltip).to.exist;
-			expect(tooltip.innerHTML).to.contain('At least one attribute must be set');
+			expect(tooltip.innerHTML).to.contain('At least one value must be set');
 
 			el.invalidTooltipText = 'blah blah blah';
 			await el.updateComplete;
