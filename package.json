@@ -27,7 +27,8 @@
     "lint:style": "stylelint \"**/*.{js,html}\"",
     "start": "web-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:headless",
-    "test:headless": "web-test-runner --node-resolve"
+    "test:headless": "web-test-runner --group all-browsers",
+    "test:headless:watch": "web-test-runner --group watch --watch"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
@@ -39,6 +40,7 @@
     "@open-wc/testing": "^3",
     "@web/dev-server": "^0.3.0",
     "@web/test-runner": "^0.17",
+    "@web/test-runner-playwright": "^0.10.1",
     "eslint": "^8",
     "eslint-config-brightspace": "^0.25",
     "lit-analyzer": "^1",
