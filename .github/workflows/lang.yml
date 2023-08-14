@@ -6,16 +6,12 @@ on:
 jobs:
   test:
     timeout-minutes: 5
-    runs-on: [self-hosted, Linux, AWS]
+    runs-on: ubuntu-latest
     steps:
       - uses: Brightspace/third-party-actions@actions/checkout
       - uses: Brightspace/third-party-actions@actions/setup-node
         with:
           node-version-file: .nvmrc
-      - name: Add CodeArtifact npm registry
-        uses: Brightspace/codeartifact-actions/npm/add-registry@main
-        with:
-          auth-token: ${{ secrets.CODEARTIFACT_AUTH_TOKEN }}
       - name: Install MessageFormat-Validator
         run: npm install messageformat-validator
       - name: Run MessageFormat-Validator
