@@ -1,6 +1,7 @@
 /* eslint quotes: 0 */
 
 export default {
+	tempTerm: "blah",
 	delete: "Delete",
 	hide: "Hide",
 	hiddenChildren: "+ {num} more",
