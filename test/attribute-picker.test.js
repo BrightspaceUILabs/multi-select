@@ -374,6 +374,49 @@ describe('attribute-picker', () => {
 			expect(listItems[0].deletable).equal(false);
 		});
 
+		it('should mark as invalid if empty and required after unfocusing', async() => {
+			el = await fixture(html`<d2l-labs-attribute-picker required allow-freeform .assignableAttributes="${assignableAttributeList}"></d2l-labs-attribute-picker>`);
+
+			const listItems = el.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
+			for (const item of listItems) {
+				await item.updateComplete;
+			}
+
+			const attributeContainer = el.shadowRoot.querySelector('.d2l-attribute-picker-container');
+			expect(attributeContainer).to.exist;
+			expect(attributeContainer.hasAttribute('aria-required')).to.be.true;
+			expect(attributeContainer.hasAttribute('aria-invalid')).to.be.false; // Doesn't have this attribute yet since it hasn't been unfocused yet
+
+			expect(el.required).to.be.true;
+			expect(el._inputFocused).to.be.false;
+			expect(el._initialFocus).to.be.true;
+
+			const pageNumberInput = el.shadowRoot.querySelector('input');
+			pageNumberInput.focus();
+			await el.updateComplete;
+
+			expect(el._inputFocused).to.be.true;
+			expect(el._initialFocus).to.be.true;
+
+			pageNumberInput.blur(); // unfocuses
+			await el.updateComplete;
+
+			expect(el._inputFocused).to.be.false;
+			expect(el._initialFocus).to.be.false;
+
+			expect(attributeContainer.hasAttribute('aria-required')).to.be.true;
+			expect(attributeContainer.hasAttribute('aria-invalid')).to.be.true;
+
+			let invalidIcon = el.shadowRoot.querySelector('.d2l-input-text-invalid-icon');
+			expect(invalidIcon).to.exist;
+
+			el.addAttribute(attributeList[0]);
+			await el.updateComplete;
+
+			expect(attributeContainer.hasAttribute('aria-invalid')).to.be.false;
+			invalidIcon = el.shadowRoot.querySelector('.d2l-input-text-invalid-icon');
+			expect(invalidIcon).to.not.exist;
+		});
 	});
 
 	describe('eventing', () => {
