@@ -209,7 +209,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		const ariaRequired = this.required ? true : undefined;
 
 		return html`
-		<div role="application" id="d2l-attribute-picker-container" class="${classMap(containerClasses)}" aria-invalid="${ifDefined(ariaInvalid)}" aria-required=${ifDefined(ariaRequired)}>
+		<div role="application" id="d2l-attribute-picker-container" class="${classMap(containerClasses)}" >
 			<div class="d2l-attribute-picker-content" aria-busy="${this._isNotActive()}" role="${this.attributeList.length > 0 ? 'list' : ''}">
 				${this.attributeList.map((item, index) => html`
 					<d2l-labs-multi-select-list-item
@@ -230,8 +230,10 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 					aria-autocomplete="list"
 					aria-expanded="${this._inputFocused}"
 					aria-haspopup="true"
+					aria-invalid="${ifDefined(ariaInvalid)}"
 					aria-label="${this.ariaLabel}"
 					aria-owns="attribute-dropdown-list"
+					aria-required=${ifDefined(ariaRequired)}
 					class="d2l-input d2l-attribute-picker-input"
 					enterkeyhint="enter"
 					@blur="${this._onInputBlur}"

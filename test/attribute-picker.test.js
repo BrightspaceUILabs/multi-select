@@ -44,6 +44,11 @@ describe('attribute-picker', () => {
 			await expect(el).to.be.accessible();
 		});
 
+		it('should pass all axe tests (with required attribute)', async() => {
+			const el = await fixture(html`<d2l-labs-attribute-picker required aria-label="attributes"></d2l-labs-attribute-picker>`);
+			await expect(el).to.be.accessible();
+		});
+
 		it('should pass all axe tests when populated', async() => {
 			const attributeList = ['one', 'two', 'three'];
 			const assignableAttributeList = ['one', 'two', 'three', 'four', 'five', 'six'];
@@ -382,7 +387,7 @@ describe('attribute-picker', () => {
 				await item.updateComplete;
 			}
 
-			const attributeContainer = el.shadowRoot.querySelector('.d2l-attribute-picker-container');
+			const attributeContainer = el.shadowRoot.querySelector('.d2l-attribute-picker-input');
 			expect(attributeContainer).to.exist;
 			expect(attributeContainer.hasAttribute('aria-required')).to.be.true;
 			expect(attributeContainer.hasAttribute('aria-invalid')).to.be.false; // Doesn't have this attribute yet since it hasn't been unfocused yet
