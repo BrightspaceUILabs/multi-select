@@ -13,7 +13,6 @@
     "lang/*",
     "attribute-picker.js",
     "localization.js",
-    "localize-behavior.js",
     "multi-select-input-text.js",
     "multi-select-input.js",
     "multi-select-list-item.js",
@@ -51,7 +50,6 @@
   },
   "dependencies": {
     "@brightspace-ui/core": "^2",
-    "@brightspace-ui/localize-behavior": "^2",
     "@polymer/polymer": "^3",
     "lit": "^2"
   }

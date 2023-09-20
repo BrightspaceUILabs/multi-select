@@ -2,9 +2,9 @@
 
 export default {
 	delete: "Dileu",
-	hide: "Hide",
-	hiddenChildren: "+ {num} more",
+	hide: "Cuddio",
+	hiddenChildren: "+ {num} arall",
 	oneAttributeRequired: "Rhaid gosod o leiaf un gwerth", // Tooltip that appears when no values have been set and we need to inform the user that this is an invalid state
-	picker_remove_value: "Click to remove value {value}",
-	picker_add_value: "Click to add value {value}"
+	picker_remove_value: "Cliciwch i dynnu'r gwerth {value}",
+	picker_add_value: "Cliciwch i ychwanegu'r gwerth {value}"
 };
