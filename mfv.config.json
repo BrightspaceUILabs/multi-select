@@ -1,5 +1,4 @@
 {
   "source": "en",
-  "path": "lang/",
-  "locales": "ar,cy,cy-gb,da,da-dk,de,en-us,en,es-es,es,fr-fr,fr-on,fr,hi,ja,ko,nl,pt,sv,tr,zh,zh-cn,zh-tw"
+  "path": "lang/"
 }
