@@ -1,4 +1,4 @@
-import { LocalizeDynamicMixin } from '@brightspace-ui/core/mixins/localize/localize-mixin.js';
+import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize/localize-mixin.js';
 export const Localizer = superclass => class extends LocalizeMixin(superclass) {
 	static get localizeConfig() {
 		return {
