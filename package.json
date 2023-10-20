@@ -45,7 +45,7 @@
     "eslint-config-brightspace": "^0.25",
     "lit-analyzer": "^1",
     "messageformat-validator": "^2.4.1",
-    "sinon": "^16",
+    "sinon": "^17",
     "stylelint": "^15"
   },
   "dependencies": {
