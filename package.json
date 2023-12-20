@@ -42,7 +42,7 @@
     "@web/test-runner": "^0.18",
     "@web/test-runner-playwright": "^0.11.0",
     "eslint": "^8",
-    "eslint-config-brightspace": "^0.25",
+    "eslint-config-brightspace": "^1.0",
     "lit-analyzer": "^2",
     "messageformat-validator": "^2.4.1",
     "sinon": "^17",
