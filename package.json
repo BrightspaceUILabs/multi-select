@@ -51,6 +51,6 @@
   "dependencies": {
     "@brightspace-ui/core": "^2",
     "@polymer/polymer": "^3",
-    "lit": "^2"
+    "lit": "^3"
   }
 }
