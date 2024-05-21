@@ -36,7 +36,7 @@
   "devDependencies": {
     "@babel/core": "^7",
     "@babel/eslint-parser": "^7",
-    "@brightspace-ui/stylelint-config": "^0.8",
+    "@brightspace-ui/stylelint-config": "^1",
     "@open-wc/testing": "^4",
     "@web/dev-server": "^0.4.0",
     "@web/test-runner": "^0.18",
@@ -46,7 +46,7 @@
     "lit-analyzer": "^2",
     "messageformat-validator": "^2.4.1",
     "sinon": "^17",
-    "stylelint": "^15"
+    "stylelint": "^16"
   },
   "dependencies": {
     "@brightspace-ui/core": "^3",

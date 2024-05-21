@@ -129,7 +129,7 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			-webkit-user-select: none;
 		}
 
-		:host([dir='rtl']) .d2l-labs-multi-select-list-item-text-wrapper {
+		:host([dir="rtl"]) .d2l-labs-multi-select-list-item-text-wrapper {
 			padding: var(--d2l-labs-multi-select-list-item-padding-rtl);
 		}
 
@@ -142,7 +142,7 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			visibility: hidden;
 		}
 
-		:host([dir='rtl'][deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
+		:host([dir="rtl"][deletable][show-delete-hover-focus]) .d2l-labs-multi-select-list-item-wrapper d2l-icon {
 			margin-left: 0;
 			margin-right: -0.7rem;
 		}
@@ -157,7 +157,7 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 			visibility: unset;
 		}
 
-		:host([dir='rtl'][deletable]) .d2l-labs-multi-select-list-item-text-wrapper {
+		:host([dir="rtl"][deletable]) .d2l-labs-multi-select-list-item-text-wrapper {
 			padding: var(--d2l-labs-multi-select-list-item-padding-deletable-rtl);
 		}
 
