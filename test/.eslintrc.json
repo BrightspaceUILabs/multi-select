@@ -1,6 +1,0 @@
-{
-  "extends": "brightspace/wct-polymer-3-config",
-  "rules": {
-    "no-invalid-this": 0
-  }
-}

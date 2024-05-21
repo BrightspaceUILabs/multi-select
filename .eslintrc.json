@@ -1,8 +1,7 @@
 {
-  "extends": "brightspace/open-wc-testing-config",
-  "parser": "@babel/eslint-parser",
-  "parserOptions": {
-    "sourceType": "module",
-    "requireConfigFile": false
-  }
+  "extends": "brightspace/lit-config",
+  "overrides": [{
+    "files": "test/**",
+    "extends": "brightspace/testing-config"
+  }]
 }
