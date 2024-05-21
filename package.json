@@ -46,7 +46,7 @@
     "lit-analyzer": "^2",
     "messageformat-validator": "^2.4.1",
     "sinon": "^17",
-    "stylelint": "^15"
+    "stylelint": "^16"
   },
   "dependencies": {
     "@brightspace-ui/core": "^3",
