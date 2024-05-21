@@ -170,7 +170,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 				width: 22px;
 			}
 
-			:host([dir='rtl']) .d2l-input-text-invalid-icon {
+			:host([dir="rtl"]) .d2l-input-text-invalid-icon {
 				left: 8px;
 				right: unset;
 			}
