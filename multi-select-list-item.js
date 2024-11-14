@@ -218,6 +218,7 @@ class MultiSelectListItem extends RtlMixin(Localizer(LitElement)) {
 
 	constructor() {
 		super();
+		console.warn('The \'d2l-labs-multi-select-list-item\' component is deprecated and will soon be removed, please use the \'d2l-tag-list-item\' component instead. https://github.com/BrightspaceUI/core/tree/main/components/tag-list#tag-list-item-d2l-tag-list-item');
 		this.text = '';
 		this.shortText = '';
 		this.maxChars = 40;
