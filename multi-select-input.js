@@ -1,6 +1,8 @@
 import './multi-select-list.js';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 
+console.warn('The \'d2l-labs-multi-select-input\' component is deprecated and will soon be removed.');
+
 const $_documentContainer = document.createElement('template');
 $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-input">
 	<template strip-whitespace>

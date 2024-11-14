@@ -1,5 +1,9 @@
 # d2l-labs-multi-select
 
+**The majority of this repo is deprecated, do not use any of the components in this repo and use [`d2l-tag-list` and `d2l-tag-list-item`](https://github.com/BrightspaceUI/core/tree/main/components/tag-list) in `BrightspaceUI/core` instead.**
+
+If you want to use `d2l-labs-attribute-picker`, contact Team Arkeltstorp first as it's going to be moved over to the [labs](https://github.com/BrightspaceUI/labs) monorepo.
+
 [![NPM version](https://img.shields.io/npm/v/@brightspace-ui-labs/multi-select.svg)](https://www.npmjs.org/package/@brightspace-ui-labs/multi-select)
 
 > Note: this is a ["labs" component](https://github.com/BrightspaceUI/guide/wiki/Component-Tiers). While functional, these tasks are prerequisites to promotion to BrightspaceUI "official" status:
@@ -26,35 +30,6 @@ npm install @brightspace-ui-labs/multi-select
 ```
 
 ## Components
-
-### `d2l-labs-multi-select-input-text`
-
-`d2l-labs-multi-select-input-text` includes a `d2l-input-text` that is hooked up to add items when 'Enter' is pressed.
-**Usage:**
-```html
-<d2l-labs-multi-select-input-text>
-	<d2l-labs-multi-select-list-item deletable text="Item 1"></d2l-labs-multi-select-list-item>
-</d2l-labs-multi-select-input-text>
-```
-
-### `d2l-labs-multi-select-input`
-
-You can use your own input component instead by putting it as a child of `d2l-labs-multi-select-input` and setting `slot="input"` on your input element. To add items to the list, call `addItem` with the item text.
-**Usage:**
-```html
-<d2l-labs-multi-select-input id="multi-select-input">
-	<div slot="input">
-		<input>
-		<button>Add</button>
-	</div>
-</d2l-labs-multi-select-input>
-```
-
-```js
-button.addEventListener('click', () => {
-	multiSelectInput.addItem(input.value)
-})
-```
 
 ### `d2l-labs-attribute-picker`
 
@@ -141,6 +116,34 @@ You can opt for a condensed view by adding the `collapsable` attribute, which li
 
 - `d2l-labs-multi-select-list-item-added`: fired on item added to the `d2l-labs-multi-select-list`
 
+### `d2l-labs-multi-select-input-text`
+
+`d2l-labs-multi-select-input-text` includes a `d2l-input-text` that is hooked up to add items when 'Enter' is pressed.
+**Usage:**
+```html
+<d2l-labs-multi-select-input-text>
+	<d2l-labs-multi-select-list-item deletable text="Item 1"></d2l-labs-multi-select-list-item>
+</d2l-labs-multi-select-input-text>
+```
+
+### `d2l-labs-multi-select-input`
+
+You can use your own input component instead by putting it as a child of `d2l-labs-multi-select-input` and setting `slot="input"` on your input element. To add items to the list, call `addItem` with the item text.
+**Usage:**
+```html
+<d2l-labs-multi-select-input id="multi-select-input">
+	<div slot="input">
+		<input>
+		<button>Add</button>
+	</div>
+</d2l-labs-multi-select-input>
+```
+
+```js
+button.addEventListener('click', () => {
+	multiSelectInput.addItem(input.value)
+})
+```
 
 ## Developing, Testing and Contributing
 

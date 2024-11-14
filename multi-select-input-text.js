@@ -2,6 +2,8 @@ import '@brightspace-ui/core/components/inputs/input-text.js';
 import './multi-select-input.js';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 
+console.warn('The \'d2l-labs-multi-select-input-text\' component is deprecated and will soon be removed.');
+
 const $_documentContainer = document.createElement('template');
 $_documentContainer.innerHTML = `<dom-module id="d2l-labs-multi-select-input-text">
 	<template strip-whitespace>
