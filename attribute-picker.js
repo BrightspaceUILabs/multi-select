@@ -1,7 +1,7 @@
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/tooltip/tooltip.js';
-import './multi-select-list.js';
-import './multi-select-list-item.js';
+import '@brightspace-ui/core/components/tag-list/tag-list.js';
+import '@brightspace-ui/core/components/tag-list/tag-list-item.js';
 import { css, html, LitElement } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
@@ -51,8 +51,8 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			/* When true, an error state will appear if no attributes are set. */
 			required: { type: Boolean, attribute: 'required', reflect: true },
 
-			/* Represents the index of the currently focused attribute. If no attribute is focused, equals -1. */
-			_activeAttributeIndex: { type: Number, reflect: false },
+			/* When true, the user currently has focus within the tag-list. */
+			_tagListFocused: { type: Number, reflect: false },
 
 			/* Represents the index of the currently focused dropdown list item. If no item is focused, equals -1. */
 			_dropdownIndex: { type: Number, reflect: false },
@@ -184,7 +184,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		this._text = '';
 		this.hideDropdown = false;
 		this._inputFocused = false;
-		this._activeAttributeIndex = -1;
+		this._tagListFocused = false;
 		this._dropdownIndex = -1;
 		this._initialFocus = true;
 		this.required = false;
@@ -211,20 +211,19 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		return html`
 		<div role="application" id="d2l-attribute-picker-container" class="${classMap(containerClasses)}" >
 			<div class="d2l-attribute-picker-content" aria-busy="${this._isNotActive()}" role="${this.attributeList.length > 0 ? 'list' : ''}">
+				<d2l-tag-list @focusout="${this._onAttributeBlur}">
 				${this.attributeList.map((item, index) => html`
-					<d2l-labs-multi-select-list-item
+					<d2l-tag-list-item
 						class="d2l-attribute-picker-attribute"
 						text="${item.name}"
-						.index="${index}"
-						?deletable="${this._inputFocused || this._activeAttributeIndex !== -1}"
-						@d2l-labs-multi-select-list-item-deleted="${this._onAttributeRemoved}"
-						@blur="${this._onAttributeBlur}"
+						key="${index}"
+						?clearable="${this._inputFocused || this._tagListFocused}"
+						@d2l-tag-list-item-clear="${this._onAttributeRemoved}"
 						@focus="${this._onAttributeFocus}"
-						@keydown="${this._onAttributeKeydown}"
 						aria-live="off">
-					</d2l-labs-multi-select-list-item>
+					</d2l-tag-list-item>
 				`)}
-
+				</d2l-tag-list>
 				<input
 					aria-activedescendant="${this._dropdownIndex > -1 ? `attribute-dropdown-list-item-${this._dropdownIndex}` : ''}"
 					aria-autocomplete="list"
@@ -279,9 +278,6 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 	updated(changedProperties) {
 		super.updated(changedProperties);
-		if (changedProperties.has('_activeAttributeIndex')) {
-			this._activeAttributeIndexChanged(this._activeAttributeIndex);
-		}
 		if (changedProperties.has('assignableAttributes')) {
 			this._assignableAttributesChanged();
 		}
@@ -326,13 +322,6 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		this._text = '';
 	}
 
-	_activeAttributeIndexChanged() {
-		const selectedAttributes = this.shadowRoot && this.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
-		if (this._activeAttributeIndex >= 0 && this._activeAttributeIndex < selectedAttributes.length) {
-			selectedAttributes[this._activeAttributeIndex].focus();
-		}
-	}
-
 	_assignableAttributesChanged() {
 		this._dropdownIndex = -1;
 	}
@@ -356,8 +345,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		if (!this.shadowRoot) {
 			return;
 		}
-		const selectedAttributes = this.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
-		this._activeAttributeIndex = index;
+		const selectedAttributes = this.shadowRoot.querySelectorAll('d2l-tag-list-item');
 		selectedAttributes[index].focus();
 	}
 
@@ -369,7 +357,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	_isNotActive() {
-		return this._activeAttributeIndex === -1 && this._dropdownIndex === -1 && !this._inputFocused;
+		return !this._tagListFocused && this._dropdownIndex === -1 && !this._inputFocused;
 	}
 
 	// Absolute value % operator for navigating menus.
@@ -378,73 +366,27 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	/* Event handlers */
-	_onAttributeBlur(e) {
-		const targetIndex = e.target.index;
-		this.updateComplete.then(() => {
-			if (this._activeAttributeIndex === targetIndex) {
-				this._activeAttributeIndex = -1;
-			}
-		});
+	_onAttributeBlur() {
+		this._tagListFocused = false;
 	}
 
-	_onAttributeFocus(e) {
-		this._activeAttributeIndex = e.target.index;
-	}
-
-	_onAttributeKeydown(e) {
-		if (!this.shadowRoot) {
-			return;
-		}
-		switch (e.keyCode) {
-			case keyCodes.BACKSPACE: {
-				this._removeAttributeIndex(this._activeAttributeIndex);
-				if (this.attributeList.length === 0) {
-					this.shadowRoot.querySelector('.d2l-attribute-picker-input').focus();
-				} else if (this._activeAttributeIndex > 0) {
-					this._focusAttribute(this._activeAttributeIndex - 1);
-				}
-				break;
-			}
-			case keyCodes.DELETE: {
-				this._removeAttributeIndex(this._activeAttributeIndex);
-				if (this.attributeList.length === 0) {
-					this.shadowRoot.querySelector('.d2l-attribute-picker-input').focus();
-				} else if (this.attributeList.length <= this._activeAttributeIndex) {
-					this._focusAttribute(this._activeAttributeIndex - 1);
-				}
-				break;
-			}
-			case keyCodes.UP:
-			case keyCodes.LEFT: {
-				e.preventDefault();
-				e.stopPropagation();
-				if (this._activeAttributeIndex > 0 && this._activeAttributeIndex < this.attributeList.length) {
-					this._focusAttribute(this._activeAttributeIndex - 1);
-				}
-				break;
-			}
-			case keyCodes.DOWN:
-			case keyCodes.RIGHT: {
-				e.preventDefault();
-				e.stopPropagation();
-				if (this._activeAttributeIndex === this.attributeList.length - 1) {
-					this.shadowRoot.querySelector('.d2l-attribute-picker-input').focus();
-				} else if (this.attributeList.length > 0) {
-					this._focusAttribute(this._activeAttributeIndex + 1);
-				}
-				break;
-			}
-		}
+	_onAttributeFocus() {
+		this._tagListFocused = true;
+		this._inputFocused = false;
 	}
 
 	_onAttributeRemoved(e) {
-		if (e.target.index !== -1) {
-			this._removeAttributeIndex(e.target.index);
-		}
+		const index = e.detail.key;
+		this.attributeList.splice(index, 1);
+		if (this.attributeList.length && index > 0) this._focusAttribute(index - 1);
+		else this.shadowRoot.querySelector('input').focus();
+		this.requestUpdate();
+		this._dispatchAttributeChangedEvent();
 	}
 
-	_onInputBlur() {
-		this._inputFocused = false;
+	_onInputBlur(e) {
+		// If moving to tag-list, let the focus handle this change to prevent delete icons from flashing
+		if (e.relatedTarget?.getRootNode() !== this.shadowRoot) this._inputFocused = false;
 	}
 
 	_onInputFocus() {
@@ -540,11 +482,6 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 	_onListItemTapped(e) {
 		this.addAttribute(e.target.text);
 		e.preventDefault();
-	}
-
-	_removeAttributeIndex(index) {
-		this.attributeList = this.attributeList.slice(0, index).concat(this.attributeList.slice(index + 1, this.attributeList.length));
-		this._dispatchAttributeChangedEvent();
 	}
 
 	_updateDropdownFocus() {
