@@ -84,7 +84,7 @@ describe('attribute-picker', () => {
 			);
 
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			await focusElem(pageNumberInput)
+			await focusElem(pageNumberInput);
 			await el.updateComplete;
 
 			const attributeElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
@@ -167,7 +167,7 @@ describe('attribute-picker', () => {
 			const pageNumberInput = el.shadowRoot.querySelector('input');
 			await focusElem(pageNumberInput);
 			el._text = 'unlisted attribute';
-			await sendKeys('press','Enter');
+			await sendKeys('press', 'Enter');
 			await el.updateComplete;
 
 			// Some attribute types, like strings or dates, have values that are equal to their names...
@@ -188,7 +188,7 @@ describe('attribute-picker', () => {
 			const pageNumberInput = el.shadowRoot.querySelector('input');
 			await focusElem(pageNumberInput);
 			el._text = 'unlisted attribute';
-			await sendKeys('press','Enter');
+			await sendKeys('press', 'Enter');
 			await el.updateComplete;
 
 			expect(el.attributeList[el.attributeList.length - 1]).to.not.equal('unlisted attribute');
@@ -214,12 +214,12 @@ describe('attribute-picker', () => {
 			await focusElem(pageNumberInput);
 
 			async function pressAndCheck(key, index) {
-				await sendKeys('press',key)
+				await sendKeys('press', key);
 				const selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
 				expect(selectedDropdown.innerText).to.equal(assignableAttributeList[index].name);
 			}
 
-			for (let i = 3; i < 6; i++) await pressAndCheck('ArrowDown', i)
+			for (let i = 3; i < 6; i++) await pressAndCheck('ArrowDown', i);
 
 			//Pressing down once more should focus the first item again.
 			await pressAndCheck('ArrowDown', 3);
@@ -237,28 +237,28 @@ describe('attribute-picker', () => {
 			await focusElem(pageNumberInput);
 
 			//Select attribute three
-			sendKeys('press','ArrowLeft');
+			sendKeys('press', 'ArrowLeft');
 			let focusElement = el.shadowRoot.querySelector(':focus');
 			expect(attributeElements[2].innerText).to.equal(focusElement.innerText);
 
 			//Navigate to 'one'
-			sendKeys('press','ArrowLeft');
-			sendKeys('press','ArrowLeft');
+			sendKeys('press', 'ArrowLeft');
+			sendKeys('press', 'ArrowLeft');
 			focusElement = el.shadowRoot.querySelector(':focus');
 			expect(attributeElements[0].innerText).to.equal(focusElement.innerText);
 
 			//Navigate Right to 'two'
-			sendKeys('press','ArrowRight');
+			sendKeys('press', 'ArrowRight');
 			focusElement = el.shadowRoot.querySelector(':focus');
 			expect(attributeElements[1].innerText).to.equal(focusElement.innerText);
 
 			//Navigate Right to 'three'
-			sendKeys('press','ArrowRight');
+			sendKeys('press', 'ArrowRight');
 			focusElement = el.shadowRoot.querySelector(':focus');
 			expect(attributeElements[2].innerText).to.equal(focusElement.innerText);
 
 			//Navigate Right to return to the input field
-			sendKeys('press','ArrowRight');
+			sendKeys('press', 'ArrowRight');
 			focusElement = el.shadowRoot.querySelector(':focus');
 			expect(focusElement).to.equal(pageNumberInput);
 		});
@@ -266,17 +266,17 @@ describe('attribute-picker', () => {
 		it('should delete focused tag using backspace', async() => {
 			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			//Delete two
-			await sendKeysElem(listItems[1],'press','Backspace');
+			await sendKeysElem(listItems[1], 'press', 'Backspace');
 
 			//Confirm the item has been deleted, and the first element is now focused
 			let expectedAttributeList = ['one', 'three'];
 			let dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
-			let focusElement = el.shadowRoot.querySelector(':focus');
+			const focusElement = el.shadowRoot.querySelector(':focus');
 			expect(focusElement).to.equal(listItems[0]);
 
 			// Delete one
-			await sendKeys('press','Backspace');
+			await sendKeys('press', 'Backspace');
 
 			expectedAttributeList = ['three'];
 			dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
@@ -287,17 +287,17 @@ describe('attribute-picker', () => {
 		it('should delete focused tag using delete', async() => {
 			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			//Delete two
-			await sendKeysElem(listItems[1],'press','Delete');
+			await sendKeysElem(listItems[1], 'press', 'Delete');
 
 			//Confirm the item has been deleted, and the third element is now focused
 			let expectedAttributeList = ['one', 'three'];
 			let dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
-			let focusElement = el.shadowRoot.querySelector(':focus');
+			const focusElement = el.shadowRoot.querySelector(':focus');
 			expect(focusElement).to.equal(listItems[2]);
 
 			// Delete third
-			await sendKeys('press','Backspace');
+			await sendKeys('press', 'Backspace');
 
 			expectedAttributeList = ['one'];
 			dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
@@ -311,7 +311,7 @@ describe('attribute-picker', () => {
 			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			expect(listItems[0].clearable).equal(true);
 
-			await focusElem(listItems[0])
+			await focusElem(listItems[0]);
 			expect(listItems[0].clearable).equal(true);
 
 			listItems[0].blur();
@@ -344,7 +344,7 @@ describe('attribute-picker', () => {
 			expect(tooltip).to.not.exist;
 
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			await focusElem(pageNumberInput)
+			await focusElem(pageNumberInput);
 			await el.updateComplete;
 
 			expect(el._inputFocused).to.be.true;
@@ -404,7 +404,7 @@ describe('attribute-picker', () => {
 			const pageNumberInput = el.shadowRoot.querySelector('input');
 			await focusElem(pageNumberInput);
 			el._text = 'four';
-			await sendKeys('press','Enter');
+			await sendKeys('press', 'Enter');
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');
@@ -424,10 +424,10 @@ describe('attribute-picker', () => {
 			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 
 			//Delete three
-			await sendKeys('press','ArrowLeft');
+			await sendKeys('press', 'ArrowLeft');
 			const focusElement = el.shadowRoot.querySelector(':focus');
 			expect(focusElement).to.equal(listItems[2]);
-			await sendKeys('press','Backspace');
+			await sendKeys('press', 'Backspace');
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');
@@ -441,10 +441,10 @@ describe('attribute-picker', () => {
 			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 
 			//Delete three
-			await sendKeys('press','ArrowLeft');
+			await sendKeys('press', 'ArrowLeft');
 			const focusElement = el.shadowRoot.querySelector(':focus');
 			expect(focusElement).to.equal(listItems[2]);
-			await sendKeys('press','Backspace');
+			await sendKeys('press', 'Backspace');
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');
@@ -462,17 +462,17 @@ describe('attribute-picker', () => {
 			const pageNumberInput = el.shadowRoot.querySelector('input');
 			expect(element.attributeList.length).to.equal(3);
 
-			await focusElem(pageNumberInput)
+			await focusElem(pageNumberInput);
 			element._text = 'four';
-			await sendKeys('press','Enter');
+			await sendKeys('press', 'Enter');
 
 			expect(element.attributeList.length).to.equal(4);
 			element._text = 'five';
-			await sendKeys('press','Enter');
+			await sendKeys('press', 'Enter');
 
 			expect(element.attributeList.length).to.equal(5);
 			element._text = 'six';
-			await sendKeys('press','Enter');
+			await sendKeys('press', 'Enter');
 			expect(element.attributeList.length).to.equal(5);
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
@@ -486,15 +486,15 @@ describe('attribute-picker', () => {
 			const pageNumberInput = el.shadowRoot.querySelector('input');
 			expect(element.attributeList.length).to.equal(3);
 
-			await focusElem(pageNumberInput)
+			await focusElem(pageNumberInput);
 			element._text = 'FouR';
-			await sendKeys('press','Enter');
+			await sendKeys('press', 'Enter');
 			await element.updateComplete;
 			expect(element.attributeList.length).to.equal(4);
 			expect(element.attributeList).to.deep.equal(assignableAttributeList.slice(0, 4));
 
 			element._text = 'FOUR';
-			await sendKeys('press','Enter');
+			await sendKeys('press', 'Enter');
 			await element.updateComplete;
 			expect(element.attributeList).to.deep.equal(assignableAttributeList.slice(0, 4));
 		});

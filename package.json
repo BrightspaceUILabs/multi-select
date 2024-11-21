@@ -27,8 +27,8 @@
     "lint:style": "stylelint \"**/*.{js,html}\"",
     "start": "web-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:headless",
-    "test:headless": "d2l-test-runner --timeout 3000",
-    "test:headless:watch": "d2l-test-runner --timeout 3000 --watch"
+    "test:headless": "d2l-test-runner",
+    "test:headless:watch": "d2l-test-runner --watch"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
