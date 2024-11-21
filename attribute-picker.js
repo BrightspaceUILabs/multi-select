@@ -51,8 +51,8 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			/* When true, an error state will appear if no attributes are set. */
 			required: { type: Boolean, attribute: 'required', reflect: true },
 
-			/* When true, the user currently has focus within the tag-list. */
-			_tagListFocused: { type: Number, reflect: false },
+			/* When true, the user currently has focus within the component. */
+			_focus: { type: Number, reflect: false },
 
 			/* Represents the index of the currently focused dropdown list item. If no item is focused, equals -1. */
 			_dropdownIndex: { type: Number, reflect: false },
@@ -184,10 +184,24 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 		this._text = '';
 		this.hideDropdown = false;
 		this._inputFocused = false;
-		this._tagListFocused = false;
+		this._focus = false;
 		this._dropdownIndex = -1;
 		this._initialFocus = true;
 		this.required = false;
+		this._onFocusout = this._onFocusout.bind(this);
+		this._onFocusIn = this._onFocusIn.bind(this);
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		this.addEventListener('focusout', this._onFocusout);
+		this.addEventListener('focusin', this._onFocusIn);
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback();
+		this.removeEventListener('focusout', this._onFocusout);
+		this.removeEventListener('focusin', this._onFocusIn);
 	}
 
 	render() {
@@ -210,15 +224,17 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 		return html`
 		<div role="application" id="d2l-attribute-picker-container" class="${classMap(containerClasses)}" >
-			<div class="d2l-attribute-picker-content" aria-busy="${this._isNotActive()}" role="${this.attributeList.length > 0 ? 'list' : ''}">
-				<d2l-tag-list @focusout="${this._onAttributeBlur}">
-				${this.attributeList.map((item, index) => html`
+			<div class="d2l-attribute-picker-content" >
+				<d2l-tag-list>
+				${repeat(this.attributeList, item => item.name, (item, index) => html`
 					<d2l-tag-list-item
+						role="listitem"
 						class="d2l-attribute-picker-attribute"
 						text="${item.name}"
 						key="${index}"
-						?clearable="${this._inputFocused || this._tagListFocused}"
+						?clearable="${this._focus}"
 						@d2l-tag-list-item-clear="${this._onAttributeRemoved}"
+						@keydown="${this._onAttributeKeydown}"
 						@focus="${this._onAttributeFocus}"
 						aria-live="off">
 					</d2l-tag-list-item>
@@ -250,6 +266,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 			<div class="d2l-attribute-picker-absolute-container">
 				<ul role="listbox"
 					id="attribute-dropdown-list"
+					tabindex="-1"
 					?hidden="${!this._inputFocused || this.hideDropdown || availableAttributes.length === 0}"
 					class="d2l-attribute-list">
 
@@ -357,7 +374,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	_isNotActive() {
-		return !this._tagListFocused && this._dropdownIndex === -1 && !this._inputFocused;
+		return !this._focus && this._dropdownIndex === -1;
 	}
 
 	// Absolute value % operator for navigating menus.
@@ -366,27 +383,60 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 	}
 
 	/* Event handlers */
-	_onAttributeBlur() {
-		this._tagListFocused = false;
+	_onAttributeFocus(e) {
+		e.target.clearable = true;
 	}
 
-	_onAttributeFocus() {
-		this._tagListFocused = true;
-		this._inputFocused = false;
+	_onAttributeKeydown(e) {
+		if (!this.shadowRoot) return;
+		const target = e.target;
+		let focusElem = null;
+		switch (e.keyCode) {
+			case keyCodes.BACKSPACE: {
+				focusElem = target.previousElementSibling ?? target.nextElementSibling;
+				break;
+			}
+			case keyCodes.DELETE: {
+				focusElem = target.nextElementSibling ?? target.previousElementSibling;
+				break;
+			}
+			case keyCodes.DOWN:
+			case keyCodes.RIGHT: {
+				focusElem = target.nextElementSibling;
+				if (focusElem) return; // Let d2l-tag-list handle focus
+				else {
+					e.preventDefault();
+					e.stopPropagation();
+				}
+				break;
+			}
+			default: return;
+		}
+		focusElem ??= this.shadowRoot.querySelector('.d2l-attribute-picker-input');
+		focusElem.focus();
 	}
 
 	_onAttributeRemoved(e) {
+		e.preventDefault();
+		e.stopPropagation();
 		const index = e.detail.key;
 		this.attributeList.splice(index, 1);
-		if (this.attributeList.length && index > 0) this._focusAttribute(index - 1);
-		else this.shadowRoot.querySelector('input').focus();
-		this.requestUpdate();
 		this._dispatchAttributeChangedEvent();
+		this.requestUpdate();
 	}
 
-	_onInputBlur(e) {
-		// If moving to tag-list, let the focus handle this change to prevent delete icons from flashing
-		if (e.relatedTarget?.getRootNode() !== this.shadowRoot) this._inputFocused = false;
+	_onFocusIn() {
+		const focusTagName = this.shadowRoot.activeElement.tagName.toUpperCase();
+		this._refocusing = !this._focus && focusTagName !== 'INPUT';
+		this._focus = true;
+	}
+
+	_onFocusout() {
+		if (!this._refocusing) this._focus = false;
+	}
+
+	_onInputBlur() {
+		this._inputFocused = false;
 	}
 
 	_onInputFocus() {

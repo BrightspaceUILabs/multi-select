@@ -1,5 +1,5 @@
 import '../attribute-picker.js';
-import { expect, fixture, html, oneEvent } from '@open-wc/testing';
+import { expect, fixture, focusElem, html, oneEvent, sendKeys, sendKeysElem } from '@brightspace-ui/testing';
 import { runConstructor } from '@brightspace-ui/core/tools/constructor-test-helper.js';
 
 // returns either the event or the returnValIfTimeout, whichever is resolved first
@@ -60,7 +60,7 @@ describe('attribute-picker', () => {
 					</d2l-labs-attribute-picker>`
 			);
 
-			const listItems = el.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
+			const listItems = el.shadowRoot.querySelectorAll('d2l-tag-list-item');
 			for (const item of listItems) {
 				await item.updateComplete;
 			}
@@ -84,7 +84,7 @@ describe('attribute-picker', () => {
 			);
 
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
+			await focusElem(pageNumberInput)
 			await el.updateComplete;
 
 			const attributeElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
@@ -112,7 +112,7 @@ describe('attribute-picker', () => {
 			);
 
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
+			await focusElem(pageNumberInput);
 			await el.updateComplete;
 
 			//Ensure the full list of new assignable attributes are displayed if none are selected
@@ -146,7 +146,7 @@ describe('attribute-picker', () => {
 			);
 
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
+			await focusElem(pageNumberInput);
 			await el.updateComplete;
 
 			const dropdownElement = el.shadowRoot.querySelector('#attribute-dropdown-list');
@@ -165,9 +165,9 @@ describe('attribute-picker', () => {
 			);
 
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
+			await focusElem(pageNumberInput);
 			el._text = 'unlisted attribute';
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			await sendKeys('press','Enter');
 			await el.updateComplete;
 
 			// Some attribute types, like strings or dates, have values that are equal to their names...
@@ -186,9 +186,9 @@ describe('attribute-picker', () => {
 			);
 
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
+			await focusElem(pageNumberInput);
 			el._text = 'unlisted attribute';
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			await sendKeys('press','Enter');
 			await el.updateComplete;
 
 			expect(el.attributeList[el.attributeList.length - 1]).to.not.equal('unlisted attribute');
@@ -203,160 +203,103 @@ describe('attribute-picker', () => {
 			el = await fixture(
 				html`<d2l-labs-attribute-picker
 						allow-freeform
-						.attributeList="${attributeList}"
+						.attributeList="${[...attributeList]}"
 						.assignableAttributes="${assignableAttributeList}">
 					</d2l-labs-attribute-picker>`
 			);
-			const listItems = el.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
-			for (const item of listItems) {
-				await item.updateComplete;
-			}
 		});
 
 		it('should scroll through the dropdown using the up and down arrow keys', async() => {
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
-			await el.updateComplete;
+			await focusElem(pageNumberInput);
 
-			//In allow-freeform, pressing down should focus the first list item.
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Down', keyCode: 40 }));
-			await el.updateComplete;
-			let selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
-			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[3].name);
+			async function pressAndCheck(key, index) {
+				await sendKeys('press',key)
+				const selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
+				expect(selectedDropdown.innerText).to.equal(assignableAttributeList[index].name);
+			}
 
-			//Select the middle and last item
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Down', keyCode: 40 }));
-			await el.updateComplete;
-			selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
-			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[4].name);
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Down', keyCode: 40 }));
-			await el.updateComplete;
-			selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
-			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[5].name);
+			for (let i = 3; i < 6; i++) await pressAndCheck('ArrowDown', i)
 
 			//Pressing down once more should focus the first item again.
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Down', keyCode: 40 }));
-			await el.updateComplete;
-			selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
-			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[3].name);
+			await pressAndCheck('ArrowDown', 3);
 
 			//Pressing up should loop back to the end.
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Up', keyCode: 38 }));
-			await el.updateComplete;
-			selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
-			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[5].name);
+			await pressAndCheck('ArrowUp', 5);
 
 			//Pressing up again should move the selection up once.
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Up', keyCode: 38 }));
-			await el.updateComplete;
-			selectedDropdown = el.shadowRoot.querySelector('.d2l-attribute-picker-li.d2l-selected');
-			expect(selectedDropdown.innerText).to.equal(assignableAttributeList[4].name);
+			await pressAndCheck('ArrowUp', 4);
 		});
 
-		it('should scroll through tags using left and right arrow keys', async() => {
+		it('should between tags and input using left and right arrow keys', async() => {
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
+			const attributeElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
+			await focusElem(pageNumberInput);
 
 			//Select attribute three
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37 }));
-			await el.updateComplete;
-			const attributeElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
-			await el.updateComplete;
+			sendKeys('press','ArrowLeft');
 			let focusElement = el.shadowRoot.querySelector(':focus');
 			expect(attributeElements[2].innerText).to.equal(focusElement.innerText);
 
 			//Navigate to 'one'
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37 }));
-			await el.updateComplete;
-			focusElement = el.shadowRoot.querySelector(':focus');
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37 }));
-			await el.updateComplete;
-			focusElement = el.shadowRoot.querySelector(':focus');
-
-			expect(attributeElements[0].innerText).to.equal(focusElement.innerText);
-
-			//Confirm going left further has no effect
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37 }));
-			await el.updateComplete;
+			sendKeys('press','ArrowLeft');
+			sendKeys('press','ArrowLeft');
 			focusElement = el.shadowRoot.querySelector(':focus');
 			expect(attributeElements[0].innerText).to.equal(focusElement.innerText);
 
 			//Navigate Right to 'two'
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Right', keyCode: 39 }));
-			await el.updateComplete;
+			sendKeys('press','ArrowRight');
 			focusElement = el.shadowRoot.querySelector(':focus');
 			expect(attributeElements[1].innerText).to.equal(focusElement.innerText);
 
 			//Navigate Right to 'three'
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Right', keyCode: 39 }));
-			await el.updateComplete;
+			sendKeys('press','ArrowRight');
 			focusElement = el.shadowRoot.querySelector(':focus');
 			expect(attributeElements[2].innerText).to.equal(focusElement.innerText);
 
 			//Navigate Right to return to the input field
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Right', keyCode: 39 }));
-			await el.updateComplete;
+			sendKeys('press','ArrowRight');
 			focusElement = el.shadowRoot.querySelector(':focus');
 			expect(focusElement).to.equal(pageNumberInput);
 		});
 
 		it('should delete focused tag using backspace', async() => {
-			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
 			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
+			//Delete two
+			await sendKeysElem(listItems[1],'press','Backspace');
 
-			//Delete three
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37, bubbles: true }));
-			await el.updateComplete;
-			let focusElement = el.shadowRoot.querySelector(':focus');
-			expect(focusElement).to.equal(listItems[2]);
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', keyCode: 8, bubbles: true }));
-			await el.updateComplete;
-
-			//Confirm the item has been deleted, and the second element is now focused
-			let expectedAttributeList = ['one', 'two'];
+			//Confirm the item has been deleted, and the first element is now focused
+			let expectedAttributeList = ['one', 'three'];
 			let dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
-			focusElement = el.shadowRoot.querySelector(':focus');
+			let focusElement = el.shadowRoot.querySelector(':focus');
+			expect(focusElement).to.equal(listItems[0]);
 
 			// Delete one
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37, bubbles: true }));
-			await el.updateComplete;
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', keyCode: 8, bubbles: true }));
-			await el.updateComplete;
+			await sendKeys('press','Backspace');
 
-			expectedAttributeList = ['two'];
+			expectedAttributeList = ['three'];
 			dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			expect(dropdownElements.length).equal(1);
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
 		});
 
 		it('should delete focused tag using delete', async() => {
-			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
 			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
+			//Delete two
+			await sendKeysElem(listItems[1],'press','Delete');
 
-			//Delete three
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37, bubbles: true }));
-			await el.updateComplete;
-			let focusElement = el.shadowRoot.querySelector(':focus');
-			expect(focusElement).to.equal(listItems[2]);
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', keyCode: 46, bubbles: true }));
-			await el.updateComplete;
-
-			//Confirm the item has been deleted, and the second element is now focused
-			let expectedAttributeList = ['one', 'two'];
+			//Confirm the item has been deleted, and the third element is now focused
+			let expectedAttributeList = ['one', 'three'];
 			let dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
-			focusElement = el.shadowRoot.querySelector(':focus');
+			let focusElement = el.shadowRoot.querySelector(':focus');
+			expect(focusElement).to.equal(listItems[2]);
 
-			// Delete one
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37, bubbles: true }));
-			await el.updateComplete;
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', keyCode: 46, bubbles: true }));
-			await el.updateComplete;
+			// Delete third
+			await sendKeys('press','Backspace');
 
-			expectedAttributeList = ['two'];
+			expectedAttributeList = ['one'];
 			dropdownElements = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 			expect(dropdownElements.length).equal(1);
 			expect(evaluateListValues(expectedAttributeList, dropdownElements)).to.equal(true);
@@ -364,25 +307,23 @@ describe('attribute-picker', () => {
 
 		it('Applies the deletable attribute on focused pickers and attributes', async() => {
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
+			await focusElem(pageNumberInput);
 			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
-			await el.updateComplete;
-			expect(listItems[0].deletable).equal(true);
+			expect(listItems[0].clearable).equal(true);
 
-			listItems[0].focus();
-			await el.updateComplete;
-			expect(listItems[0].deletable).equal(true);
+			await focusElem(listItems[0])
+			expect(listItems[0].clearable).equal(true);
 
 			listItems[0].blur();
-			await listItems[0].updateComplete;
 			await el.updateComplete;
-			expect(listItems[0].deletable).equal(false);
+			await listItems[0].updateComplete;
+			expect(listItems[0].clearable).equal(false);
 		});
 
 		it('should mark as invalid if empty and required after unfocusing', async() => {
 			el = await fixture(html`<d2l-labs-attribute-picker required allow-freeform .assignableAttributes="${assignableAttributeList}"></d2l-labs-attribute-picker>`);
 
-			const listItems = el.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
+			const listItems = el.shadowRoot.querySelectorAll('d2l-tag-list-item');
 			for (const item of listItems) {
 				await item.updateComplete;
 			}
@@ -403,7 +344,7 @@ describe('attribute-picker', () => {
 			expect(tooltip).to.not.exist;
 
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
+			await focusElem(pageNumberInput)
 			await el.updateComplete;
 
 			expect(el._inputFocused).to.be.true;
@@ -450,24 +391,20 @@ describe('attribute-picker', () => {
 			el = await fixture(
 				html`<d2l-labs-attribute-picker
 						allow-freeform
-						.attributeList="${attributeList}"
+						.attributeList="${[...attributeList]}"
 						.assignableAttributes="${assignableAttributeList}"
 						limit="5">
 					</d2l-labs-attribute-picker>`
 			);
-			const listItems = el.shadowRoot.querySelectorAll('d2l-labs-multi-select-list-item');
-			for (const item of listItems) {
-				await item.updateComplete;
-			}
 		});
 
 		it('should fire the d2l-attributes-changed event when adding a tag', async() => {
 			const listener = oneEvent(el, 'd2l-attributes-changed');
 
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
+			await focusElem(pageNumberInput);
 			el._text = 'four';
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			await sendKeys('press','Enter');
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');
@@ -483,16 +420,14 @@ describe('attribute-picker', () => {
 			const listener = oneEvent(el, 'd2l-attributes-changed');
 
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
+			await focusElem(pageNumberInput);
 			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 
 			//Delete three
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37, bubbles: true }));
-			await el.updateComplete;
+			await sendKeys('press','ArrowLeft');
 			const focusElement = el.shadowRoot.querySelector(':focus');
 			expect(focusElement).to.equal(listItems[2]);
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', keyCode: 8, bubbles: true }));
-			await el.updateComplete;
+			await sendKeys('press','Backspace');
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');
@@ -502,16 +437,14 @@ describe('attribute-picker', () => {
 			const listener = oneEvent(el, 'd2l-attributes-changed');
 
 			const pageNumberInput = el.shadowRoot.querySelector('input');
-			pageNumberInput.focus();
+			await focusElem(pageNumberInput);
 			const listItems = el.shadowRoot.querySelectorAll('.d2l-attribute-picker-attribute');
 
 			//Delete three
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Left', keyCode: 37, bubbles: true }));
-			await el.updateComplete;
+			await sendKeys('press','ArrowLeft');
 			const focusElement = el.shadowRoot.querySelector(':focus');
 			expect(focusElement).to.equal(listItems[2]);
-			focusElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', keyCode: 46, bubbles: true }));
-			await el.updateComplete;
+			await sendKeys('press','Backspace');
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
 			expect(result).to.not.equal('no event fired');
@@ -529,17 +462,17 @@ describe('attribute-picker', () => {
 			const pageNumberInput = el.shadowRoot.querySelector('input');
 			expect(element.attributeList.length).to.equal(3);
 
-			pageNumberInput.focus();
+			await focusElem(pageNumberInput)
 			element._text = 'four';
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			await sendKeys('press','Enter');
 
 			expect(element.attributeList.length).to.equal(4);
 			element._text = 'five';
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			await sendKeys('press','Enter');
 
 			expect(element.attributeList.length).to.equal(5);
 			element._text = 'six';
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			await sendKeys('press','Enter');
 			expect(element.attributeList.length).to.equal(5);
 
 			const result = await verifyEventTimeout(listener, 'no event fired');
@@ -553,15 +486,15 @@ describe('attribute-picker', () => {
 			const pageNumberInput = el.shadowRoot.querySelector('input');
 			expect(element.attributeList.length).to.equal(3);
 
-			pageNumberInput.focus();
+			await focusElem(pageNumberInput)
 			element._text = 'FouR';
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			await sendKeys('press','Enter');
 			await element.updateComplete;
 			expect(element.attributeList.length).to.equal(4);
 			expect(element.attributeList).to.deep.equal(assignableAttributeList.slice(0, 4));
 
 			element._text = 'FOUR';
-			pageNumberInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			await sendKeys('press','Enter');
 			await element.updateComplete;
 			expect(element.attributeList).to.deep.equal(assignableAttributeList.slice(0, 4));
 		});

@@ -27,8 +27,8 @@
     "lint:style": "stylelint \"**/*.{js,html}\"",
     "start": "web-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:headless",
-    "test:headless": "web-test-runner --group all-browsers",
-    "test:headless:watch": "web-test-runner --group watch --watch"
+    "test:headless": "d2l-test-runner --timeout 3000",
+    "test:headless:watch": "d2l-test-runner --timeout 3000 --watch"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
@@ -37,6 +37,7 @@
     "@babel/core": "^7",
     "@babel/eslint-parser": "^7",
     "@brightspace-ui/stylelint-config": "^1",
+    "@brightspace-ui/testing": "^1",
     "@open-wc/testing": "^4",
     "@web/dev-server": "^0.4.0",
     "@web/test-runner": "^0.19",
