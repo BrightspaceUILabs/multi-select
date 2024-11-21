@@ -1,6 +1,6 @@
 import '../multi-select-input.js';
 import '../multi-select-list-item.js';
-import { expect, fixture, html } from '@open-wc/testing';
+import { expect, fixture, html } from '@brightspace-ui/testing';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { runConstructor } from '@brightspace-ui/core/tools/constructor-test-helper.js';
 

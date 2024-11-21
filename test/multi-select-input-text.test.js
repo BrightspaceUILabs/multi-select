@@ -1,6 +1,6 @@
 import '../multi-select-input-text.js';
 import '../multi-select-list-item.js';
-import { expect, fixture, html } from '@open-wc/testing';
+import { expect, fixture, html } from '@brightspace-ui/testing';
 import { runConstructor } from '@brightspace-ui/core/tools/constructor-test-helper.js';
 
 const keyCodes = { ENTER: 13 };

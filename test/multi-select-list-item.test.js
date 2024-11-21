@@ -1,6 +1,6 @@
 import '../multi-select-list-item.js';
 import '../multi-select-list.js';
-import { expect, fixture, html } from '@open-wc/testing';
+import { expect, fixture, html } from '@brightspace-ui/testing';
 import { runConstructor } from '@brightspace-ui/core/tools/constructor-test-helper.js';
 import sinon from 'sinon';
 
