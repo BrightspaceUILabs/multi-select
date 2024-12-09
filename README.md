@@ -1,8 +1,6 @@
 # d2l-labs-multi-select
 
-**The majority of this repo is deprecated, do not use any of the components in this repo and use [`d2l-tag-list` and `d2l-tag-list-item`](https://github.com/BrightspaceUI/core/tree/main/components/tag-list) in `BrightspaceUI/core` instead.**
-
-If you want to use `d2l-labs-attribute-picker`, contact Team Arkeltstorp first as it's going to be moved over to the [labs](https://github.com/BrightspaceUI/labs) monorepo.
+**This repo is deprecated, do not use any of the components in this repo and use [`d2l-tag-list` and `d2l-tag-list-item`](https://github.com/BrightspaceUI/core/tree/main/components/tag-list) in `BrightspaceUI/core` or [`d2l-labs-attribute-picker`](https://github.com/BrightspaceUI/labs/tree/main/src/components/attribute-picker) in the [labs](https://github.com/BrightspaceUI/labs) monorepo instead.**
 
 [![NPM version](https://img.shields.io/npm/v/@brightspace-ui-labs/multi-select.svg)](https://www.npmjs.org/package/@brightspace-ui-labs/multi-select)
 
@@ -28,10 +26,11 @@ Polymer/Lit-based web component collection for D2L multi-select, creating, editi
 ```shell
 npm install @brightspace-ui-labs/multi-select
 ```
-
-## Components
+## Deprecated Components
 
 ### `d2l-labs-attribute-picker`
+
+This component was migrated to the [labs](https://github.com/BrightspaceUI/labs/tree/main/src/components/attribute-picker) monorepo, so you should use that component instead.
 
 An autocompleting dropdown to choose one or more new or pre-existing attributes inline.
 **Usage:**
@@ -70,7 +69,6 @@ attributePicker.addEventListener('d2l-attributes-changed', (e) => {
 
 The `d2l-labs-attribute-picker` dispatches the `d2l-attribute-limit-reached` event when the user attempts to enter an attribute greater than the limit. This can be used to send feedback to the user.
 
-## Deprecated Components
 
 **The following components are deprecated. Use [`d2l-tag-list` and `d2l-tag-list-item`](https://github.com/BrightspaceUI/core/tree/main/components/tag-list) in `BrightspaceUI/core` instead.**
 
