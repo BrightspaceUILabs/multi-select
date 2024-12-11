@@ -123,7 +123,7 @@ class MultiSelectList extends RtlMixin(Localizer(LitElement)) {
 
 	constructor() {
 		super();
-		console.warn('The \'d2l-labs-multi-select-list\' component is deprecated and will soon be removed, please use the \'d2l-tag-list\' component instead. https://github.com/BrightspaceUI/core/tree/main/components/tag-list#tag-list-d2l-tag-list');
+		console.warn('The \'d2l-labs-multi-select-list\' component is deprecated and will soon be removed. Please use the \'d2l-tag-list\' component instead: https://github.com/BrightspaceUI/core/tree/main/components/tag-list#tag-list-d2l-tag-list');
 		this.autoremove = false;
 		this.collapsable = false;
 		this._collapsed = false;
