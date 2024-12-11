@@ -179,7 +179,7 @@ class AttributePicker extends RtlMixin(Localizer(LitElement)) {
 
 	constructor() {
 		super();
-		console.warn('The \'d2l-labs-attribute-picker\' component has been moved to another repo and now is deprecated and will soon be removed, please update to use version found here: https://github.com/BrightspaceUI/labs/tree/main/src/components/attribute-picker');
+		console.warn('The \'d2l-labs-attribute-picker\' component has been moved to another repo and now is deprecated and will soon be removed. Please update to use version found here: https://github.com/BrightspaceUI/labs/tree/main/src/components/attribute-picker');
 		this.attributeList = [];
 		this.assignableAttributes = [];
 		this._text = '';
